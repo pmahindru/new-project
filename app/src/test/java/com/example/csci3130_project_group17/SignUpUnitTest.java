@@ -29,8 +29,14 @@ public class SignUpUnitTest {
     // Checks if a field is empty
     @Test
     public void isEmpty() {
-        assertTrue(signUp.isEmpty(""));
-        assertFalse(signUp.isEmpty("xyz$56"));
+        assertTrue(signUp.isEmptyfirstname(""));
+        assertFalse(signUp.isEmptyfirstname("xyz$56"));
+        assertTrue(signUp.isEmptylastname(""));
+        assertFalse(signUp.isEmptylastname("xyasdz$56"));
+        assertTrue(signUp.isEmptyemail(""));
+        assertFalse(signUp.isEmptyemail("sanju@dal.ca"));
+        assertTrue(signUp.isEmptypassword(""));
+        assertFalse(signUp.isEmptypassword("!Sanjan123"));
     }
 
     // Checks if email is valid
