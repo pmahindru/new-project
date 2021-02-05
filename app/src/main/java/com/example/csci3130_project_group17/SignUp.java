@@ -25,10 +25,15 @@ public class SignUp extends AppCompatActivity {
     public void addToDatabase(){
 
     }
+
+
+    public boolean isEmpty(String str){
+        return false;
+    }
     public boolean userProfileCheck(){
         return false;
     }
-    public boolean emailCheck(){
+    public boolean emailCheck(String email){
         return false;
     }
     public boolean passwordCheck(){
