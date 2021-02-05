@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:animateLayoutChanges="false"
+    android:background="#D3AFF3"
     tools:context=".MainActivity">
 
     <EditText
@@ -18,8 +19,8 @@
         android:inputType="textPersonName"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="177dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="177dp" />
 
     <EditText
         android:id="@+id/emailinput"
@@ -32,8 +33,8 @@
         android:inputType="textPersonName"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="248dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="248dp" />
 
     <EditText
         android:id="@+id/passwordinput"
@@ -46,8 +47,8 @@
         android:inputType="textPersonName"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="318dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="318dp" />
 
     <EditText
         android:id="@+id/fnameinput"
@@ -57,9 +58,9 @@
         android:hint="First name "
         android:inputType="textPersonName"
         android:textSize="18sp"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="114dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="114dp" />
 
     <TextView
         android:id="@+id/textView2"

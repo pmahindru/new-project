@@ -16,7 +16,7 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.signup);
 
         // take value of button
         Button square_button = (Button)findViewById(R.id.switchbutton);
@@ -25,7 +25,6 @@ public class SignUp extends AppCompatActivity {
     public void addToDatabase(){
 
     }
-
     public boolean userProfileCheck(){
         return false;
     }
