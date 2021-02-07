@@ -25,7 +25,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 //    String lastName;
 //    String email;
 //    String password;
-    String organistion;
+//    String organistion;
 //    Boolean employer;
 
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
