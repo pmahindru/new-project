@@ -42,7 +42,7 @@ public class SignUpUnitTest {
     // Checks if email is valid
     @Test
     public void isEmailValid() {
-        assertTrue(signUp.emailCheck("sanju@dal.ca"));
+        assertTrue(signUp.emailCheck("sanju_123@dal.ca"));
         assertTrue(signUp.emailCheck("sanjana.123@dal.ca"));
     }
 
@@ -53,16 +53,27 @@ public class SignUpUnitTest {
         assertFalse(signUp.emailCheck("sanju@dal"));
     }
 
-    // Checks if email is valid
+    // Checks if password is valid
     @Test
     public void isPasswordValid() {
-
+        assertTrue(signUp.passwordCheck("Sanju123!"));
+        assertTrue(signUp.passwordCheck("@Pranav123"));
     }
 
-    // Checks if email is invalid
+    // Checks if password is invalid
     @Test
     public void isPasswordInvalid() {
-
+        assertFalse(signUp.passwordCheck(" "));
+        //false because missing number
+        assertFalse(signUp.passwordCheck("@Pranav"));
+        //missing one uppercaseletter
+        assertFalse(signUp.passwordCheck("@jojo123"));
+        //missing one lovercaseletter
+        assertFalse(signUp.passwordCheck("PRANAV!@123"));
+        //missing non alphanumeric letter
+        assertFalse(signUp.passwordCheck("Pranav123"));
+        //length is too long for the password it should be 6 to 15
+        assertFalse(signUp.passwordCheck("asdasddQWEASfnief12312!@#!#"));
     }
 
     // Checks if Organisation name is alphanumeric or not

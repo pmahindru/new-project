@@ -40,29 +40,45 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
     }
 
+    //firstname check if it is empty or not
     protected boolean isEmptyfirstname(String firstName){
         return firstName.isEmpty();
     }
+
+    //lastname check if it is empty or not
     protected boolean isEmptylastname(String lastName){
         return lastName.isEmpty() ;
     }
+
+    //email check if it is empty or not
     protected boolean isEmptyemail(String email){
         return email.isEmpty();
     }
+
+    //password check if it is empty or not
     protected boolean isEmptypassword(String password){
         return password.isEmpty();
     }
+
+    //email check if it is valid or not
     public boolean emailCheck(String email){
-        return email.matches("^(.+)@(a-zA-Z+)(.a-zA-Z+)$");
+        return email.matches("^(.+)@([a-zA-Z0-9]+.[a-zA-Z0-9].+)$");
+    }
+
+    //checking if the password is valid or not
+    public boolean passwordCheck(String password){
+        // regex is taken from the link because there is only way to valid for the password with the specific length
+        // specific other requirement too.
+        // link where i only copy the regex.
+        // https://mkyong.com/regular-expressions/how-to-validate-password-with-regular-expression/
+        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{6,15}$");
     }
 
 
     public boolean userProfileCheck(){
         return false;
     }
-    public boolean passwordCheck(){
-        return false;
-    }
+
     public boolean employerCheck(){
         return false;
     }
