@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="false"
-    android:background="#D3AFF3"
+    android:background="#EAEAEA"
     tools:context=".MainActivity">
 
     <EditText
@@ -21,6 +21,7 @@
         android:ems="10"
         android:hint="Last name "
         android:inputType="textPersonName"
+        android:textColorHint="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/emailinput"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +42,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
+        android:textColorHint="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/passwordinput"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +63,7 @@
         android:ems="10"
         android:hint="password"
         android:inputType="textPersonName"
+        android:textColorHint="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/employerId"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,6 +84,7 @@
         android:ems="10"
         android:hint="First name "
         android:inputType="textPersonName"
+        android:textColorHint="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/lnameinput"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,6 +103,8 @@
         android:layout_marginRight="101dp"
         android:layout_marginBottom="43dp"
         android:text=" Create an Account "
+        android:textColor="#020202"
+        android:textColorHint="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/fnameinput"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,30 +116,53 @@
         android:id="@+id/switchbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginRight="99dp"
+        android:layout_marginBottom="111dp"
         android:text="Create Your Account"
+        android:textColorHint="#000000"
         app:backgroundTint="#673AB7"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="572dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <CheckBox
         android:id="@+id/employerId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="145dp"
+        android:layout_marginLeft="145dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="146dp"
+        android:layout_marginRight="146dp"
         android:text="  Employer "
+        android:textColorHint="#000000"
         android:textSize="18sp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="145dp"
-        tools:layout_editor_absoluteY="380dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordinput"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/organisationinput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginRight="101dp"
+        android:layout_marginBottom="38dp"
         android:ems="10"
+        android:visibility="invisible"
+        android:hint="organisation name"
         android:inputType="textPersonName"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="489dp" />
+        android:textColorHint="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/switchbutton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

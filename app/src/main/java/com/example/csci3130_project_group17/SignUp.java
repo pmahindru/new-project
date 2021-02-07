@@ -6,6 +6,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
@@ -13,19 +17,22 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 //    String lastName;
 //    String email;
 //    String password;
-//    String organistion;
+    String organistion;
 //    Boolean employer;
 
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
 
-//    FirebaseDatabase database =  null;
-//    DatabaseReference userNameRef = null;
-//    DatabaseReference emailRef = null;
+    FirebaseDatabase database =  null;
+    DatabaseReference userNameRef = null;
+    DatabaseReference emailRef = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
+
+        //show the organization field for the employer
+        showorganization();
 
         // take value of button
         Button square_button = (Button)findViewById(R.id.switchbutton);
@@ -60,6 +67,26 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         return password.isEmpty();
     }
 
+    protected void showorganization(){
+        CheckBox employer = findViewById(R.id.employerId);
+
+        employer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText organisationName = findViewById(R.id.organisationinput);
+                if (((CheckBox) v).isChecked()){
+                    organisationName.setVisibility(View.VISIBLE);
+                }
+                else{
+                    ((CheckBox) v).setChecked(false);
+                    organisationName.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+
+
     //email check if it is valid or not
     public boolean emailCheck(String email){
         return email.matches("^(.+)@([a-zA-Z0-9]+.[a-zA-Z0-9].+)$");
@@ -93,17 +120,18 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
     }
 
     public void onClick(View view) {
+
+        //all inputs are here
         EditText firstName = findViewById(R.id.fnameinput);
-        String fname = String.valueOf(firstName);
         EditText lastName = findViewById(R.id.lnameinput);
-        String lname = String.valueOf(lastName);
         EditText emailaddress = findViewById(R.id.emailinput);
-        String email = String.valueOf(emailaddress);
         EditText passwordInput = findViewById(R.id.passwordinput);
+
+        //convert input into string format so that we check for it
+        String fname = String.valueOf(firstName);
+        String lname = String.valueOf(lastName);
+        String email = String.valueOf(emailaddress);
         String password = String.valueOf(passwordInput);
-        EditText organisationName = findViewById(R.id.organisationinput);
-        String orgname = String.valueOf(organisationName);
-        Boolean employer = ((CheckBox)findViewById(R.id.employerId)) .isChecked();
 
 //        String userName = getUserName();
 //        String emailAddress = getEmailAddress();
@@ -140,6 +168,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 //        }
 
         //below line is only for check (below line is taken from the firebase lab)
-        //Toast.makeText(MainActivity.this,"Firebaseconnection success", Toast.LENGTH_LONG).show();
+        Toast.makeText(SignUp.this,"Firebaseconnection success", Toast.LENGTH_LONG).show();
     }
 }
