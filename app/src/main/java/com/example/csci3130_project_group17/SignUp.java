@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,10 +16,14 @@ import android.widget.Toast;
 import android.content.Intent;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +43,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
 
     FirebaseFirestore database =  null;
+    //DatabaseReference userNameRef = null;
+    //DatabaseReference emailRef = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         database.collection("users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
 
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -108,31 +116,26 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
 
 
-    // the organisation is supposed to show only when the bossiness option in the spinner is used, we need to add that
+    // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
     protected void showorganization(){
         CheckBox employer = findViewById(R.id.employerId);
+
         employer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText organisationName = findViewById(R.id.organisationinput);
                 Spinner spinner = findViewById(R.id.spinner);
                 CheckBox employee = findViewById(R.id.employeeCheck);
-                if (!employer.isChecked() && !employee.isChecked()){
-                    employee.setVisibility(View.VISIBLE);
-                    Toast.makeText(SignUp.this,"You have to choose one thing from the checkbox", Toast.LENGTH_LONG).show();
+                if (((CheckBox) v).isChecked()){
+                    organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
+                    spinner.setVisibility(View.VISIBLE);
+                    employee.setVisibility(View.INVISIBLE);
                 }
                 else{
-                    if (((CheckBox) v).isChecked()) {
-                        organisationName.setVisibility(View.VISIBLE);
-                        spinner.setVisibility(View.VISIBLE);
-                        employee.setVisibility(View.INVISIBLE);
-                    }
-                    else{
-                        ((CheckBox) v).setChecked(false);
-                        organisationName.setVisibility(View.INVISIBLE);
-                        spinner.setVisibility(View.INVISIBLE);
-                        employee.setVisibility(View.VISIBLE);
-                    }
+                    ((CheckBox) v).setChecked(false);
+                    organisationName.setVisibility(View.INVISIBLE);
+                    spinner.setVisibility(View.INVISIBLE);
+                    employee.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -159,12 +162,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         };
         arrayAdapter.setDropDownViewResource(layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
-        //
+
         spinner.setVisibility(View.INVISIBLE);
     }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //show organisation part
+
     }
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
@@ -190,29 +193,44 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     // just need to add in the part where we report if the
     public boolean userProfileCheck(String email){
-        Boolean result = false;
-        database.collection("user")
+        final Boolean[] result = {false};
+        database.collection("users")
                 .whereEqualTo("email", email)
-                .get();
-        return result;
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String TAG ="QueryError";
+                if (task.isSuccessful()) {
+                    result[0] = task.getResult().isEmpty();
+                    System.out.println(result[0]);
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+        return result[0];
     }
 
-    public boolean employerCheck(CheckBox employer, CheckBox employee){
-        //checking the checkbox (isEmpty)
-        return (employer.isChecked() || employee.isChecked());
+    public boolean employerCheck(){
+        return false;
     }
 
-    //last thing to do
+    public boolean fullNameCheck(){
+        return false;
+    }
+
     public void switchToDashboard(){
     }
 
     public void initializeDatabase(){
-        //initializing the database
         this.database = FirebaseFirestore.getInstance();
+
     }
 
     public void errorMessageDisplay(String error){
-        //show the error message to the user.
         Toast.makeText(SignUp.this,error, Toast.LENGTH_LONG).show();
 
     }
@@ -235,7 +253,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         String email = emailaddress.getText().toString();
         String password = passwordInput.getText().toString();
 
-        //String errorMessage = "";
+        String errorMessage = "";
         Boolean errorFlag = false;
 
         if(isInputEmpty(fname) || isInputEmpty(lname) || isInputEmpty(email) || isInputEmpty(password)) {
@@ -244,15 +262,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         } else {
             //add all the checks for the
             if(emailCheck(email) && passwordCheck(password)) {
+                errorFlag = false;
                 if(userProfileCheck(email)) {
-                    // Move them to login page
-                    errorFlag = true;
-                    // Alert dialog to tell user that profile is already in the db
+                    // The profile doesn't exist
+                    errorFlag = false;
+                    System.out.println("I am here!");
 
                 } else {
-                    errorFlag = false;
+                    // Alert dialog to tell user that profile is already in the db
+                    // Move them to login page
+                    errorFlag = true;
                 }
-
             } else if(!emailCheck(email)) {
                 errorMessageDisplay("Email is invalid");
                 errorFlag = true;
@@ -260,20 +280,16 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 errorMessageDisplay("Password is invalid. It should be have a lowercase and upper case alphabet, digit and a special character. It should be 6-15 characters in length.");
                 errorFlag = true;
             }
-            else if (!employerCheck(employer,employee)){
-                errorMessageDisplay("checkbox is empty");
-                errorFlag = true;
-            }
         }
 
         if(!errorFlag) {
+            System.out.println("I was here!");
             Map<String, Object> user = new HashMap<>();
             user.put("firstName", fname);
             user.put("lastName", lname);
             user.put("email", email);
             user.put("password", password);
-            user.put("employer", employer.isChecked());
-            user.put("employee", employer.isChecked());
+            user.put("employer", true); //based on the employer radio button change the true or false value
             user.put("orgName", "lol");
 
             //maybe add userid here?
