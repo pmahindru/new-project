@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.content.Intent;
+
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -39,11 +41,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
 
-        //show the organization field for the employer
-        showorganization();
+        Intent intent = getIntent();
 
         //job show in spinner
         jobsspinner();
+
+        //show the organization field for the employer
+        showorganization();
 
         // take value of button
         Button square_button = (Button)findViewById(R.id.switchbutton);
@@ -58,6 +62,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     }
 
+    protected boolean isInputEmpty(String str){
+        return str.isEmpty();
+    }
+
+    //could be replaced by a single is empty function
     //firstname check if it is empty or not
     protected boolean isEmptyfirstname(String firstName){
         return firstName.isEmpty();
@@ -78,6 +87,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         return password.isEmpty();
     }
 
+
+
+    // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
     protected void showorganization(){
         CheckBox employer = findViewById(R.id.employerId);
 
@@ -85,12 +97,18 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             @Override
             public void onClick(View v) {
                 EditText organisationName = findViewById(R.id.organisationinput);
+                Spinner spinner = findViewById(R.id.spinner);
+                CheckBox employee = findViewById(R.id.employeeCheck);
                 if (((CheckBox) v).isChecked()){
                     organisationName.setVisibility(View.VISIBLE);
+                    spinner.setVisibility(View.VISIBLE);
+                    employee.setVisibility(View.INVISIBLE);
                 }
                 else{
                     ((CheckBox) v).setChecked(false);
                     organisationName.setVisibility(View.INVISIBLE);
+                    spinner.setVisibility(View.INVISIBLE);
+                    employee.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -117,6 +135,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         };
         arrayAdapter.setDropDownViewResource(layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
+
+        spinner.setVisibility(View.INVISIBLE);
     }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -151,14 +171,20 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     public boolean employerCheck(){
         return false;
     }
+
     public boolean fullNameCheck(){
         return false;
     }
+
     public void switchToDashboard(){
     }
+
     public void initializeDatabase(){
     }
-    public void errorMessageDisplay(){
+
+    public void errorMessageDisplay(String error){
+        Toast.makeText(SignUp.this,error, Toast.LENGTH_LONG).show();
+
     }
 
     public void onClick(View view) {
@@ -169,31 +195,37 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         EditText emailaddress = findViewById(R.id.emailinput);
         EditText passwordInput = findViewById(R.id.passwordinput);
 
+        //so that we can check if employer and employee is checked or not
+        CheckBox employer = findViewById(R.id.employerId);
+        CheckBox employee = findViewById(R.id.employeeCheck);
+
         //convert input into string format so that we check for it
-        String fname = String.valueOf(firstName);
-        String lname = String.valueOf(lastName);
-        String email = String.valueOf(emailaddress);
-        String password = String.valueOf(passwordInput);
+        String fname = firstName.getText().toString();
+        String lname = lastName.getText().toString();
+        String email = emailaddress.getText().toString();
+        String password = passwordInput.getText().toString();
 
-//        String userName = getUserName();
-//        String emailAddress = getEmailAddress();
-//        String errorMessage = new String();
+        String errorMessage = "";
+        Boolean errorFlag = false;
 
-//        if (isEmptyUserName(userName)) {
-//            errorMessage = getResources().getString(R.string.EMPTY_USER_NAME);
-//        }
-//        else {
-//            //check for valid user name and valid email email address
-//            if(!isAlphanumericUserName(userName)){
-//                errorMessage = getResources().getString(R.string.NON_ALPHA_NUMERIC_USER_NAME);
-//            }
-//            else if (!isValidEmailAddress(emailAddress)){
-//                errorMessage = getResources().getString(R.string.INVALID_EMAIL_ADDRESS);
-//            }
-//            else {
-//                errorMessage = getResources().getString(R.string.EMPTY_STRING);
-//            }
-//        }
+        if(isInputEmpty(fname) || isInputEmpty(lname) || isInputEmpty(email) || isInputEmpty(password)) {
+            errorMessageDisplay("One of the fields are empty");
+            errorFlag = true;
+        } else {
+            //add all the checks for the
+            if(emailCheck(email) && passwordCheck(password)) {
+                errorFlag = false;
+            } else if(!emailCheck(email)) {
+                errorMessageDisplay("Email is invalid");
+                errorFlag = true;
+            } else if(!passwordCheck(password)) {
+                errorMessageDisplay("Password is invalid. It should be have a lowercase and upper case alphabet, digit and a special character. It should be 6-15 characters in length.");
+                errorFlag = true;
+            }
+        }
+
+
+
 
 //        if (errorMessage.isEmpty()) {
 //            //no errors were found!
@@ -210,6 +242,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 //        }
 
         //below line is only for check (below line is taken from the firebase lab)
-        Toast.makeText(SignUp.this,"Firebaseconnection success", Toast.LENGTH_LONG).show();
+        //Toast.makeText(SignUp.this,"Sup", Toast.LENGTH_LONG).show();
     }
 }
