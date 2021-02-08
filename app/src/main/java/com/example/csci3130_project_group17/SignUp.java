@@ -127,7 +127,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 Spinner spinner = findViewById(R.id.spinner);
                 CheckBox employee = findViewById(R.id.employeeCheck);
                 if (((CheckBox) v).isChecked()){
-                    organisationName.setVisibility(View.VISIBLE);
+                    organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
                     spinner.setVisibility(View.VISIBLE);
                     employee.setVisibility(View.INVISIBLE);
                 }
@@ -193,11 +193,25 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     // just need to add in the part where we report if the
     public boolean userProfileCheck(String email){
-        Boolean result = false;
-        database.collection("user")
+        final Boolean[] result = {false};
+        database.collection("users")
                 .whereEqualTo("email", email)
-                .get();
-        return result;
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String TAG ="QueryError";
+                if (task.isSuccessful()) {
+                    result[0] = task.getResult().isEmpty();
+                    System.out.println(result[0]);
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+        return result[0];
     }
 
     public boolean employerCheck(){
@@ -250,14 +264,15 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             if(emailCheck(email) && passwordCheck(password)) {
                 errorFlag = false;
                 if(userProfileCheck(email)) {
+                    // The profile doesn't exist
+                    errorFlag = false;
+                    System.out.println("I am here!");
+
+                } else {
                     // Alert dialog to tell user that profile is already in the db
                     // Move them to login page
                     errorFlag = true;
-
-                } else {
-                    errorFlag = false;
                 }
-
             } else if(!emailCheck(email)) {
                 errorMessageDisplay("Email is invalid");
                 errorFlag = true;
@@ -268,6 +283,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         }
 
         if(!errorFlag) {
+            System.out.println("I was here!");
             Map<String, Object> user = new HashMap<>();
             user.put("firstName", fname);
             user.put("lastName", lname);
