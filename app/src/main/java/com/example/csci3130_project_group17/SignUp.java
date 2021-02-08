@@ -16,10 +16,14 @@ import android.widget.Toast;
 import android.content.Intent;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,8 +191,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     }
 
 
-    public boolean userProfileCheck(){
-        return false;
+    // just need to add in the part where we report if the
+    public boolean userProfileCheck(String email){
+        Boolean result = false;
+        database.collection("user")
+                .whereEqualTo("email", email)
+                .get();
+        return result;
     }
 
     public boolean employerCheck(){
@@ -240,6 +249,15 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             //add all the checks for the
             if(emailCheck(email) && passwordCheck(password)) {
                 errorFlag = false;
+                if(userProfileCheck(email)) {
+                    // Alert dialog to tell user that profile is already in the db
+                    // Move them to login page
+                    errorFlag = true;
+
+                } else {
+                    errorFlag = false;
+                }
+
             } else if(!emailCheck(email)) {
                 errorMessageDisplay("Email is invalid");
                 errorFlag = true;
