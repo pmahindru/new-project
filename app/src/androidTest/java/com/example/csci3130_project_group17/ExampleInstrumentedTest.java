@@ -23,4 +23,7 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.csci3130_project_group17", appContext.getPackageName());
     }
+
+    //this is based on the acceptance test.
+
 }
