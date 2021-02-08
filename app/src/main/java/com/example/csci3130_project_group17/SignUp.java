@@ -1,7 +1,9 @@
 package com.example.csci3130_project_group17;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -14,10 +16,14 @@ import android.widget.Toast;
 import android.content.Intent;
 
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.R.*;
 
@@ -32,9 +38,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
 
-    FirebaseDatabase database =  null;
-    DatabaseReference userNameRef = null;
-    DatabaseReference emailRef = null;
+    FirebaseFirestore database =  null;
+    //DatabaseReference userNameRef = null;
+    //DatabaseReference emailRef = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,24 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     }
 
-    public void addToDatabase(){
+    public void addToDatabase(Map<String, Object> user){
+        String TAG = "databaseError";
+        database.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
     }
 
@@ -180,6 +203,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     }
 
     public void initializeDatabase(){
+        this.database = FirebaseFirestore.getInstance();
+
     }
 
     public void errorMessageDisplay(String error){
@@ -222,6 +247,20 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 errorMessageDisplay("Password is invalid. It should be have a lowercase and upper case alphabet, digit and a special character. It should be 6-15 characters in length.");
                 errorFlag = true;
             }
+        }
+
+        if(!errorFlag) {
+            Map<String, Object> user = new HashMap<>();
+            user.put("firstName", fname);
+            user.put("lastName", lname);
+            user.put("email", email);
+            user.put("password", password);
+            user.put("employer", true); //based on the employer radio button change the true or false value
+            user.put("orgName", "lol");
+
+            //maybe add userid here?
+
+            addToDatabase(user);
         }
 
 
