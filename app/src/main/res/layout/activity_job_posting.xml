@@ -192,7 +192,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <view
-        android:layout_width="600"
+        android:layout_width="600dp"
         android:layout_height="1dp"
         android:layout_marginTop="100dp"
         android:background="#808080"
