@@ -1,12 +1,11 @@
 package com.example.csci3130_project_group17;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,15 +14,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Intent;
 
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,18 +28,13 @@ import static android.R.*;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
-//    String firstName;
-//    String lastName;
-//    String email;
-//    String password;
-//    String organistion;
-//    Boolean employer;
-
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
 
-    FirebaseFirestore database =  null;
-    //DatabaseReference userNameRef = null;
-    //DatabaseReference emailRef = null;
+    //this is for the read and write in the database
+    FirebaseDatabase database =  null;
+    DatabaseReference userstable = null;
+    int userid = 1;
+    Boolean result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +57,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         initializeDatabase();
 
     }
+    public void initializeDatabase(){
+        //initialize your database and related fields here
+        database =  FirebaseDatabase.getInstance();
+        userstable = database.getReference().child("users");
+    }
 
-    public void addToDatabase(Map<String, Object> user){
-        String TAG = "databaseError";
-        database.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-
-
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+    public void addToDatabase(){
 
     }
 
@@ -190,44 +168,30 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{6,15}$");
     }
 
-
     // just need to add in the part where we report if the
     public boolean userProfileCheck(String email){
-        final Boolean[] result = {false};
-        database.collection("users")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String TAG ="QueryError";
-                if (task.isSuccessful()) {
-                    result[0] = task.getResult().isEmpty();
-                    System.out.println(result[0]);
-
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
-
-        return result[0];
+        //not done have to complete
+//        result = true;
+//        userstable.equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()){
+//                    result = false;
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
+        return result;
     }
 
+    //check for the employer and employee check s empty or not
     public boolean employerCheck(){
         return false;
     }
 
-    public boolean fullNameCheck(){
-        return false;
-    }
-
     public void switchToDashboard(){
-    }
-
-    public void initializeDatabase(){
-        this.database = FirebaseFirestore.getInstance();
-
     }
 
     public void errorMessageDisplay(String error){
@@ -253,68 +217,52 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         String email = emailaddress.getText().toString();
         String password = passwordInput.getText().toString();
 
-        String errorMessage = "";
         Boolean errorFlag = false;
 
         if(isInputEmpty(fname) || isInputEmpty(lname) || isInputEmpty(email) || isInputEmpty(password)) {
             errorMessageDisplay("One of the fields are empty");
             errorFlag = true;
-        } else {
+        }
+        else{
             //add all the checks for the
-            if(emailCheck(email) && passwordCheck(password)) {
-                errorFlag = false;
-                if(userProfileCheck(email)) {
-                    // The profile doesn't exist
-                    errorFlag = false;
-                    System.out.println("I am here!");
-
-                } else {
-                    // Alert dialog to tell user that profile is already in the db
-                    // Move them to login page
-                    errorFlag = true;
-                }
-            } else if(!emailCheck(email)) {
+            if(!emailCheck(email)) {
                 errorMessageDisplay("Email is invalid");
                 errorFlag = true;
             } else if(!passwordCheck(password)) {
                 errorMessageDisplay("Password is invalid. It should be have a lowercase and upper case alphabet, digit and a special character. It should be 6-15 characters in length.");
                 errorFlag = true;
             }
+            else if(userProfileCheck(email) == true) {
+                errorMessageDisplay("Thanks for sign in your database is saved");
+                errorFlag = false;
+            }
+            else if(userProfileCheck(email) == false){
+                // Alert dialog to tell user that profile is already in the db
+                // Move them to login page
+                errorMessageDisplay("email is already save ");
+                errorFlag = true;
+                Intent switchintent = new Intent(this,MainActivity.class);
+                startActivity(switchintent);
+            }
         }
 
         if(!errorFlag) {
+            String count = String.valueOf(userid);
             System.out.println("I was here!");
             Map<String, Object> user = new HashMap<>();
             user.put("firstName", fname);
             user.put("lastName", lname);
             user.put("email", email);
             user.put("password", password);
-            user.put("employer", true); //based on the employer radio button change the true or false value
+            user.put("employer", employer.isChecked());
+            user.put("employee", employee.isChecked());
             user.put("orgName", "lol");
 
             //maybe add userid here?
 
-            addToDatabase(user);
+            userstable.child(count).setValue(user);
+            userid = userid + 1;
+
         }
-
-
-
-
-//        if (errorMessage.isEmpty()) {
-//            //no errors were found!
-//            //much of the business logic goes here!
-//            setStatusMessage(errorMessage);
-//            if (isAlphanumericUserName(userName) && isValidEmailAddress(emailAddress)) {
-//                saveUserNameToFirebase(userName);
-//                saveEmailToFirebase(emailAddress);
-//                switch2WelcomeWindow(userName,emailAddress);
-//            }
-//        }
-//        else {
-//            setStatusMessage(errorMessage);
-//        }
-
-        //below line is only for check (below line is taken from the firebase lab)
-        //Toast.makeText(SignUp.this,"Sup", Toast.LENGTH_LONG).show();
     }
 }
