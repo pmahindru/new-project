@@ -83,7 +83,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 Spinner spinner = findViewById(R.id.spinner);
                 CheckBox employee = findViewById(R.id.employeeCheck);
                 if (((CheckBox) v).isChecked()){
-                    organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
                     spinner.setVisibility(View.VISIBLE);
                     employee.setVisibility(View.INVISIBLE);
 
@@ -94,7 +93,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                             String selectedItemText = (String) parentView.getItemAtPosition(position);
                             if(selectedItemText.equals("Business"))
                             {
-                                organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
+                                organisationName.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                organisationName.setVisibility(View.INVISIBLE);
+
                             }
 
                         }
@@ -115,8 +118,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 }
             }
         });
-
-
     }
 
     //---------------------------spinner start here -------------------------------------------------
@@ -194,6 +195,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         return passwordInput.getText().toString().trim();
     }
 
+    protected String employer_Input() {
+        CheckBox passwordInput = findViewById(R.id.employerId);
+        return passwordInput.getText().toString().trim();
+    }
+
     public void switchToDashboard(){
     }
 
@@ -259,7 +265,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         //so that we can check if employer and employee is checked or not
         CheckBox employer = findViewById(R.id.employerId);
         CheckBox employee = findViewById(R.id.employeeCheck);
-        if(!errorFlag[0]) {
+
             UUID idOne = UUID.randomUUID();
             userid = userid + 1;
             String count = String.valueOf(idOne);
@@ -273,6 +279,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             user.put("orgName", "lol");
             userstable.child(count).setValue(user);
 
-        }
+
     }
 }
