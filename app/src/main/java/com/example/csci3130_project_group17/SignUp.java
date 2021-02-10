@@ -97,17 +97,37 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
     protected void showorganization(){
         CheckBox employer = findViewById(R.id.employerId);
+        Spinner spinner = findViewById(R.id.spinner);
 
         employer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText organisationName = findViewById(R.id.organisationinput);
-                Spinner spinner = findViewById(R.id.spinner);
                 CheckBox employee = findViewById(R.id.employeeCheck);
                 if (((CheckBox) v).isChecked()){
-                    organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
                     spinner.setVisibility(View.VISIBLE);
                     employee.setVisibility(View.INVISIBLE);
+
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
+                            // your code here
+                            String selectedItemText = (String) parentView.getItemAtPosition(position);
+                            if(selectedItemText.equals("Business"))
+                            {
+                                organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
+                            }
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parentView) {
+                            // your code here
+                        }
+
+                    });
+
+
                 }
                 else{
                     ((CheckBox) v).setChecked(false);
@@ -117,6 +137,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 }
             }
         });
+
+
     }
 
     //---------------------------spinner start here -------------------------------------------------
@@ -127,7 +149,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         spinner.setOnItemSelectedListener(this);
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("Account Type");
-        arrayList.add("individual");
+        arrayList.add("Individual");
         arrayList.add("Business");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, layout.simple_spinner_item,arrayList){
             @Override
@@ -232,18 +254,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 errorMessageDisplay("Password is invalid. It should be have a lowercase and upper case alphabet, digit and a special character. It should be 6-15 characters in length.");
                 errorFlag = true;
             }
-            else if(userProfileCheck(email) == true) {
-                errorMessageDisplay("Thanks for sign in your database is saved");
-                errorFlag = false;
-            }
-            else if(userProfileCheck(email) == false){
-                // Alert dialog to tell user that profile is already in the db
-                // Move them to login page
-                errorMessageDisplay("email is already save ");
-                errorFlag = true;
-                Intent switchintent = new Intent(this,MainActivity.class);
-                startActivity(switchintent);
-            }
+
         }
 
         if(!errorFlag) {
