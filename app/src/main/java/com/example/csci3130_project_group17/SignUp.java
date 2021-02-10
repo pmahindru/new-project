@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.R.*;
 
@@ -34,7 +35,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     FirebaseDatabase database =  null;
     DatabaseReference userstable = null;
     int userid = 1;
-    Boolean result;
+    final Boolean[] errorFlag = {false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,22 +169,58 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{6,15}$");
     }
 
-    // just need to add in the part where we report if the
-    public boolean userProfileCheck(String email){
-        //not done have to complete
-//        result = true;
-//        userstable.equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()){
-//                    result = false;
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
-        return result;
+    public void switchtologin(){
+        Intent switchintent = new Intent(this,MainActivity.class);
+        startActivity(switchintent);
+    }
+
+    public void addtodatabase(){
+        if(!errorFlag[0]) {
+            System.out.println("I was here!");
+            Map<String, Object> user = new HashMap<>();
+            user.put("firstName", fname);
+            user.put("lastName", lname);
+            user.put("email", email);
+            user.put("password", password);
+            user.put("employer", employer.isChecked());
+            user.put("employee", employee.isChecked());
+            user.put("orgName", "lol");
+
+            //maybe add userid here?
+        }
+    }
+
+    protected String getUserName() {
+        //all inputs are here
+        EditText firstName = findViewById(R.id.fnameinput);
+        EditText lastName = findViewById(R.id.lnameinput);
+        EditText emailaddress = findViewById(R.id.emailinput);
+        EditText passwordInput = findViewById(R.id.passwordinput);
+        return userName.getText().toString().trim();
+    }
+
+    protected String getEmailAddress() {
+        EditText emailAddress = findViewById(R.id.emailAddress);
+        return emailAddress.getText().toString().trim();
+    }
+    protected String getUserName() {
+        EditText userName = findViewById(R.id.userName);
+        return userName.getText().toString().trim();
+    }
+
+    protected String getEmailAddress() {
+        EditText emailAddress = findViewById(R.id.emailAddress);
+        return emailAddress.getText().toString().trim();
+    }
+
+    protected String getUserName() {
+        EditText userName = findViewById(R.id.userName);
+        return userName.getText().toString().trim();
+    }
+
+    protected String getEmailAddress() {
+        EditText emailAddress = findViewById(R.id.emailAddress);
+        return emailAddress.getText().toString().trim();
     }
 
     //check for the employer and employee check s empty or not
@@ -201,11 +238,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     public void onClick(View view) {
 
-        //all inputs are here
-        EditText firstName = findViewById(R.id.fnameinput);
-        EditText lastName = findViewById(R.id.lnameinput);
-        EditText emailaddress = findViewById(R.id.emailinput);
-        EditText passwordInput = findViewById(R.id.passwordinput);
+
 
         //so that we can check if employer and employee is checked or not
         CheckBox employer = findViewById(R.id.employerId);
@@ -217,52 +250,49 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         String email = emailaddress.getText().toString();
         String password = passwordInput.getText().toString();
 
-        Boolean errorFlag = false;
-
         if(isInputEmpty(fname) || isInputEmpty(lname) || isInputEmpty(email) || isInputEmpty(password)) {
             errorMessageDisplay("One of the fields are empty");
-            errorFlag = true;
+            errorFlag[0] = true;
         }
         else{
             //add all the checks for the
             if(!emailCheck(email)) {
                 errorMessageDisplay("Email is invalid");
-                errorFlag = true;
+                errorFlag[0] = true;
             } else if(!passwordCheck(password)) {
                 errorMessageDisplay("Password is invalid. It should be have a lowercase and upper case alphabet, digit and a special character. It should be 6-15 characters in length.");
-                errorFlag = true;
+                errorFlag[0] = true;
             }
-            else if(userProfileCheck(email) == true) {
-                errorMessageDisplay("Thanks for sign in your database is saved");
-                errorFlag = false;
-            }
-            else if(userProfileCheck(email) == false){
-                // Alert dialog to tell user that profile is already in the db
-                // Move them to login page
-                errorMessageDisplay("email is already save ");
-                errorFlag = true;
-                Intent switchintent = new Intent(this,MainActivity.class);
-                startActivity(switchintent);
+            else  if (emailCheck(email) && passwordCheck(password)){
+                userstable.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+
+                            if (Objects.requireNonNull(dataSnapshot.child("email").getValue()).equals(email)){
+                                System.out.println("sdaadsada");
+                                errorMessageDisplay("email is already save ");
+                                errorFlag[0] = true;
+                                switchtologin();
+
+                                break;
+                            }
+                            else {
+                                System.out.println("asdasdadasdasdadasdasdas------------------------------");
+                                errorMessageDisplay("Thanks for sign in your database is saved");
+                                errorFlag[0] = false;
+                            }
+                        }
+                        addtodatabase(user);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
             }
         }
 
-        if(!errorFlag) {
-            String count = String.valueOf(userid);
-            System.out.println("I was here!");
-            Map<String, Object> user = new HashMap<>();
-            user.put("firstName", fname);
-            user.put("lastName", lname);
-            user.put("email", email);
-            user.put("password", password);
-            user.put("employer", employer.isChecked());
-            user.put("employee", employee.isChecked());
-            user.put("orgName", "lol");
 
-            //maybe add userid here?
 
-            userstable.child(count).setValue(user);
-            userid = userid + 1;
-
-        }
     }
 }
