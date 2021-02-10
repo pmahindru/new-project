@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import static android.R.*;
 
@@ -34,8 +35,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
     DatabaseReference userstable = null;
-    int userid = 1;
+    int userid = 0;
     final Boolean[] errorFlag = {false};
+    private static final Map<String, Object> user = new HashMap<>();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,35 +66,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         userstable = database.getReference().child("users");
     }
 
-    public void addToDatabase(){
-
-    }
-
     protected boolean isInputEmpty(String str){
         return str.isEmpty();
     }
-
-    //could be replaced by a single is empty function
-    //firstname check if it is empty or not
-    protected boolean isEmptyfirstname(String firstName){
-        return firstName.isEmpty();
-    }
-
-    //lastname check if it is empty or not
-    protected boolean isEmptylastname(String lastName){
-        return lastName.isEmpty() ;
-    }
-
-    //email check if it is empty or not
-    protected boolean isEmptyemail(String email){
-        return email.isEmpty();
-    }
-
-    //password check if it is empty or not
-    protected boolean isEmptypassword(String password){
-        return password.isEmpty();
-    }
-
 
 
     // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
@@ -129,7 +105,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                         }
 
                     });
-
 
                 }
                 else{
@@ -198,58 +173,25 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         startActivity(switchintent);
     }
 
-    public void addtodatabase(){
-        if(!errorFlag[0]) {
-            System.out.println("I was here!");
-            Map<String, Object> user = new HashMap<>();
-            user.put("firstName", fname);
-            user.put("lastName", lname);
-            user.put("email", email);
-            user.put("password", password);
-            user.put("employer", employer.isChecked());
-            user.put("employee", employee.isChecked());
-            user.put("orgName", "lol");
-
-            //maybe add userid here?
-        }
-    }
-
-    protected String getUserName() {
+    protected String first_Name() {
         //all inputs are here
         EditText firstName = findViewById(R.id.fnameinput);
+        return firstName.getText().toString().trim();
+    }
+
+    protected String last_Name() {
         EditText lastName = findViewById(R.id.lnameinput);
+
+        return lastName.getText().toString().trim();
+    }
+    protected String email_address() {
         EditText emailaddress = findViewById(R.id.emailinput);
+        return emailaddress.getText().toString().trim();
+    }
+
+    protected String password_Input() {
         EditText passwordInput = findViewById(R.id.passwordinput);
-        return userName.getText().toString().trim();
-    }
-
-    protected String getEmailAddress() {
-        EditText emailAddress = findViewById(R.id.emailAddress);
-        return emailAddress.getText().toString().trim();
-    }
-    protected String getUserName() {
-        EditText userName = findViewById(R.id.userName);
-        return userName.getText().toString().trim();
-    }
-
-    protected String getEmailAddress() {
-        EditText emailAddress = findViewById(R.id.emailAddress);
-        return emailAddress.getText().toString().trim();
-    }
-
-    protected String getUserName() {
-        EditText userName = findViewById(R.id.userName);
-        return userName.getText().toString().trim();
-    }
-
-    protected String getEmailAddress() {
-        EditText emailAddress = findViewById(R.id.emailAddress);
-        return emailAddress.getText().toString().trim();
-    }
-
-    //check for the employer and employee check s empty or not
-    public boolean employerCheck(){
-        return false;
+        return passwordInput.getText().toString().trim();
     }
 
     public void switchToDashboard(){
@@ -262,19 +204,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     public void onClick(View view) {
 
-
-
-        //so that we can check if employer and employee is checked or not
-        CheckBox employer = findViewById(R.id.employerId);
-        CheckBox employee = findViewById(R.id.employeeCheck);
-
-        //convert input into string format so that we check for it
-        String fname = firstName.getText().toString();
-        String lname = lastName.getText().toString();
-        String email = emailaddress.getText().toString();
-        String password = passwordInput.getText().toString();
-
-        Boolean errorFlag = false;
+        String fname = first_Name();
+        String lname = last_Name();
+        String email = email_address();
+        String password = password_Input();
 
         if(isInputEmpty(fname) || isInputEmpty(lname) || isInputEmpty(email) || isInputEmpty(password)) {
             errorMessageDisplay("One of the fields are empty");
@@ -294,22 +227,21 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-
                             if (Objects.requireNonNull(dataSnapshot.child("email").getValue()).equals(email)){
-                                System.out.println("sdaadsada");
-                                errorMessageDisplay("email is already save ");
                                 errorFlag[0] = true;
                                 switchtologin();
-
                                 break;
                             }
-                            else {
-                                System.out.println("asdasdadasdasdadasdasdas------------------------------");
-                                errorMessageDisplay("Thanks for sign in your database is saved");
-                                errorFlag[0] = false;
-                            }
                         }
-                        addtodatabase(user);
+                        if (snapshot.equals(email) &&  errorFlag[0]){
+                            errorMessageDisplay("email is already save ");
+                        }
+                        else if (!errorFlag[0]){
+                            errorMessageDisplay("Thanks for sign in your database is saved");
+                            errorFlag[0] = false;
+                            addtodatabase(user);
+                        }
+
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -317,11 +249,21 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 });
             }
         }
+    }
 
-        if(!errorFlag) {
-            String count = String.valueOf(userid);
+    private void addtodatabase(Map<String, Object> user) {
+        String fname = first_Name();
+        String lname = last_Name();
+        String email = email_address();
+        String password = password_Input();
+        //so that we can check if employer and employee is checked or not
+        CheckBox employer = findViewById(R.id.employerId);
+        CheckBox employee = findViewById(R.id.employeeCheck);
+        if(!errorFlag[0]) {
+            UUID idOne = UUID.randomUUID();
+            userid = userid + 1;
+            String count = String.valueOf(idOne);
             System.out.println("I was here!");
-            Map<String, Object> user = new HashMap<>();
             user.put("firstName", fname);
             user.put("lastName", lname);
             user.put("email", email);
@@ -329,11 +271,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             user.put("employer", employer.isChecked());
             user.put("employee", employee.isChecked());
             user.put("orgName", "lol");
-
-            //maybe add userid here?
-
             userstable.child(count).setValue(user);
-            userid = userid + 1;
 
         }
     }
