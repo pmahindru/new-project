@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Intent;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -74,7 +75,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
     protected void showorganization(){
         CheckBox employer = findViewById(R.id.employerId);
-        Spinner spinner = findViewById(R.id.spinner);
 
         employer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,9 +99,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                                 organisationName.setVisibility(View.INVISIBLE);
 
                             }
-
                         }
-
                         @Override
                         public void onNothingSelected(AdapterView<?> parentView) {
                             // your code here
@@ -195,12 +193,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         return passwordInput.getText().toString().trim();
     }
 
-    protected String employer_Input() {
-        CheckBox passwordInput = findViewById(R.id.employerId);
-        return passwordInput.getText().toString().trim();
+    protected String org_Name() {
+        EditText orgName = findViewById(R.id.organisationinput);
+        return orgName.getText().toString().trim();
     }
 
     public void switchToDashboard(){
+        //dashboard is not made, how will we go to the dashboard!! :)
     }
 
     public void errorMessageDisplay(String error){
@@ -247,7 +246,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                             errorFlag[0] = false;
                             addtodatabase(user);
                         }
-
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -262,6 +260,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         String lname = last_Name();
         String email = email_address();
         String password = password_Input();
+        String orgName = org_Name();
         //so that we can check if employer and employee is checked or not
         CheckBox employer = findViewById(R.id.employerId);
         CheckBox employee = findViewById(R.id.employeeCheck);
@@ -276,7 +275,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             user.put("password", password);
             user.put("employer", employer.isChecked());
             user.put("employee", employee.isChecked());
-            user.put("orgName", "lol");
+
+            user.put("orgName", orgName);
             userstable.child(count).setValue(user);
 
 
