@@ -98,6 +98,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
     protected void showorganization(){
         CheckBox employer = findViewById(R.id.employerId);
+        Spinner spinner = findViewById(R.id.spinner);
 
         employer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +110,27 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                     organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
                     spinner.setVisibility(View.VISIBLE);
                     employee.setVisibility(View.INVISIBLE);
+
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
+                            // your code here
+                            String selectedItemText = (String) parentView.getItemAtPosition(position);
+                            if(selectedItemText.equals("Business"))
+                            {
+                                organisationName.setVisibility(View.VISIBLE); // add part to show organisation name only when spinner option is checked
+                            }
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parentView) {
+                            // your code here
+                        }
+
+                    });
+
+
                 }
                 else{
                     ((CheckBox) v).setChecked(false);
@@ -118,6 +140,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 }
             }
         });
+
+
     }
 
     //---------------------------spinner start here -------------------------------------------------
@@ -128,7 +152,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         spinner.setOnItemSelectedListener(this);
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("Account Type");
-        arrayList.add("individual");
+        arrayList.add("Individual");
         arrayList.add("Business");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, layout.simple_spinner_item,arrayList){
             @Override
@@ -250,6 +274,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         String email = emailaddress.getText().toString();
         String password = passwordInput.getText().toString();
 
+        Boolean errorFlag = false;
+
         if(isInputEmpty(fname) || isInputEmpty(lname) || isInputEmpty(email) || isInputEmpty(password)) {
             errorMessageDisplay("One of the fields are empty");
             errorFlag[0] = true;
@@ -292,7 +318,23 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             }
         }
 
+        if(!errorFlag) {
+            String count = String.valueOf(userid);
+            System.out.println("I was here!");
+            Map<String, Object> user = new HashMap<>();
+            user.put("firstName", fname);
+            user.put("lastName", lname);
+            user.put("email", email);
+            user.put("password", password);
+            user.put("employer", employer.isChecked());
+            user.put("employee", employee.isChecked());
+            user.put("orgName", "lol");
 
+            //maybe add userid here?
 
+            userstable.child(count).setValue(user);
+            userid = userid + 1;
+
+        }
     }
 }
