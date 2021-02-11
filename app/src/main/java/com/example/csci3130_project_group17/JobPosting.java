@@ -69,6 +69,26 @@ public class JobPosting extends AppCompatActivity {
         return false;
     }
 
+    protected boolean jobTitleIsEmpty(String s){
+        return s.isEmpty();
+    }
+
+    public boolean jobTypeIsEmpty(String s){
+        return s.isEmpty();
+    }
+
+    public boolean jobLocationIsEmpty(String s){
+        return s.isEmpty();
+    }
+
+    public boolean jobPayRateIsEmpty(String s){
+        return s.isEmpty();
+    }
+
+    public boolean jobDescriptionIsEmpty(String s){
+        return s.isEmpty();
+    }
+
     protected void setErrorMessage(){
         //condition when no input
         if(getJobType()==null){
