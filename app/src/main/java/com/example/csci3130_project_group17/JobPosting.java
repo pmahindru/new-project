@@ -32,6 +32,7 @@ public class JobPosting extends AppCompatActivity {
         initializedatabase();
     }
 
+    //inital database
     public void initializedatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
