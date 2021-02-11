@@ -52,6 +52,7 @@ public class JobPosting extends AppCompatActivity {
 
     protected String getJobPayRate() {
         EditText rate = PAY;
+
         return PAY.getText().toString().trim();
     }
 
