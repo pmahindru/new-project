@@ -12,14 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="91dp"
         android:layout_marginLeft="91dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="136dp"
         android:layout_marginEnd="91dp"
         android:layout_marginRight="91dp"
         android:text="CREAT NEW JOB"
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,9 +26,9 @@
         android:id="@+id/job"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="168dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="224dp"
         android:text="JOB TITLE:"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -131,8 +130,8 @@
         android:id="@+id/DES"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
         android:layout_marginTop="64dp"
         android:text="DESCRIPTION:"
         android:textSize="20dp"
@@ -144,17 +143,14 @@
         android:id="@+id/inputforDES"
         android:layout_width="218dp"
         android:layout_height="114dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
         android:layout_marginTop="47dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:background="#808080"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/DES"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName12" />
 
     <Button
@@ -171,6 +167,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputforDES" />
 
+    <view
+        android:id="@+id/view2"
+        android:layout_width="600dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="650dp"
+        android:background="#808080"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/Home"
@@ -178,14 +183,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="150dp"
         android:layout_marginRight="150dp"
         android:text="HOME"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create" />
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <view
+        android:layout_width="600dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="100dp"
+        android:background="#808080"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,7 +35,7 @@ public class JobPostingUnitTest {
 
     @Test
     public void checkIfJobPayRateIsEmpty() {
-        assertTrue(jobPosting.jobPayRateIsEmpty("0.0"));
+        assertTrue(jobPosting.jobPayRateIsEmpty(""));
         assertFalse(jobPosting.jobPayRateIsEmpty("15.00"));
     }
 
@@ -43,6 +43,12 @@ public class JobPostingUnitTest {
     public void checkIfJobPayDescriptionIsEmpty() {
         assertTrue(jobPosting.jobDescriptionIsEmpty(""));
         assertFalse(jobPosting.jobDescriptionIsEmpty("This is a really nice job!"));
+    }
+
+    @Test
+    public void checkIsletter(){
+        assertTrue(jobPosting.isletter("test"));
+        assertFalse(jobPosting.isletter("test1"));
     }
 
     @AfterClass
