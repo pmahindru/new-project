@@ -35,7 +35,7 @@ public class JobPostingUnitTest {
 
     @Test
     public void checkIfJobPayRateIsEmpty() {
-        assertTrue(jobPosting.jobPayRateIsEmpty(""));
+        assertTrue(jobPosting.jobPayRateIsEmpty("0.0"));
         assertFalse(jobPosting.jobPayRateIsEmpty("15.00"));
     }
 

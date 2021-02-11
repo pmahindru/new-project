@@ -37,6 +37,9 @@ public class JobPosting extends AppCompatActivity {
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
 
+
+
+    //get method
     protected String getJobTitle() {
         EditText title = JobTitle;
         return title.getText().toString().trim();
@@ -62,13 +65,9 @@ public class JobPosting extends AppCompatActivity {
         return description.getText().toString().trim();
     }
 
-    protected boolean allFieldsEnteredCheck(){
-        if(getJobTitle()!=null&&getJobType()!=null&&getJobPayRate()!=null&&getJobDescription()!=null){
-            return true;
-        }
-        return false;
-    }
 
+
+    //missing or erro input
     protected boolean jobTitleIsEmpty(String s){
         return s.isEmpty();
     }
@@ -82,7 +81,8 @@ public class JobPosting extends AppCompatActivity {
     }
 
     public boolean jobPayRateIsEmpty(String s){
-        return s.isEmpty();
+        double d = new Double(s);
+        return d==0.0;
     }
 
     public boolean jobDescriptionIsEmpty(String s){
@@ -91,13 +91,13 @@ public class JobPosting extends AppCompatActivity {
 
     protected void setErrorMessage(){
         //condition when no input
-        if(getJobType()==null){
+        if(jobTypeIsEmpty(getJobType())){
             Toast.makeText(getBaseContext(),"Enter Job Type",Toast.LENGTH_SHORT).show();
         }
-        if(getJobTitle()==null){
+        if(jobTitleIsEmpty(getJobTitle())){
             Toast.makeText(getBaseContext(),"enter job title",Toast.LENGTH_SHORT).show();
         }
-        if(getJobPayRate()==null){
+        if(getJobPayRate()==0.0){
             Toast.makeText(getBaseContext(),"enter job rate",Toast.LENGTH_SHORT).show();
         }
         if(getJobDescription()==null){
@@ -122,6 +122,15 @@ public class JobPosting extends AppCompatActivity {
             jobInformation.child("jobPayRate").setValue(getJobPayRate());
             jobInformation.child("jobLocation").setValue(getJobLocation());
             jobInformation.child("jobSescription").setValue(getJobDescription());
+    }
+
+
+    protected void switchToJobPage(){
+
+    }
+
+    protected void publishJob(){
+
     }
 
 
