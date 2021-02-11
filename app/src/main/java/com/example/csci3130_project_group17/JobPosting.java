@@ -25,7 +25,9 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_job_posting);
 
         Creat = findViewById(R.id.create);
+        Creat.setOnClickListener(this);
         home = findViewById(R.id.Home);
+        home.setOnClickListener(this);
 
         initializedatabase();
     }
@@ -119,7 +121,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
             jobInformation.child("jobType").setValue(getJobType());
             jobInformation.child("jobPayRate").setValue(getJobPayRate());
             jobInformation.child("jobLocation").setValue(getJobLocation());
-            jobInformation.child("jobSescription").setValue(getJobDescription());
+            jobInformation.child("jobDescription").setValue(getJobDescription());
     }
 
 
@@ -135,6 +137,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v){
         switch (v.getId()){
             case R.id.create:
+                setErrorMessage();
                 //switch to job page
                 switchToJobPage();
                 break;
