@@ -45,6 +45,12 @@ public class JobPostingUnitTest {
         assertFalse(jobPosting.jobDescriptionIsEmpty("This is a really nice job!"));
     }
 
+    @Test
+    public void checkIsletter(){
+        assertTrue(jobPosting.isletter("test"));
+        assertFalse(jobPosting.isletter("test1"));
+    }
+
     @AfterClass
     public static void tearDown(){
         System.gc();
