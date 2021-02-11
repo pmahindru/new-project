@@ -21,22 +21,17 @@ public class SignUpUnitTest {
         signUp = new SignUp();
     }
 
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-
     // Checks if a field is empty
     @Test
     public void isEmpty() {
-        assertTrue(signUp.isEmptyfirstname(""));
-        assertFalse(signUp.isEmptyfirstname("xyz$56"));
-        assertTrue(signUp.isEmptylastname(""));
-        assertFalse(signUp.isEmptylastname("xyasdz$56"));
-        assertTrue(signUp.isEmptyemail(""));
-        assertFalse(signUp.isEmptyemail("sanju@dal.ca"));
-        assertTrue(signUp.isEmptypassword(""));
-        assertFalse(signUp.isEmptypassword("!Sanjan123"));
+        assertTrue(signUp.isInputEmpty(""));
+        assertFalse(signUp.isInputEmpty("xyz$56"));
+        assertTrue(signUp.isInputEmpty(""));
+        assertFalse(signUp.isInputEmpty("xyasdz$56"));
+        assertTrue(signUp.isInputEmpty(""));
+        assertFalse(signUp.isInputEmpty("sanju@dal.ca"));
+        assertTrue(signUp.isInputEmpty(""));
+        assertFalse(signUp.isInputEmpty("!Sanjan123"));
     }
 
     // Checks if email is valid
@@ -74,18 +69,6 @@ public class SignUpUnitTest {
         assertFalse(signUp.passwordCheck("Pranav123"));
         //length is too long for the password it should be 6 to 15
         assertFalse(signUp.passwordCheck("asdasddQWEASfnief12312!@#!#"));
-    }
-
-    // Checks if Organisation name is alphanumeric or not
-    @Test
-    public void isOrgNameAlphanumeric() {
-
-    }
-
-    // Checks if screen changed if info is valid (Could be an espresso test instead)
-    @Test
-    public void checkScreenSwitch() {
-
     }
 
 
