@@ -1,6 +1,8 @@
 package com.example.csci3130_project_group17;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.os.Bundle;
@@ -10,7 +12,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class JobPosting extends AppCompatActivity {
+public class JobPosting extends AppCompatActivity implements View.OnClickListener {
 
     private EditText JobTitle, TYPE, PAY, Location, Description;
     private Button Creat, home;
@@ -126,11 +128,24 @@ public class JobPosting extends AppCompatActivity {
 
 
     protected void switchToJobPage(){
-
+        setJobInformation_toDatabase();
+        publishJob();
     }
 
     protected void publishJob(){
+        //switch to the job page
+    }
 
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.create:
+                //switch to job page
+                switchToJobPage();
+                break;
+            case R.id.Home:
+                //switch to home page
+                break;
+        }
     }
 
 
