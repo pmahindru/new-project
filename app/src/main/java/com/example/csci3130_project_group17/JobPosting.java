@@ -50,10 +50,9 @@ public class JobPosting extends AppCompatActivity {
         return type.getText().toString().trim();
     }
 
-    protected Double getJobPayRate() {
+    protected String getJobPayRate() {
         EditText rate = PAY;
-        Double ans = Double.parseDouble(rate.getText().toString());
-        return ans;
+        return PAY.getText().toString().trim();
     }
 
     protected String getJobLocation(){
@@ -81,8 +80,8 @@ public class JobPosting extends AppCompatActivity {
     }
 
     public boolean jobPayRateIsEmpty(String s){
-        double d = new Double(s);
-        return d==0.0;
+
+        return s.isEmpty();
     }
 
     public boolean jobDescriptionIsEmpty(String s){
@@ -97,7 +96,7 @@ public class JobPosting extends AppCompatActivity {
         if(jobTitleIsEmpty(getJobTitle())){
             Toast.makeText(getBaseContext(),"enter job title",Toast.LENGTH_SHORT).show();
         }
-        if(getJobPayRate()==0.0){
+        if(jobPayRateIsEmpty(getJobPayRate())){
             Toast.makeText(getBaseContext(),"enter job rate",Toast.LENGTH_SHORT).show();
         }
         if(getJobDescription()==null){
