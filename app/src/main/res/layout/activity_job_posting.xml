@@ -6,13 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".JobPosting">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"></LinearLayout>
+
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="91dp"
         android:layout_marginLeft="91dp"
-        android:layout_marginTop="136dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="91dp"
         android:layout_marginRight="91dp"
         android:text="CREAT NEW JOB"
@@ -28,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="224dp"
+        android:layout_marginTop="101dp"
         android:text="JOB TITLE:"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -39,7 +47,7 @@
         android:id="@+id/editTextTextPersonName6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
@@ -65,7 +73,7 @@
         android:id="@+id/editTextTextPersonName10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
@@ -81,7 +89,7 @@
         android:layout_marginStart="35dp"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="25dp"
-        android:text="PAY HERE:"
+        android:text="PAY RATE:"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +99,7 @@
         android:id="@+id/editTextTextPersonName11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
@@ -117,7 +125,7 @@
         android:id="@+id/editTextTextPersonName12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
@@ -132,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="35dp"
         android:text="DESCRIPTION:"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -141,15 +149,15 @@
 
     <EditText
         android:id="@+id/inputforDES"
-        android:layout_width="218dp"
-        android:layout_height="114dp"
-        android:layout_marginTop="47dp"
+        android:layout_width="208dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
+        android:background="#808080"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName12" />
 
@@ -159,23 +167,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="150dp"
         android:layout_marginRight="150dp"
+        android:layout_marginBottom="32dp"
         android:text="Create"
+        app:layout_constraintBottom_toTopOf="@+id/Home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputforDES" />
-
-    <view
-        android:id="@+id/view2"
-        android:layout_width="600dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="650dp"
-        android:background="#808080"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/Home"
@@ -183,21 +183,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="150dp"
         android:layout_marginRight="150dp"
         android:text="HOME"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-    <view
-        android:layout_width="600dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="100dp"
-        android:background="#808080"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/create" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
