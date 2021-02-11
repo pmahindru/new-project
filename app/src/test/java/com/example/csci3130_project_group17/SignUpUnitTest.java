@@ -21,11 +21,6 @@ public class SignUpUnitTest {
         signUp = new SignUp();
     }
 
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-
     // Checks if a field is empty
     @Test
     public void isEmpty() {
@@ -74,18 +69,6 @@ public class SignUpUnitTest {
         assertFalse(signUp.passwordCheck("Pranav123"));
         //length is too long for the password it should be 6 to 15
         assertFalse(signUp.passwordCheck("asdasddQWEASfnief12312!@#!#"));
-    }
-
-    // Checks if screen changed if info is valid (Could be an espresso test instead)
-    @Test
-    public void checkScreenSwitchdashboar() {
-
-    }
-
-    // Checks if screen changed if info is valid (Could be an espresso test instead)
-    @Test
-    public void checkScreenSwitchlogin() {
-
     }
 
 

@@ -67,12 +67,35 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         userstable = database.getReference().child("users");
     }
 
+    private void addtodatabase(Map<String, Object> user) {
+        String fname = first_Name();
+        String lname = last_Name();
+        String email = email_address();
+        String password = password_Input();
+        String orgName = org_Name();
+        //so that we can check if employer and employee is checked or not
+        CheckBox employer = findViewById(R.id.employerId);
+        CheckBox employee = findViewById(R.id.employeeCheck);
+
+        UUID idOne = UUID.randomUUID();
+        userid = userid + 1;
+        String count = String.valueOf(idOne);
+        System.out.println("I was here!");
+        user.put("firstName", fname);
+        user.put("lastName", lname);
+        user.put("email", email);
+        user.put("password", password);
+        user.put("employer", employer.isChecked());
+        user.put("employee", employee.isChecked());
+
+        user.put("orgName", orgName);
+        userstable.child(count).setValue(user);
+    }
+
     protected boolean isInputEmpty(String str){
         return str.isEmpty();
     }
 
-
-    // the organisation is supposed to show only when the bussiness option in the spinner is used, we need to add that
     protected void showorganization(){
         CheckBox employer = findViewById(R.id.employerId);
 
@@ -119,7 +142,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     }
 
     //---------------------------spinner start here -------------------------------------------------
-    //this thing is reference from the given link
+    //The solution to implement spinner behaviour has been used from
     //https://www.tutorialspoint.com/android/android_spinner_control.html
     protected void jobsspinner(){
         Spinner spinner = findViewById(R.id.spinner);
@@ -168,12 +191,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     }
 
     public void switchtologin(){
+        //considering this is the main activity
         Intent switchintent = new Intent(this,MainActivity.class);
         startActivity(switchintent);
     }
 
     protected String first_Name() {
-        //all inputs are here
         EditText firstName = findViewById(R.id.fnameinput);
         return firstName.getText().toString().trim();
     }
@@ -199,12 +222,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     }
 
     public void switchToDashboard(){
-        //dashboard is not made, how will we go to the dashboard!! :)
+        //dashboard is not made, which is why there is no functionality to switch to it yet :)
     }
 
     public void errorMessageDisplay(String error){
         Toast.makeText(SignUp.this,error, Toast.LENGTH_LONG).show();
-
     }
 
     public void onClick(View view) {
@@ -219,7 +241,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             errorFlag[0] = true;
         }
         else{
-            //add all the checks for the
             if(!emailCheck(email)) {
                 errorMessageDisplay("Email is invalid");
                 errorFlag[0] = true;
@@ -239,10 +260,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                             }
                         }
                         if (snapshot.equals(email) &&  errorFlag[0]){
-                            errorMessageDisplay("email is already save ");
+                            errorMessageDisplay("An account with this email already exists");
                         }
                         else if (!errorFlag[0]){
-                            errorMessageDisplay("Thanks for sign in your database is saved");
+                            errorMessageDisplay("Your account has been created");
                             errorFlag[0] = false;
                             addtodatabase(user);
                         }
@@ -255,30 +276,5 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         }
     }
 
-    private void addtodatabase(Map<String, Object> user) {
-        String fname = first_Name();
-        String lname = last_Name();
-        String email = email_address();
-        String password = password_Input();
-        String orgName = org_Name();
-        //so that we can check if employer and employee is checked or not
-        CheckBox employer = findViewById(R.id.employerId);
-        CheckBox employee = findViewById(R.id.employeeCheck);
 
-            UUID idOne = UUID.randomUUID();
-            userid = userid + 1;
-            String count = String.valueOf(idOne);
-            System.out.println("I was here!");
-            user.put("firstName", fname);
-            user.put("lastName", lname);
-            user.put("email", email);
-            user.put("password", password);
-            user.put("employer", employer.isChecked());
-            user.put("employee", employee.isChecked());
-
-            user.put("orgName", orgName);
-            userstable.child(count).setValue(user);
-
-
-    }
 }
