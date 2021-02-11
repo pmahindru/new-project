@@ -23,11 +23,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_posting);
-        JobTitle = findViewById(R.id.editTextTextPersonName6);
-        TYPE = findViewById(R.id.editTextTextPersonName10);
-        PAY = findViewById(R.id.editTextTextPersonName11);
-        Location = findViewById(R.id.editTextTextPersonName12);
-        Description = findViewById(R.id.inputforDES);
+
         Creat = findViewById(R.id.create);
         home = findViewById(R.id.Home);
 
@@ -43,27 +39,27 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     //get method
     protected String getJobTitle() {
-        EditText title = JobTitle;
+        EditText title = findViewById(R.id.editTextTextPersonName6);
         return title.getText().toString().trim();
     }
 
     protected String getJobType() {
-        EditText type = TYPE;
+        EditText type =  findViewById(R.id.editTextTextPersonName10);
         return type.getText().toString().trim();
     }
 
     protected String getJobPayRate() {
-        EditText rate = PAY;
+        EditText rate = findViewById(R.id.editTextTextPersonName11);
 
-        return PAY.getText().toString().trim();
+        return rate.getText().toString().trim();
     }
 
     protected String getJobLocation(){
-        EditText location = Location;
+        EditText location = findViewById(R.id.editTextTextPersonName12);
         return location.getText().toString().trim();
     }
     protected String getJobDescription() {
-        EditText description = Description;
+        EditText description = findViewById(R.id.inputforDES);
         return description.getText().toString().trim();
     }
 
