@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,8 +14,7 @@ import java.util.UUID;
 
 public class JobPosting extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText JobTitle, TYPE, PAY, Location, Description;
-    private Button Creat, home;
+    private Button createButton, ButtonHome;
     private String errorMessage;
     DatabaseReference jobInformation;
 
@@ -26,10 +24,10 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_posting);
 
-        Creat = findViewById(R.id.create);
-        Creat.setOnClickListener(this);
-        home = findViewById(R.id.Home);
-        home.setOnClickListener(this);
+        createButton = findViewById(R.id.createJobButton);
+        createButton.setOnClickListener(this);
+        ButtonHome = findViewById(R.id.homeButton);
+        ButtonHome.setOnClickListener(this);
 
         initializedatabase();
     }
@@ -43,33 +41,33 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     //get method
     protected String getJobTitle() {
-        EditText title = findViewById(R.id.editTextTextPersonName6);
+        EditText title = findViewById(R.id.jobTitleInput);
         return title.getText().toString().trim();
     }
 
     protected String getJobType() {
-        EditText type =  findViewById(R.id.editTextTextPersonName10);
+        EditText type =  findViewById(R.id.jobTypeInput);
         return type.getText().toString().trim();
     }
 
     protected String getJobPayRate() {
-        EditText rate = findViewById(R.id.editTextTextPersonName11);
+        EditText rate = findViewById(R.id.jobPayRateInput);
 
         return rate.getText().toString().trim();
     }
 
     protected String getJobLocation(){
-        EditText location = findViewById(R.id.editTextTextPersonName12);
+        EditText location = findViewById(R.id.jobLocationInput);
         return location.getText().toString().trim();
     }
     protected String getJobDescription() {
-        EditText description = findViewById(R.id.inputforDES);
+        EditText description = findViewById(R.id.jobDescriptionInput);
         return description.getText().toString().trim();
     }
 
 
 
-    //missing or erro input
+    //missing or invalid input
     protected boolean jobTitleIsEmpty(String s){
         return s.isEmpty();
     }
@@ -91,8 +89,10 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         return s.isEmpty();
     }
 
-    protected String setErrorMessage(){
+    protected String getErrorMessage(){
+        //clear error message
         errorMessage="";
+        //determine if any fields are empty
         if (jobTitleIsEmpty(getJobTitle())){
             errorMessage = "Enter Job Title";
         }
@@ -108,6 +108,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         else if (getJobDescription().isEmpty()){
             errorMessage ="Enter Job Description";
         }
+        //determine if invalid characters entered
         else {
             if((!isletter(getJobTitle()))|| (!isletter(getJobType()))){
                 errorMessage = "Only letters allowed";
@@ -121,7 +122,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         return input.matches("^[A-Za-z\\s]+$");
     }
 
-    protected void setJobInformation_toDatabase(){
+    protected void saveJobToDatabase(){
         String jobID = UUID.randomUUID().toString();
         jobInformation.child(jobID).child("jobTitle").setValue(getJobTitle());
         jobInformation.child(jobID).child("jobType").setValue(getJobType());
@@ -136,19 +137,22 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     }
 
     public void onClick(View v){
+        //determine which button was pressed
         switch (v.getId()){
-            case R.id.create:
-                String error = setErrorMessage();
+            case R.id.createJobButton:
+                String error = getErrorMessage();
+                //if there is an error message, notify user of error
                 if (!error.isEmpty()){
                     Toast.makeText(getBaseContext(),errorMessage,Toast.LENGTH_LONG).show();
                 }else{
-                    setJobInformation_toDatabase();
+                    //if no errors, publish job in database and notify user of success
+                    saveJobToDatabase();
                     Toast.makeText(getBaseContext(),"Job Successfully Created",Toast.LENGTH_LONG).show();
                 }
                 //switch to job page
                 switchToJobPage();
                 break;
-            case R.id.Home:
+            case R.id.homeButton:
                 //switch to home page
                 break;
         }

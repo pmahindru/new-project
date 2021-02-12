@@ -7,7 +7,7 @@
     tools:context=".JobPosting">
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/jobScreenTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="91dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/job"
+        android:id="@+id/jobTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName6"
+        android:id="@+id/jobTitleInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -46,10 +46,10 @@
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/jobScreenTitle" />
 
     <TextView
-        android:id="@+id/type"
+        android:id="@+id/jobTypeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
@@ -59,10 +59,10 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/job" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTitleLabel" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName10"
+        android:id="@+id/jobTypeInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -72,10 +72,10 @@
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName6" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTitleInput" />
 
     <TextView
-        android:id="@+id/PAY"
+        android:id="@+id/jobPayRateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
@@ -85,10 +85,10 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/type" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTypeLabel" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName11"
+        android:id="@+id/jobPayRateInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -98,10 +98,10 @@
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName10" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTypeInput" />
 
     <TextView
-        android:id="@+id/LOCATION"
+        android:id="@+id/jobLocationLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
@@ -111,10 +111,10 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PAY" />
+        app:layout_constraintTop_toBottomOf="@+id/jobPayRateLabel" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName12"
+        android:id="@+id/jobLocationInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -124,10 +124,10 @@
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName11" />
+        app:layout_constraintTop_toBottomOf="@+id/jobPayRateInput" />
 
     <TextView
-        android:id="@+id/DES"
+        android:id="@+id/jobDescriptionLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
@@ -137,10 +137,10 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LOCATION" />
+        app:layout_constraintTop_toBottomOf="@+id/jobLocationLabel" />
 
     <EditText
-        android:id="@+id/inputforDES"
+        android:id="@+id/jobDescriptionInput"
         android:layout_width="218dp"
         android:layout_height="114dp"
         android:layout_marginTop="47dp"
@@ -151,10 +151,10 @@
         android:inputType="textMultiLine"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName12" />
+        app:layout_constraintTop_toBottomOf="@+id/jobLocationInput" />
 
     <Button
-        android:id="@+id/create"
+        android:id="@+id/createJobButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
@@ -165,7 +165,7 @@
         android:text="Create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputforDES" />
+        app:layout_constraintTop_toBottomOf="@+id/jobDescriptionInput" />
 
     <View
         android:id="@+id/view2"
@@ -178,7 +178,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Home"
+        android:id="@+id/homeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"

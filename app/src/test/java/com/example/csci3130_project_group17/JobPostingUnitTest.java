@@ -15,6 +15,7 @@ public class JobPostingUnitTest {
         jobPosting = new JobPosting();
     }
 
+    //tests to check if input is empty
     @Test
     public void checkIfJobTitleIsEmpty() {
         assertTrue(jobPosting.jobTitleIsEmpty(""));
@@ -45,6 +46,7 @@ public class JobPostingUnitTest {
         assertFalse(jobPosting.jobDescriptionIsEmpty("This is a really nice job!"));
     }
 
+    //test to check if input only contains Letters
     @Test
     public void checkIsletter(){
         assertTrue(jobPosting.isletter("test"));

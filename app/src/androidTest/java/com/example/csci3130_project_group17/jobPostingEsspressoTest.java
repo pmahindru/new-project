@@ -24,19 +24,19 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
         @Test
         public void checkIfOnJobPostingPage(){
-            onView(withId(R.id.textView8)).check(matches(withText("CREAT NEW JOB")));
-            onView(withId(R.id.job)).check(matches(withText("JOB TITLE:")));
-            onView(withId(R.id.editTextTextPersonName6)).check(matches(withText("")));
-            onView(withId(R.id.PAY)).check(matches(withText("PAY RATE:")));
-            onView(withId(R.id.editTextTextPersonName10)).check(matches(withText("")));
-            onView(withId(R.id.type)).check(matches(withText("TYPE:")));
-            onView(withId(R.id.editTextTextPersonName11)).check(matches(withText("")));
-            onView(withId(R.id.LOCATION)).check(matches(withText("LOCATION:")));
-            onView(withId(R.id.editTextTextPersonName12)).check(matches(withText("")));
-            onView(withId(R.id.DES)).check(matches(withText("DESCRIPTION:")));
-            onView(withId(R.id.inputforDES)).check(matches(withText("")));
-            onView(withId(R.id.create)).check(matches(withText("Create")));
-            onView(withId(R.id.Home)).check(matches(withText("HOME")));
+            onView(withId(R.id.jobScreenTitle)).check(matches(withText("CREAT NEW JOB")));
+            onView(withId(R.id.jobTitleLabel)).check(matches(withText("JOB TITLE:")));
+            onView(withId(R.id.jobTitleInput)).check(matches(withText("")));
+            onView(withId(R.id.jobPayRateLabel)).check(matches(withText("PAY RATE:")));
+            onView(withId(R.id.jobTypeInput)).check(matches(withText("")));
+            onView(withId(R.id.jobTypeLabel)).check(matches(withText("TYPE:")));
+            onView(withId(R.id.jobPayRateInput)).check(matches(withText("")));
+            onView(withId(R.id.jobLocationLabel)).check(matches(withText("LOCATION:")));
+            onView(withId(R.id.jobLocationInput)).check(matches(withText("")));
+            onView(withId(R.id.jobDescriptionLabel)).check(matches(withText("DESCRIPTION:")));
+            onView(withId(R.id.jobDescriptionInput)).check(matches(withText("")));
+            onView(withId(R.id.createJobButton)).check(matches(withText("Create")));
+            onView(withId(R.id.homeButton)).check(matches(withText("HOME")));
         }
 
     }
