@@ -1,12 +1,10 @@
 package com.example.csci3130_project_group17;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,4 +21,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void switchLogIn(View view) {
+        Intent intent = new Intent(this, LogIn.class);
+    }
 }
