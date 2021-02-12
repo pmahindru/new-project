@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import java.util.UUID;
 
 public class JobPosting extends AppCompatActivity implements View.OnClickListener {
 
@@ -108,7 +109,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
             errorMessage ="Enter Job Description";
         }
         else {
-            if((!isletter(getJobTitle()))|| (!isletter(getJobType()))||(!isletter(getJobDescription()))|| (!isletter(getJobLocation()))||(!isletter(getJobDescription()))){
+            if((!isletter(getJobTitle()))|| (!isletter(getJobType()))){
                 errorMessage = "Only letters allowed";
             }
         }
@@ -117,25 +118,21 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     }
 
     protected boolean isletter(String input){
-        return input.matches("[A-Za-z]");
+        return input.matches("^[A-Za-z\\s]+$");
     }
 
     protected void setJobInformation_toDatabase(){
-            jobInformation.child("jobTitle").setValue(getJobTitle());
-            jobInformation.child("jobType").setValue(getJobType());
-            jobInformation.child("jobPayRate").setValue(getJobPayRate());
-            jobInformation.child("jobLocation").setValue(getJobLocation());
-            jobInformation.child("jobDescription").setValue(getJobDescription());
+        String jobID = UUID.randomUUID().toString();
+        jobInformation.child(jobID).child("jobTitle").setValue(getJobTitle());
+        jobInformation.child(jobID).child("jobType").setValue(getJobType());
+        jobInformation.child(jobID).child("jobPayRate").setValue(getJobPayRate());
+        jobInformation.child(jobID).child("jobLocation").setValue(getJobLocation());
+        jobInformation.child(jobID).child("jobDescription").setValue(getJobDescription());
     }
 
 
     protected void switchToJobPage(){
-        setJobInformation_toDatabase();
-        publishJob();
-    }
 
-    protected void publishJob(){
-        //switch to the job page
     }
 
     public void onClick(View v){
