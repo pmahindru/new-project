@@ -21,4 +21,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void switch2JobPosting(View view){
+        Intent jobIntent = new Intent(this, JobPosting.class);
+        startActivity(jobIntent);
+    }
+
 }
