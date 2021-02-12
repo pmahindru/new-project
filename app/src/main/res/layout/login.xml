@@ -4,98 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
     android:animateLayoutChanges="false"
     android:background="#EAEAEA"
     tools:context=".MainActivity">
-
-<EditText
-    android:id="@+id/usernameinput"
-    android:layout_width="348dp"
-    android:layout_height="45dp"
-    android:layout_marginStart="31dp"
-    android:layout_marginLeft="31dp"
-    android:layout_marginTop="20dp"
-    android:layout_marginEnd="32dp"
-    android:layout_marginRight="32dp"
-    android:layout_marginBottom="11dp"
-    android:ems="10"
-    android:hint="User Name "
-    android:inputType="textPersonName"
-    android:textColorHint="#000000"
-    android:textSize="18sp"
-    app:layout_constraintBottom_toTopOf="@+id/textView3"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView3"
-    tools:ignore="MissingConstraints" />
-
-
-    <EditText
-        android:id="@+id/passwordinput"
-        android:layout_width="348dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginLeft="31dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textColorHint="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/usernameinput"
-        app:layout_constraintTop_toBottomOf="@+id/usernameinput"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-    android:id="@+id/textView3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="101dp"
-    android:layout_marginLeft="101dp"
-    android:layout_marginTop="60dp"
-    android:layout_marginEnd="101dp"
-    android:layout_marginRight="101dp"
-    android:layout_marginBottom="30dp"
-    android:text=" Login to your account"
-    android:textColor="#020202"
-    android:textColorHint="#000000"
-    android:textSize="24sp"
-    app:layout_constraintBottom_toTopOf="@+id/usernameinput"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/loginbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginLeft="99dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="99dp"
-        android:layout_marginRight="99dp"
-        android:layout_marginBottom="384dp"
-        android:text="Login"
-        android:textColorHint="#000000"
-        app:backgroundTint="#673AB7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.568"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/organisationinput"
-        tools:ignore="MissingConstraints" />
-=======
-    android:background="@android:drawable/screen_background_light_transparent">
-
+    
     <ImageView
         android:id="@+id/logIn_logo"
         android:layout_width="139dp"
@@ -213,6 +125,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logIn_text_noAccount"
         app:rippleColor="@android:color/transparent" />
->>>>>>> refs/remotes/origin/feature/log-in
 
 </androidx.constraintlayout.widget.ConstraintLayout>
