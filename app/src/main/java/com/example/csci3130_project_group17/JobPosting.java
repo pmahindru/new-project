@@ -2,6 +2,7 @@ package com.example.csci3130_project_group17;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_posting);
+
+        Intent jobIntent = getIntent();
 
         createButton = findViewById(R.id.createJobButton);
         createButton.setOnClickListener(this);
@@ -131,6 +134,10 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         jobInformation.child(jobID).child("jobDescription").setValue(getJobDescription());
     }
 
+    protected void switchToMain(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
     protected void switchToJobPage(){
 
@@ -154,6 +161,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.homeButton:
                 //switch to home page
+                switchToMain();
                 break;
         }
     }
