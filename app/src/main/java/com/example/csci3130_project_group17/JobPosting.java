@@ -16,6 +16,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     private EditText JobTitle, TYPE, PAY, Location, Description;
     private Button Creat, home;
+    private String errorMessage;
     DatabaseReference jobInformation;
 
 
@@ -89,27 +90,30 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         return s.isEmpty();
     }
 
-    protected void setErrorMessage(){
-        //condition when no input
-        if(jobTypeIsEmpty(getJobType())){
-            Toast.makeText(getBaseContext(),"Enter Job Type",Toast.LENGTH_SHORT).show();
+    protected String setErrorMessage(){
+        errorMessage="";
+        if (jobTitleIsEmpty(getJobTitle())){
+            errorMessage = "Enter Job Title";
         }
-        if(jobTitleIsEmpty(getJobTitle())){
-            Toast.makeText(getBaseContext(),"enter job title",Toast.LENGTH_SHORT).show();
+        else if (jobTypeIsEmpty(getJobType())){
+            errorMessage ="Enter Job Type";
         }
-        if(jobPayRateIsEmpty(getJobPayRate())){
-            Toast.makeText(getBaseContext(),"enter job rate",Toast.LENGTH_SHORT).show();
+        else if (jobPayRateIsEmpty(getJobPayRate())){
+            errorMessage ="Enter Pay Rate";
         }
-        if(getJobDescription()==null){
-            Toast.makeText(getBaseContext(),"enter job description",Toast.LENGTH_SHORT).show();
+        else if (jobLocationIsEmpty(getJobLocation())){
+            errorMessage = "Enter Job Location";
+        }
+        else if (getJobDescription().isEmpty()){
+            errorMessage ="Enter Job Description";
+        }
+        else {
+            if((!isletter(getJobTitle()))|| (!isletter(getJobType()))||(!isletter(getJobDescription()))|| (!isletter(getJobLocation()))||(!isletter(getJobDescription()))){
+                errorMessage = "Only letters allowed";
+            }
         }
 
-        //condition when erro input
-        if(!isletter(getJobType())||!isletter(getJobType())||!isletter(getJobDescription())){
-            Toast.makeText(getBaseContext(),"wrong input",Toast.LENGTH_SHORT).show();
-        }
-
-
+        return errorMessage;
     }
 
     protected boolean isletter(String input){
@@ -137,7 +141,13 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v){
         switch (v.getId()){
             case R.id.create:
-                setErrorMessage();
+                String error = setErrorMessage();
+                if (!error.isEmpty()){
+                    Toast.makeText(getBaseContext(),errorMessage,Toast.LENGTH_LONG).show();
+                }else{
+                    setJobInformation_toDatabase();
+                    Toast.makeText(getBaseContext(),"Job Successfully Created",Toast.LENGTH_LONG).show();
+                }
                 //switch to job page
                 switchToJobPage();
                 break;
