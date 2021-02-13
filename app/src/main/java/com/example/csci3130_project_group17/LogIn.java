@@ -61,7 +61,7 @@ public class LogIn extends AppCompatActivity{
     //if the email and password don't match, clear password textbox and display error massage
     @SuppressLint("SetTextI18n")
     private void logInFail() {
-        err.setText("email and password not match, or the email doesn't exist");
+        err.setText("email and password not match, or the email not exist");
         pw.setText("");
     }
 
