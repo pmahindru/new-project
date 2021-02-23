@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
     }
 
     public void switch2SignUp(View view) {
@@ -26,4 +28,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(jobIntent);
     }
 
+    public void switchLogIn(View view) {
+        Intent intent = new Intent(this, LogIn.class);
+    }
 }
