@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void switch2SignUp(View view){
+    public void switch2SignUp(View view) {
         Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
     }
@@ -24,10 +24,6 @@ public class MainActivity extends AppCompatActivity {
     public void switch2JobPosting(View view){
         Intent jobIntent = new Intent(this, JobPosting.class);
         startActivity(jobIntent);
-    }
-    public void switch2Login(View view){
-        Intent loginIntent = new Intent(this, Login.class);
-        startActivity(loginIntent);
     }
 
 }
