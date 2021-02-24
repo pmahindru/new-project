@@ -6,4 +6,7 @@
     <string name="dont_have_an_account">Dont have an Account</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
+    <string name="EMPTY_STRING">\"\"</string>
+    <string name="TITLE">" Create an Account  "</string>
+    <string name="SIGNUPBUTTON">" Create your Account"</string>
 </resources>
