@@ -1,6 +1,7 @@
 package com.example.csci3130_project_group17;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 
-public class LogIn extends AppCompatActivity implements View.OnClickListener{
+public class LogIn extends AppCompatActivity{
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
 
     //this is for the read and write in the database
@@ -30,14 +31,46 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener{
 
         Intent intent = getIntent();
 
-        // take value of button
-        Button square_button = (Button)findViewById(R.id.switchtodashboard);
-        square_button.setOnClickListener(this);
-
         //initiating the Firebase
         initializeDatabase();
 
+        //button function take place
+        OnClick();
     }
+    public void switchToDashboard(){
+        //dashboard is not made, which is why there is no functionality to switch to it yet :)
+    }
+
+    public void switchToSignup(){
+        //dashboard is not made, which is why there is no functionality to switch to it yet :)
+        Intent SignupIntent = new Intent(this, SignUp.class);
+        startActivity(SignupIntent);
+    }
+
+    private void OnClick() {
+        // take value of button
+        Button square_button = (Button)findViewById(R.id.switchtodashboard);
+        square_button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String email = email_address();
+                String password = password_Input();
+                CheckEmailAndPasswordIsValid(email, password);
+            }
+        });
+
+        // take value of button
+        Button square_button2 = (Button)findViewById(R.id.switch2Signup);
+        square_button2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                switchToSignup();
+            }
+        });
+    }
+
     public void initializeDatabase(){
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
@@ -62,13 +95,18 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener{
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{6,15}$");
     }
 
-
-    public void switchToDashboard(){
-        //dashboard is not made, which is why there is no functionality to switch to it yet :)
-    }
-
     protected void errorMessageDisplay(String error){
         Toast.makeText(LogIn.this,error, Toast.LENGTH_LONG).show();
+    }
+
+    private void messageshow() {
+        //alert square box that shows the answer
+        AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
+        // change the integer value into string value
+        alert_answer.setMessage("Please check you email \n If you dont have an account please SignUp");
+        alert_answer.setPositiveButton("ok", null);
+        alert_answer.create();
+        alert_answer.show();
     }
 
     protected String email_address() {
@@ -81,9 +119,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener{
         return passwordInput.getText().toString().trim();
     }
 
-    public void onClick(View view) {
-        String email = email_address();
-        String password = password_Input();
+    private void CheckEmailAndPasswordIsValid(String email, String password) {
         if(isInputEmpty(email) || isInputEmpty(password)) {
             errorMessageDisplay("One of the fields are empty");
             errorFlag[0] = true;
@@ -97,28 +133,29 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener{
                 errorFlag[0] = true;
             }
             else  if (emailCheck(email) && passwordCheck(password)){
-                logintable.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-                            if (Objects.requireNonNull(dataSnapshot.child("email").getValue()).equals(email)){
-                                errorFlag[0] = true;
-                                break;
-                            }
-                        }
-                        if (snapshot.equals(email) &&  errorFlag[0]){
-                            errorMessageDisplay("An account with this email already exists");
-                        }
-                        else if (!errorFlag[0]){
-                            errorMessageDisplay("Your account has been created");
-                            errorFlag[0] = false;
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
+                CheckEmailAndPasswordInDatabase(email, password);
             }
+        }
+    }
+
+    private void CheckEmailAndPasswordInDatabase(String email, String password) {
+        logintable.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    if (Objects.requireNonNull(dataSnapshot.child("email").getValue()).equals(email) && Objects.requireNonNull(dataSnapshot.child("password").getValue()).equals(password)){
+                        errorFlag[0] = true;
+                        errorMessageDisplay("go to the dashboard");
+                        break;
+                    }
+                }
+                if (!errorFlag[0]) {
+                    messageshow();
+                }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 }
