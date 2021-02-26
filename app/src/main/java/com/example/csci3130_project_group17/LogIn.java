@@ -103,7 +103,7 @@ public class LogIn extends AppCompatActivity{
         //alert square box that shows the answer
         AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
         // change the integer value into string value
-        alert_answer.setMessage("Please check you email \n If you dont have an account please SignUp");
+        alert_answer.setMessage("Please check you Email and Password is incorrect \nIf you dont have an account please SignUp");
         alert_answer.setPositiveButton("ok", null);
         alert_answer.create();
         alert_answer.show();

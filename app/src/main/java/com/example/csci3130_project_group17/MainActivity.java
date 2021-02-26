@@ -13,12 +13,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
+        setContentView(R.layout.login);
     }
-
-
     public void switch2JobPosting(View view){
         Intent jobIntent = new Intent(this, JobPosting.class);
         startActivity(jobIntent);
