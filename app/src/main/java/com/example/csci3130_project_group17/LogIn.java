@@ -37,12 +37,18 @@ public class LogIn extends AppCompatActivity{
         //button function take place
         OnClick();
     }
-    public void switchToDashboard(){
-        //dashboard is not made, which is why there is no functionality to switch to it yet :)
+    public void switchToDashboard(Boolean employee){
+        if(employee) {
+            Intent dashboardIntent = new Intent(this, DashboardEmployee.class);
+            startActivity(dashboardIntent);
+        } else  {
+            Intent dashboardIntent = new Intent(this, DashboardEmployer.class);
+            startActivity(dashboardIntent);
+        }
+
     }
 
     public void switchToSignup(){
-        //dashboard is not made, which is why there is no functionality to switch to it yet :)
         Intent SignupIntent = new Intent(this, SignUp.class);
         startActivity(SignupIntent);
     }
@@ -76,6 +82,8 @@ public class LogIn extends AppCompatActivity{
         database =  FirebaseDatabase.getInstance();
         logintable = database.getReference().child("users");
     }
+
+
 
     protected boolean isInputEmpty(String str){
         return str.isEmpty();
@@ -144,8 +152,10 @@ public class LogIn extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()){
                     if (Objects.requireNonNull(dataSnapshot.child("email").getValue()).equals(email) && Objects.requireNonNull(dataSnapshot.child("password").getValue()).equals(password)){
+
                         errorFlag[0] = true;
-                        errorMessageDisplay("go to the dashboard");
+                        switchToDashboard(Objects.requireNonNull(dataSnapshot.child("employee").getValue()).equals(true));
+
                         break;
                     }
                 }
