@@ -11,4 +11,5 @@
     <string name="SIGNUPBUTTON">" Create your Account"</string>
     <string name="view_jobs">View Jobs</string>
     <string name="logo">Logo</string>
+    <string name="title_activity_view_jobs">Map</string>
 </resources>
