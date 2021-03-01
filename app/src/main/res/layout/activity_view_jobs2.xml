@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".ViewJobs">
 
     <Button
@@ -75,21 +76,109 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="351dp"
-        android:layout_height="343dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="184dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:visibility="invisible"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mapLayer"
+        android:layout_width="386dp"
+        android:layout_height="434dp"
+        android:layout_marginTop="19dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ViewJobs"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/filterButton">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="302dp"
+            android:layout_height="253dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginTop="37dp"
+            android:layout_marginEnd="42dp"
+            android:layout_marginRight="42dp"
+            android:layout_marginBottom="144dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".ViewJobs"
+            tools:visibility="visible" />
+
+        <SeekBar
+            android:id="@+id/rangeInput"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:layout_marginLeft="68dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="68dp"
+            android:layout_marginRight="68dp"
+            android:layout_marginBottom="79dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rangeLabel" />
+
+
+        <TextView
+            android:id="@+id/rangeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginLeft="54dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="207dp"
+            android:layout_marginRight="207dp"
+            android:layout_marginBottom="10dp"
+            android:text="Location Range"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/rangeInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/map" />
+
+        <Button
+            android:id="@+id/locationApplyButton"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginRight="34dp"
+            android:layout_marginBottom="15dp"
+            android:text="Apply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/locationCancelButton"
+            app:layout_constraintTop_toBottomOf="@+id/rangeInput" />
+
+        <Button
+            android:id="@+id/locationCancelButton"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:layout_marginLeft="29dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="164dp"
+            android:layout_marginRight="164dp"
+            android:layout_marginBottom="16dp"
+            android:text="Cancel"
+            android:textColor="#000000"
+            app:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/locationApplyButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rangeInput" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

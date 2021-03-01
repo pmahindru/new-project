@@ -1,7 +1,9 @@
 package com.example.csci3130_project_group17;
 
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
@@ -11,14 +13,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,9 +34,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,19 +49,17 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     LocationManager manager;
 
+    DatabaseReference jobInformation;
+
+
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String LOCATION_PREF = "locationPref";
 
     Context context;
     Activity activity;
-    Spinner spinner;
-    String radius_array[] = {"5", "10", "15", "20", "25"};
     int radius = 5;
 
-    private GoogleMap googleMap;
-    private Serializable escolas;
-    private ProgressDialog dialog;
     private Circle mCircle;
     private Marker mMarker;
 
@@ -59,7 +67,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     //ArrayList<Places> placesList = new ArrayList<>();
     //PlacesAdapter adapter;
-    ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,13 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_view_jobs2);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
+        setClickListeners();
+        initializedatabase();
+
+    }
+
+    public void initializedatabase(){
+        jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
 
     private void setClickListeners() {
@@ -76,9 +90,70 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 locateUser();
             }});
+
+
+        Button locationCancelButton = (Button) findViewById(R.id.locationApplyButton);
+
+        locationCancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                showJobPosts();
+            }});
+
+        SeekBar rangeInput = (SeekBar) findViewById(R.id.rangeInput);
+        rangeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                radius = progress;
+                drawMarkerWithCircle(currentLocation);
+            }
+        });
+    }
+
+    private void drawMarkerWithCircle(LatLng position) {
+        double radiusInMeters = radius * 1000.0;  // increase decrease this distancce as per your requirements
+        int strokeColor = 0xffff0000; //red outline
+        int shadeColor = 0x44ff0000; //opaque red fill
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(position)
+                .radius(radiusInMeters)
+                .fillColor(shadeColor)
+                .strokeColor(strokeColor)
+                .strokeWidth(8);
+        mCircle = mMap.addCircle(circleOptions);
+    }
+
+
+    public void showJobPosts() {
+        View mapInfo =  findViewById(R.id.mapLayer);
+        RecyclerView jobPostings = findViewById(R.id.recyclerView);
+
+        mapInfo.setVisibility(View.INVISIBLE);
+        jobPostings.setVisibility(View.VISIBLE);
+
     }
 
     public void locateUser() {
+
+        View mapInfo =  findViewById(R.id.mapLayer);
+        RecyclerView jobPostings = findViewById(R.id.recyclerView);
+
+        jobPostings.setVisibility(View.INVISIBLE);
+        mapInfo.setVisibility(View.VISIBLE);
+
+        activity = ViewJobs.this;
+        context = ViewJobs.this;
 
         if (Build.VERSION.SDK_INT >= 23) {
             checkLocationPermission(activity, context, LOCATION_PERMISSION, LOCATION_PREF);
@@ -100,7 +175,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        //manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 5, listener);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, listener);
 
         mapFragment.getMapAsync(this);
 
@@ -121,11 +196,78 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Showing / hiding your current location
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+
+        // Enable / Disable zooming controls
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Enable / Disable my location button
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        // Enable / Disable Compass icon
+        mMap.getUiSettings().setCompassEnabled(true);
+
+        // Enable / Disable Rotate gesture
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
+
+        // Enable / Disable zooming functionality
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+
+        if (currentLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+            drawMarkerWithCircle(currentLocation);
+        }
     }
+
+    LocationListener listener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+
+            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+            Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
+
+            mMap.clear();
+            drawMarkerWithCircle(currentLocation);
+
+            if (mMap != null) {
+               /* if (isFirstLaunch) {
+                    MarkerOptions mOptions = new MarkerOptions().position(currentLocation);
+                    myMarker = mMap.addMarker(mOptions);
+                    isFirstLaunch = false;
+                } else {
+                    myMarker.setPosition(currentLocation);
+                }*/
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
 
 
     private void checkLocationPermission(final Activity activity, final Context context, final String Permission, final String prefName) {
