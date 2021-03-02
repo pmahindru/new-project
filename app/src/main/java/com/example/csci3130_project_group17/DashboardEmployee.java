@@ -14,6 +14,8 @@ public class DashboardEmployee extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employee);
 
+        Intent intent = getIntent();
+
         setClickListeners();
     }
 
