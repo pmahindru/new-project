@@ -20,7 +20,7 @@ public class jobHistoryAdapter extends FirebaseRecyclerAdapter<Job, jobHistoryAd
         //bind view holders to Job model fields
         holder.title.setText(model.getJobTitle());
         holder.name.setText(model.getEmployerName());
-        holder.totalPay.setText(model.getJobPayRate());
+        holder.totalPay.setText("$"+model.getJobPayRate());
     }
 
     @NonNull
