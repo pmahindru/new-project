@@ -15,6 +15,7 @@ public class jobHistory extends AppCompatActivity {
     DatabaseReference jobInformation;
     private RecyclerView historyRecView;
     jobHistoryAdapter adapter;
+    String uID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,8 @@ public class jobHistory extends AppCompatActivity {
 
         Intent intent = getIntent();
         initializeDatabase();
+        //TODO: replace uID w/ logged in user ID once that functionality is implemented
+        uID = "5200c54f-45fb-4d0f-a9d4-51b670427395";
 
         historyRecView = findViewById(R.id.historyRecyclerView);
         setHistoryRecView(historyRecView);
@@ -39,7 +42,7 @@ public class jobHistory extends AppCompatActivity {
                 new LinearLayoutManager(this));
         FirebaseRecyclerOptions<Job> options
                 = new FirebaseRecyclerOptions.Builder<Job>()
-                .setQuery(jobInformation.orderByChild("state").equalTo("closed"), Job.class)
+                .setQuery(jobInformation.orderByChild("empID_state").equalTo(uID+"_closed"), Job.class)
                 .build();
 
         adapter = new jobHistoryAdapter(options);
