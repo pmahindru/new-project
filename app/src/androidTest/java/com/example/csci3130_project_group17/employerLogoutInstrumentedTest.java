@@ -23,10 +23,10 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class LogoutInstrumentedTest {
+public class employerLogoutInstrumentedTest {
 
     @Rule
-    public ActivityScenarioRule<DashboardEmployee> myRule = new ActivityScenarioRule<>(DashboardEmployee.class);
+    public ActivityScenarioRule<DashboardEmployer> myRule = new ActivityScenarioRule<>(DashboardEmployer.class);
 
     @Test
     public void useAppContext() {
@@ -36,16 +36,6 @@ public class LogoutInstrumentedTest {
     }
 
     //this is based on the acceptance test.
-    @Test
-    public void checkIfEmployeeRedirectToLogin() {
-        onView(withId(R.id.logoutButton2)).perform(click());
-        onView(withId(R.id.switchtodashboard)).check(matches(withText(R.string.login)));
-    }
-
-
-    @Rule
-    public ActivityScenarioRule<DashboardEmployer> newRule = new ActivityScenarioRule<>(DashboardEmployer.class);
-
 
     @Test
     public void checkIfEmployerRedirectToLogin() {

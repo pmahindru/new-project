@@ -40,7 +40,7 @@ public class DashboardEmployee extends AppCompatActivity {
 
     }
 
-    public void logout() {
+    private void logout() {
 
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
