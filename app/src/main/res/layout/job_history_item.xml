@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        app:cardBackgroundColor="#8751E6"
+        app:contentPadding="5sp">
+
+        <TextView
+            android:id="@+id/jobTitleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:drawableBottom="@color/white"
+            android:text="TextView"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="@tools:sample/cities" />
+
+        <TextView
+            android:id="@+id/jobNameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="TextView"
+            android:textSize="18sp"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/jobTotalLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:text="TextView" />
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
