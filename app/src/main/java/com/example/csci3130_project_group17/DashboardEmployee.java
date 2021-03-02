@@ -24,12 +24,26 @@ public class DashboardEmployee extends AppCompatActivity {
         public void onClick(View view) {
             switchToViewJobs();
         }});
+
+        Button logout = findViewById(R.id.logoutButton2);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {logout();};
+        });
+
     }
 
     public void switchToViewJobs() {
 
         Intent viewJobsIntent = new Intent(this, ViewJobs.class);
         startActivity(viewJobsIntent);
+
+    }
+
+    public void logout() {
+
+        Intent switchToLogin = new Intent(this, LogIn.class);
+        startActivity(switchToLogin);
 
     }
 }
