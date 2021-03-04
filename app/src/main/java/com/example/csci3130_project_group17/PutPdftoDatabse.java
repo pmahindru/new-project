@@ -2,9 +2,14 @@ package com.example.csci3130_project_group17;
 
 public class PutPdftoDatabse {
     public String name;
-    public String URL;
+    public String url;
 
     public PutPdftoDatabse() {
+    }
+
+    public PutPdftoDatabse(String name, String url){
+        this.name = name;
+        this.url = url;
     }
 
     public String getName() {
@@ -16,15 +21,11 @@ public class PutPdftoDatabse {
     }
 
     public String getURL() {
-        return URL;
+        return url;
     }
 
     public void setURL(String URL) {
-        this.URL = URL;
+        this.url = URL;
     }
 
-    public PutPdftoDatabse(String name, String URL){
-        this.name = name;
-        this.URL = URL;
-    }
 }

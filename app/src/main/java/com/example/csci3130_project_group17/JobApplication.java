@@ -1,16 +1,30 @@
 package com.example.csci3130_project_group17;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.Intent;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,13 +36,13 @@ public class JobApplication extends AppCompatActivity{
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
     DatabaseReference userstable = null;
+    StorageReference storageReference = null;
+
     EditText resume;
+    private Uri datauri;
     int userid = 0;
     final Boolean[] errorFlag = {false};
     private static final Map<String, Object> user = new HashMap<>();
-
-    //upload things to the database
-    Button square_button = (Button)findViewById(R.id.Apply);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +56,6 @@ public class JobApplication extends AppCompatActivity{
 
         //button function take place
         OnClick();
-
     }
 
     private void OnClick() {
@@ -55,11 +68,13 @@ public class JobApplication extends AppCompatActivity{
             }
         });
 
+        Button square_button = (Button)findViewById(R.id.Apply);
         square_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-
+                updatepdffiletodatabase(datauri);
+                System.out.println("call this thing or not");
             }
         });
 
@@ -76,38 +91,57 @@ public class JobApplication extends AppCompatActivity{
 
     //upload a resume in pdf in the database i took a look from here
     //https://www.youtube.com/watch?v=lY9zSr6cxko
-    private void selectanduploadresume() {
+    public void selectanduploadresume() {
         Intent intent = new Intent();
         intent.setType("application/pdf");
         intent.setAction(intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"PDF FILE SELECT"),12);
+        startActivityForResult(Intent.createChooser(intent,"PDF FILE SELECT"),86);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData()!= null){
+        if (requestCode == 86 && resultCode == RESULT_OK && data != null && data.getData()!= null){
             resume.setText(data.getDataString().substring(data.getDataString().lastIndexOf("/") + 1));
-            square_button.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    updatepdffiletodatabase(data.getData());
-                }
-            });
+            this.datauri = data.getData();
         }
 
     }
 
     private void updatepdffiletodatabase(Uri data) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("File is uploading");
+        progressDialog.show();
 
+        StorageReference reference = storageReference.child("pranav" + System.currentTimeMillis() + ".pdf");
+        reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @SuppressLint("ShowToast")
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isComplete());
+                Uri uri = uriTask.getResult();
+                assert uri != null;
+                PutPdftoDatabse putPdftoDatabse = new PutPdftoDatabse(resume.getText().toString(), uri.toString());
+                userstable.child("resume").setValue(putPdftoDatabse);
+                Toast.makeText(getApplicationContext(),"all things add to the database",Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                double progess = (100.0 * snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                progressDialog.setMessage("File is uploading......" + (int) progess + "%");
+            }
+        });
     }
 
     public void initializeDatabase(){
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
-        userstable = database.getReference().child("Application");
+        userstable = database.getReference("application");
+        storageReference = FirebaseStorage.getInstance().getReference();
     }
 
     protected String first_Name() {
