@@ -3,6 +3,8 @@ package com.example.csci3130_project_group17;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +25,8 @@ public class LogIn extends AppCompatActivity{
     FirebaseDatabase database =  null;
     DatabaseReference logintable = null;
     final Boolean[] errorFlag = {false};
+    SharedPreferences storedAppData;
+    String uID = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class LogIn extends AppCompatActivity{
         setContentView(R.layout.login);
 
         Intent intent = getIntent();
+        storedAppData = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
 
         //initiating the Firebase
         initializeDatabase();
@@ -154,6 +159,10 @@ public class LogIn extends AppCompatActivity{
                     if (Objects.requireNonNull(dataSnapshot.child("email").getValue()).equals(email) && Objects.requireNonNull(dataSnapshot.child("password").getValue()).equals(password)){
 
                         errorFlag[0] = true;
+
+                        uID = dataSnapshot.getKey();
+                        storeUserData(uID);
+
                         switchToDashboard(Objects.requireNonNull(dataSnapshot.child("employee").getValue()).equals(true));
 
                         break;
@@ -167,5 +176,11 @@ public class LogIn extends AppCompatActivity{
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    public void storeUserData(String uID) {
+        SharedPreferences.Editor editor = storedAppData.edit();
+        editor.putString("uID", uID);
+        editor.commit();
     }
 }
