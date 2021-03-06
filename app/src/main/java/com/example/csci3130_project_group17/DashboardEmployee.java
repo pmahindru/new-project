@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.Button;
 
 public class DashboardEmployee extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employee);
+
+        //get stored user data
+        StoredData data = new StoredData(getApplicationContext());
+        String uID = data.getStoredUserID();
 
         setClickListeners();
     }
@@ -30,6 +33,6 @@ public class DashboardEmployee extends AppCompatActivity {
 
         Intent viewJobsIntent = new Intent(this, ViewJobs.class);
         startActivity(viewJobsIntent);
-
     }
+
 }
