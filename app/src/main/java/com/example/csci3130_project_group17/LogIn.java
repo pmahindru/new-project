@@ -25,7 +25,8 @@ public class LogIn extends AppCompatActivity{
     FirebaseDatabase database =  null;
     DatabaseReference logintable = null;
     final Boolean[] errorFlag = {false};
-    SharedPreferences storedAppData;
+    StoredData appData;
+    SharedPreferences data;
     String uID = null;
 
     @Override
@@ -34,7 +35,8 @@ public class LogIn extends AppCompatActivity{
         setContentView(R.layout.login);
 
         Intent intent = getIntent();
-        storedAppData = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        appData = new StoredData(data);
 
         //initiating the Firebase
         initializeDatabase();
@@ -161,7 +163,7 @@ public class LogIn extends AppCompatActivity{
                         errorFlag[0] = true;
 
                         uID = dataSnapshot.getKey();
-                        storeUserData(uID);
+                        appData.storeUserID(uID);
 
                         switchToDashboard(Objects.requireNonNull(dataSnapshot.child("employee").getValue()).equals(true));
 
@@ -178,9 +180,4 @@ public class LogIn extends AppCompatActivity{
         });
     }
 
-    public void storeUserData(String uID) {
-        SharedPreferences.Editor editor = storedAppData.edit();
-        editor.putString("uID", uID);
-        editor.commit();
-    }
 }
