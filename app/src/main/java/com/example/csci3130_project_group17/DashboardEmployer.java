@@ -10,5 +10,10 @@ public class DashboardEmployer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employer);
+
+        //get stored user data
+        StoredData data = new StoredData(getApplicationContext());
+        String uID = data.getStoredUserID();
     }
+
 }
