@@ -6,24 +6,22 @@ public class Job {
     private String jobDescription;
     private String jobLocation;
     private String jobPayRate;
-    private String jobState;
+    private String state;
     private String employeeID;
-    private String empID_state;
     private String employerName;
 
     //constructors
     public Job() {
     }
 
-    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String jobState, String employeeID, String employerName) {
+    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String state, String employeeID, String employerName) {
         this.jobTitle = jobTitle;
         this.jobType = jobType;
         this.jobDescription = jobDescription;
         this.jobLocation = jobLocation;
         this.jobPayRate = jobPayRate;
-        this.jobState = jobState;
+        this.state = state;
         this.employeeID = employeeID;
-        this.empID_state = employeeID + "_" + jobState;
         this.employerName = employerName;
     }
 
@@ -68,12 +66,12 @@ public class Job {
         this.jobPayRate = jobPayRate;
     }
 
-    public String getJobState() {
-        return jobState;
+    public String getState() {
+        return state;
     }
 
-    public void setJobState(String jobState) {
-        this.jobState = jobState;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getEmployeeID() {
@@ -82,14 +80,6 @@ public class Job {
 
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
-    }
-
-    public String getEmpID_state() {
-        return empID_state;
-    }
-
-    public void setEmpID_state(String empID_state) {
-        this.empID_state = empID_state;
     }
 
     public String getEmployerName() {
