@@ -16,11 +16,34 @@
         android:text="Job History"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
+    <ToggleButton
+        android:id="@+id/toggleButtonState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/historyTItleView"
+        android:layout_centerHorizontal="true"
+        android:text="ToggleButton"
+        android:textOff="Current"
+        android:textOn="Completed" />
+
+    <TextView
+        android:id="@+id/noJobsMessageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/historyTItleView"
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal"
+        android:text="No Jobs Available"
+        android:textColor="#AA5252"
+        android:textSize="24sp"
+        android:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/historyTItleView"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toggleButtonState"
+        android:layout_marginTop="-1dp"
         android:isScrollContainer="true"
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="vertical">
