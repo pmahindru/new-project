@@ -5,45 +5,49 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-public class jobHistoryAdapter extends FirebaseRecyclerAdapter<Job, jobHistoryAdapter.historyViewholder> {
+import java.util.List;
+
+
+public class jobHistoryAdapter extends RecyclerView.Adapter{
+    private List<Job> jobsList;
 
     //constructor
-    public jobHistoryAdapter(@NonNull FirebaseRecyclerOptions<Job> options) {
-        super(options);
-    }
-
-    @Override
-    protected void onBindViewHolder(@NonNull historyViewholder holder, int position, @NonNull Job model) {
-        //bind view holders to Job model fields
-        holder.title.setText(model.getJobTitle());
-        holder.name.setText(model.getEmployerName());
-        holder.totalPay.setText("$"+model.getJobPayRate());
+    public jobHistoryAdapter(List<Job> jobsList) {
+        this.jobsList = jobsList;
     }
 
     @NonNull
     @Override
-    public historyViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //use history item template to show data
-        View historyItemTemplate = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_history_item, parent, false);
-        return new jobHistoryAdapter.historyViewholder(historyItemTemplate);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_history_item,parent,false);
+        HistoryViewHolder historyViewHolder = new HistoryViewHolder(view);
+        return historyViewHolder;
     }
 
-    public class historyViewholder extends RecyclerView.ViewHolder{
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        HistoryViewHolder historyViewHolder = (HistoryViewHolder)holder;
+        Job job = jobsList.get(position);
+        historyViewHolder.title.setText(job.getJobTitle());
+        historyViewHolder.name.setText("Employer: " +job.getEmployerName());
+        historyViewHolder.rate.setText("$"+job.getJobPayRate()+"/hr");
+        historyViewHolder.state.setText("State: " + job.getState());
+    }
 
-        TextView title, name, totalPay;
-        //get references to history item layout template views
-        public historyViewholder(@NonNull View itemView) {
+    @Override
+    public int getItemCount() {
+        return jobsList.size();
+    }
+
+    public class HistoryViewHolder extends RecyclerView.ViewHolder {
+        TextView title,name, state, rate;
+        public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-
             title = itemView.findViewById(R.id.jobTitleLayout);
             name = itemView.findViewById(R.id.jobNameLayout);
-            totalPay = itemView.findViewById(R.id.jobTotalLayout);
-
+            state = itemView.findViewById(R.id.jobStateLayout);
+            rate = itemView.findViewById(R.id.jobTotalLayout);
         }
-
     }
-
 }
