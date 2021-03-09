@@ -8,13 +8,13 @@ public class Job {
     private String jobPayRate;
     private String state;
     private String employeeID;
-    private String employerName;
+    private String employerID;
 
     //constructors
     public Job() {
     }
 
-    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String state, String employeeID, String employerName) {
+    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String state, String employeeID, String employerID) {
         this.jobTitle = jobTitle;
         this.jobType = jobType;
         this.jobDescription = jobDescription;
@@ -22,7 +22,7 @@ public class Job {
         this.jobPayRate = jobPayRate;
         this.state = state;
         this.employeeID = employeeID;
-        this.employerName = employerName;
+        this.employerID = employerID;
     }
 
     //getters and setters
@@ -82,11 +82,11 @@ public class Job {
         this.employeeID = employeeID;
     }
 
-    public String getEmployerName() {
-        return employerName;
+    public String getEmployerID() {
+        return employerID;
     }
 
-    public void setEmployerName(String employerName) {
-        this.employerName = employerName;
+    public void setEmployerID(String employerID) {
+        this.employerID = employerID;
     }
 }
