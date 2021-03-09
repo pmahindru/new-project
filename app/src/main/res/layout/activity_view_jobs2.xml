@@ -41,6 +41,8 @@
         app:layout_constraintStart_toEndOf="@+id/locateButton"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="340dp"
@@ -51,7 +53,7 @@
         android:layout_marginEnd="35dp"
         android:layout_marginRight="35dp"
         android:layout_marginBottom="5dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -81,7 +83,7 @@
         android:layout_width="386dp"
         android:layout_height="434dp"
         android:layout_marginTop="19dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterButton">

@@ -3,7 +3,9 @@ package com.example.csci3130_project_group17;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.Manifest;
 import android.app.Activity;
@@ -22,11 +24,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,11 +43,16 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
@@ -51,6 +61,9 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     DatabaseReference jobInformation;
 
+    public RecyclerView recyclerView;
+    public RecyclerView.LayoutManager layoutManager;
+    public RecyclerView.Adapter recycleViewAdaptor;
 
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -65,6 +78,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     LatLng currentLocation;
 
+    ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
+
     //ArrayList<Places> placesList = new ArrayList<>();
     //PlacesAdapter adapter;
 
@@ -74,12 +89,36 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_view_jobs2);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recycleViewAdaptor = new RecycleViewAdaptor();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(recycleViewAdaptor);
+
         setClickListeners();
-        initializedatabase();
+        initializeDatabase();
+        pullJobs();
 
     }
 
-    public void initializedatabase(){
+    private void initializeJobPostings() {
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recycleViewAdaptor = new RecycleViewAdaptor(jobsList);
+
+        recyclerView.setAdapter(recycleViewAdaptor);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
+
+
+    }
+
+    public void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
 
@@ -104,23 +143,23 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 radius = progress;
+                mMap.clear();
                 drawMarkerWithCircle(currentLocation);
             }
         });
     }
 
     private void drawMarkerWithCircle(LatLng position) {
+        mMap.clear();
         double radiusInMeters = radius * 1000.0;  // increase decrease this distancce as per your requirements
         int strokeColor = 0xffff0000; //red outline
         int shadeColor = 0x44ff0000; //opaque red fill
@@ -132,6 +171,46 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
         mCircle = mMap.addCircle(circleOptions);
+    }
+
+    public void pullJobs() {
+
+        jobInformation.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Store all the job posts in the jobslist arraylist as a hashmap
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    jobsList.add((HashMap<String, String>) postSnapshot.getValue());
+                }
+
+
+                //all methods that require anything to do with the data retrieved will be called here
+
+                System.out.println(jobsList);
+                for(HashMap<String,String> jobItem: jobsList) {
+                    System.out.println(jobItem.get("jobTitle"));
+
+                }
+
+                initializeJobPostings();
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                String TAG = "JobRetrievalError";
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+
+
+
+
+
     }
 
 
