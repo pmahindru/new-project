@@ -47,8 +47,15 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     //noinspection GradleCompatible
     implementation 'com.android.support:design:27.1.1'
-
+    implementation 'com.firebaseui:firebase-ui-database:4.3.2'
+    implementation 'com.firebaseui:firebase-ui-firestore:4.3.2'
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.firebaseui:firebase-ui:3.2.2'
+    implementation 'com.google.gms:google-services:3.2.0'
+    implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.android.gms:play-services:11.8.0'
 
 }
