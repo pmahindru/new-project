@@ -4,43 +4,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="15dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="70dp"
-        app:cardBackgroundColor="#8751E6"
-        app:contentPadding="5sp">
+        app:cardBackgroundColor="#DCD0F1"
+        app:cardElevation="20dp">
 
-        <TextView
-            android:id="@+id/jobTitleLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:drawableBottom="@color/white"
-            android:text="TextView"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            tools:text="@tools:sample/cities" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/jobNameLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="TextView"
-            android:textSize="18sp"
-            tools:text="@tools:sample/full_names" />
+            <TextView
+                android:id="@+id/jobTitleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:drawableBottom="@color/white"
+                android:text="TextView"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="@tools:sample/cities" />
 
-        <TextView
-            android:id="@+id/jobTotalLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/jobNameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="TextView"
+                android:textSize="18sp"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView
+                android:id="@+id/jobStateLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="TextView"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/jobTotalLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="TextView" />
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
