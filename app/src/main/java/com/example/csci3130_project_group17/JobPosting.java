@@ -18,7 +18,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     private Button createButton, ButtonHome;
     private String errorMessage;
     DatabaseReference jobInformation;
-
+    String uID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_job_posting);
 
         Intent jobIntent = getIntent();
+        StoredData data = new StoredData(getApplicationContext());
+        uID = data.getStoredUserID();
 
         createButton = findViewById(R.id.createJobButton);
         createButton.setOnClickListener(this);
@@ -127,15 +129,12 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     protected void saveJobToDatabase(){
         String jobID = UUID.randomUUID().toString();
-        jobInformation.child(jobID).child("jobTitle").setValue(getJobTitle());
-        jobInformation.child(jobID).child("jobType").setValue(getJobType());
-        jobInformation.child(jobID).child("jobPayRate").setValue(getJobPayRate());
-        jobInformation.child(jobID).child("jobLocation").setValue(getJobLocation());
-        jobInformation.child(jobID).child("jobDescription").setValue(getJobDescription());
+        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID);
+        jobInformation.child(jobID).setValue(job);
     }
 
     protected void switchToMain(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, DashboardEmployer.class);
         startActivity(intent);
     }
 
