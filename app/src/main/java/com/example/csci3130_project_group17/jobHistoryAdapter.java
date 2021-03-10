@@ -2,6 +2,7 @@ package com.example.csci3130_project_group17;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import java.util.List;
 public class jobHistoryAdapter extends RecyclerView.Adapter{
     private List<Job> jobsList;
     DatabaseReference users;
+    DatabaseReference jobInformation;
 
     //constructor
     public jobHistoryAdapter(List<Job> jobsList) {
@@ -28,6 +30,7 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         users= FirebaseDatabase.getInstance().getReference().child("users");
+        jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_history_item,parent,false);
         HistoryViewHolder historyViewHolder = new HistoryViewHolder(view);
         return historyViewHolder;
@@ -42,6 +45,18 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
         historyViewHolder.title.setText(job.getJobTitle());
         historyViewHolder.rate.setText("$"+job.getJobPayRate()+"/hr");
         historyViewHolder.state.setText("State: " + job.getState());
+        if (job.getState().equals("open")){
+            historyViewHolder.closeBttn.setVisibility(View.VISIBLE);
+            historyViewHolder.closeBttn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    jobInformation.child(job.getId()).child("state").setValue("closed");
+
+                }});
+
+        }
+        else{
+            historyViewHolder.closeBttn.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -52,7 +67,6 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
     public void getEmployerName(String id, HistoryViewHolder holder){
         Query query = users.orderByChild(id);
         query.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot child: snapshot.getChildren()) {
@@ -80,14 +94,17 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
         });
     }
 
+
     public class HistoryViewHolder extends RecyclerView.ViewHolder {
         TextView title,name, state, rate;
+        Button closeBttn;
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.jobTitleLayout);
             name = itemView.findViewById(R.id.jobNameLayout);
             state = itemView.findViewById(R.id.jobStateLayout);
             rate = itemView.findViewById(R.id.jobTotalLayout);
+            closeBttn = itemView.findViewById(R.id.closeJobButton);
         }
     }
 }
