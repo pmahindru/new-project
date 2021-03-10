@@ -27,4 +27,5 @@
     <string name="view_jobs">View Jobs</string>
     <string name="logo">Logo</string>
     <string name="PDF_FILE_SELECT">PDF FILE SELECT</string>
+    <string name="title_activity_view_jobs">Map</string>
 </resources>
