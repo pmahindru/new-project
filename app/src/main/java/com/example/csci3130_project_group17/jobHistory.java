@@ -49,6 +49,8 @@ public class jobHistory extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (((dataSnapshot.child("employeeID").getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
                         Job job = dataSnapshot.getValue(Job.class);
+                        String id = dataSnapshot.getKey().toString();
+                        job.setId(id);
                         jobs.add(job);
                     }
                 }
@@ -86,6 +88,8 @@ public class jobHistory extends AppCompatActivity {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             if (((dataSnapshot.child("employeeID").getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
                                 Job job = dataSnapshot.getValue(Job.class);
+                                String id = dataSnapshot.getKey().toString();
+                                job.setId(id);
                                 jobs.add(job);
                             }
                         }
