@@ -104,12 +104,12 @@ public class AddImage extends AppCompatActivity {
     protected String getJobName() {
         return text.getText().toString().trim();
     }
-    //method to check invalid jobname input
+    //check missing or invalid input
     protected boolean jobNameIsEmpty(String s)
     {
         return s.isEmpty();
     }
-    //method to determine if name are empty
+    //method to check if name field is empty and set value in errorMessage
     protected String getErrorMessage(){
         errorMessage = "";
         if(jobNameIsEmpty(getJobName())){
@@ -117,4 +117,23 @@ public class AddImage extends AppCompatActivity {
         }
         return errorMessage;
     }
+    //display image on the image view bar
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Image_Request_Code && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            FilePathUri = data.getData();
+
+            try {
+               Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), FilePathUri);
+               imageView.setImageBitmap(bitmap);
+            }
+            catch (IOException e) {
+
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
