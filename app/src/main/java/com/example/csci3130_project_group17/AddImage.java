@@ -20,31 +20,33 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
+import java.util.UUID;
+
 import android.os.Bundle;
 
 public class AddImage extends AppCompatActivity {
     Button UploadIMG, ChooseIMG;
     ImageView imageView;
     Uri FilePathUri;
+    //inital database and storage
     StorageReference storageReference;
     DatabaseReference databaseReference;
     int Image_Request_Code = 7;
     EditText text;
+    private String errorMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_image);
-        storageReference = FirebaseStorage.getInstance().getReference("jobImages");
-        databaseReference = FirebaseDatabase.getInstance().getReference("jobImages");
+        storageReference = FirebaseStorage.getInstance().getReference("jobimages");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("jobimages");
         ChooseIMG = (Button) findViewById(R.id.ChooseIMG);
         UploadIMG = (Button) findViewById(R.id.UploadIMG);
         text = (EditText) findViewById(R.id.text);
         imageView = (ImageView) findViewById(R.id.imageView);
-
         ChooseIMG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,45 +61,60 @@ public class AddImage extends AppCompatActivity {
         });
 
     }
+
     private String getExtension(Uri uri){
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
     }
-    private void Fileuploader(){
-        StorageReference reference = storageReference.child(System.currentTimeMillis()+"."+getExtension(FilePathUri));
-        reference.putFile(FilePathUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                String TempImageName=text.getText().toString().trim();
-                Toast.makeText(getApplicationContext(),"Image Successfully Uploaded", Toast.LENGTH_LONG).show();
-                String ImageUploadId = databaseReference.push().getKey();
-                databaseReference.child(ImageUploadId).setValue(imageView);
-            }
-        });
+    //method for upload image and jobname
+    public void Fileuploader(){
+        String error = getErrorMessage();
+        //set loop to detect illegal input
+        if(error.isEmpty()) {
+            StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getExtension(FilePathUri));
+            reference.putFile(FilePathUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    String TempImageName = text.getText().toString().trim();
+                    //text of successfully upload the image
+                    Toast.makeText(getApplicationContext(), "Image Successfully Uploaded", Toast.LENGTH_LONG).show();
+                    @SuppressWarnings("VisibleForTests")
+                    uploadinfo imageUploadInfo = new uploadinfo(taskSnapshot.getUploadSessionUri().toString());
+                    String ImageUploadId = databaseReference.push().getKey();
+                    //upload data to database
+                    databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
+                    databaseReference.child(ImageUploadId).child("jobname").setValue(TempImageName);
+                }
+            });
+        }
+        else{
+            Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+        }
     }
+
+    //method for choosing image from cellphone
     private void Filechooser(){
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Image"), Image_Request_Code);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Image_Request_Code && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            FilePathUri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), FilePathUri);
-                imageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e) {
-
-                e.printStackTrace();
-            }
+    //get method
+    protected String getJobName() {
+        return text.getText().toString().trim();
+    }
+    //method to check invalid jobname input
+    protected boolean jobNameIsEmpty(String s)
+    {
+        return s.isEmpty();
+    }
+    //method to determine if name are empty
+    protected String getErrorMessage(){
+        errorMessage = "";
+        if(jobNameIsEmpty(getJobName())){
+            errorMessage = "Enter Job Name";
         }
+        return errorMessage;
     }
 }
