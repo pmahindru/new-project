@@ -72,6 +72,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     Context context;
     Activity activity;
     int radius = 5;
+    int undecidedRadius = 0;
 
     private Circle mCircle;
     private Marker mMarker;
@@ -112,14 +113,14 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         recyclerView.setAdapter(recycleViewAdaptor);
         recyclerView.setLayoutManager(layoutManager);
 
-
-
-
-
     }
 
     public void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+    }
+
+    protected void changeRadius() {
+        radius = undecidedRadius;
     }
 
     private void setClickListeners() {
@@ -138,6 +139,15 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 showJobPosts();
             }});
 
+        Button locationApplyButton = (Button) findViewById(R.id.locationApplyButton);
+
+        locationApplyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                changeRadius();
+                showJobPosts();
+            }});
+
+
         SeekBar rangeInput = (SeekBar) findViewById(R.id.rangeInput);
         rangeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -150,8 +160,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                radius = progress;
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                undecidedRadius = progress;
                 mMap.clear();
                 drawMarkerWithCircle(currentLocation);
             }
@@ -195,7 +205,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 initializeJobPostings();
 
 
-
             }
 
             @Override
@@ -212,7 +221,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
 
     }
-
 
     public void showJobPosts() {
         View mapInfo =  findViewById(R.id.mapLayer);
