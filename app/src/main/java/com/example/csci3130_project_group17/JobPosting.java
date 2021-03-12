@@ -166,13 +166,4 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-
-
-
-
-
-
-
-
-
 }

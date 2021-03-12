@@ -4,19 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.Intent;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +43,14 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
-public class JobApplication extends AppCompatActivity{
+public class JobApplication extends AppCompatActivity implements OnMapReadyCallback {
 
     public static String WELCOME_MESSAGE = "ca.dal.csci3130.a2.welcome";
 
@@ -50,6 +69,18 @@ public class JobApplication extends AppCompatActivity{
     //giving the specific id to each user
     UUID idOne = UUID.randomUUID();
     String count = String.valueOf(idOne);
+
+    //for location
+    EditText location;
+    private GoogleMap mMap;
+    LocationManager manager;
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
+    public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    public static final String LOCATION_PREF = "locationPref";
+    Context context;
+    Activity activity;
+    LatLng currentLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +117,16 @@ public class JobApplication extends AppCompatActivity{
             }
         });
 
+        //for the location
+        location = findViewById(R.id.Location);
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentLocatioOfUser();
+            }
+        });
+
+        //for the resume
         resume = findViewById(R.id.Resume);
         resume.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +179,7 @@ public class JobApplication extends AppCompatActivity{
         user.put("lastName", lname);
         user.put("email", email);
         user.put("phone_number", phonenumber);
+        user.put("location",currentLocation);
 
         userstable.child(count).setValue(user);
     }
@@ -202,8 +244,8 @@ public class JobApplication extends AppCompatActivity{
             }
             else  if (emailCheck(email) && Resume(resume)){
                 addtodatabase(user);
-                updatepdffiletodatabase(datauri);
                 messageshow();
+                updatepdffiletodatabase(datauri);
             }
         }
     }
@@ -261,7 +303,7 @@ public class JobApplication extends AppCompatActivity{
         progressDialog.setTitle("File is uploading");
         progressDialog.show();
 
-        StorageReference reference = storageReference.child(first_Name() + " " + last_Name() + ".pdf");
+        StorageReference reference = storageReference.child("Resume/").child(first_Name() + " " + last_Name() + ".pdf");
         reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -283,4 +325,201 @@ public class JobApplication extends AppCompatActivity{
     }
     // ---------------------------- ends here -----------------------------------------------
 
+    //For the location
+    // this code is modified by Pranav Mahindru but taken from the lab.
+    // I just copy paste location code from the Lab
+    // ---------------------------- Starts here -----------------------------------------------
+
+    public void currentLocatioOfUser() {
+
+        activity = JobApplication.this;
+        context = JobApplication.this;
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            checkLocationPermission(activity, context);
+        } else {
+        }
+
+        manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, listener);
+    }
+
+    private void checkLocationPermission(final Activity activity, final Context context) {
+
+        PermissionUtil.checkPermission(activity, context, JobApplication.LOCATION_PERMISSION, JobApplication.LOCATION_PREF,
+                new PermissionUtil.PermissionAskListener() {
+                    @Override
+                    public void onPermissionAsk() {
+                        ActivityCompat.requestPermissions(JobApplication.this,
+                                new String[]{JobApplication.LOCATION_PERMISSION},
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    }
+
+                    @Override
+                    public void onPermissionPreviouslyDenied() {
+                        //show a dialog explaining is permission denied previously , but app require it and then request permission
+
+                        errorMessageDisplay("Permission previously Denied.");
+
+                        ActivityCompat.requestPermissions(JobApplication.this,
+                                new String[]{JobApplication.LOCATION_PERMISSION},
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    }
+
+                    @Override
+                    public void onPermissionDisabled() {
+                        // permission check box checked and permission denied previously .
+                        askUserToAllowPermissionFromSetting();
+                    }
+
+                    @Override
+                    public void onPermissionGranted() {
+                        errorMessageDisplay("Permission Granted.");
+                    }
+                });
+    }
+
+    private void askUserToAllowPermissionFromSetting() {
+
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(
+                context);
+
+        // set title
+        alertDialogBuilder.setTitle("Permission Required:");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Kindly allow Permission from App Setting, without this permission app could not show maps.")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                        errorMessageDisplay("Permission forever Disabled.");
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Showing / hiding your current location
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+
+        // Enable / Disable zooming controls
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Enable / Disable my location button
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        // Enable / Disable Compass icon
+        mMap.getUiSettings().setCompassEnabled(true);
+
+        // Enable / Disable Rotate gesture
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
+
+        // Enable / Disable zooming functionality
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+
+        if (currentLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+        }
+    }
+
+    LocationListener listener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+
+            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+            Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
+            getTheFullAddressOfTheUser(location.getLatitude(), location.getLongitude());
+
+            if (mMap != null) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
+
+    //reference from the given link
+    //http://wintechtutorials.com/blog/android-get-address-latitude-longitude-google-map-tutorial/
+    //so basically from this user can see the address but in the database we only adding the Latitude and Longitude.
+    private void getTheFullAddressOfTheUser(double getLatitude, double getLongitude){
+        String full_address = null;
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address>  get_the_address = geocoder.getFromLocation(getLatitude,getLongitude,1);
+            if (get_the_address != null && get_the_address.size() > 0){
+
+                //here we getting the first address
+                Address address = get_the_address.get(0);
+                System.out.println(address);
+                System.out.println("123123  = " + get_the_address.get(0));
+
+                //but here we are getting that specific line of the address
+                full_address = address.getAddressLine(0);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        location.setText(full_address);
+    }
+
+    // ---------------------------- ends here -----------------------------------------------
 }
