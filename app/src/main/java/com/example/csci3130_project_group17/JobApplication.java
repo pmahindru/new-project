@@ -520,6 +520,5 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
 
         location.setText(full_address);
     }
-
     // ---------------------------- ends here -----------------------------------------------
 }
