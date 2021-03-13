@@ -47,7 +47,9 @@ public class jobHistory extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (((dataSnapshot.child("employeeID").getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
+                    Object employeeID = dataSnapshot.child("employeeID").getValue();
+                    Object employeeState = dataSnapshot.child("employeeState").getValue();
+                    if (employeeID != null && ((dataSnapshot.child("employeeID").getValue()).equals(uID)) && employeeState != null && ((dataSnapshot.child("state").getValue()).equals(state))) {
                         Job job = dataSnapshot.getValue(Job.class);
                         String id = dataSnapshot.getKey().toString();
                         job.setId(id);
