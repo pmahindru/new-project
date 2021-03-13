@@ -1,16 +1,42 @@
 package com.example.csci3130_project_group17;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class JobPosting extends AppCompatActivity implements View.OnClickListener {
@@ -18,7 +44,14 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     private Button createButton, ButtonHome;
     private String errorMessage;
     DatabaseReference jobInformation;
+    LatLng locationCoordinates;
 
+    Context context;
+    Activity activity;
+
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
+    public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    public static final String LOCATION_PREF = "locationPref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +66,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         ButtonHome.setOnClickListener(this);
 
         initializedatabase();
+        locateUser();
     }
 
     //inital database
@@ -63,6 +97,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         EditText location = findViewById(R.id.jobLocationInput);
         return location.getText().toString().trim();
     }
+
     protected String getJobDescription() {
         EditText description = findViewById(R.id.jobDescriptionInput);
         return description.getText().toString().trim();
@@ -130,6 +165,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         jobInformation.child(jobID).child("jobTitle").setValue(getJobTitle());
         jobInformation.child(jobID).child("jobType").setValue(getJobType());
         jobInformation.child(jobID).child("jobPayRate").setValue(getJobPayRate());
+        jobInformation.child(jobID).child("jobLocationCoordinates").setValue(locationCoordinates);
         jobInformation.child(jobID).child("jobLocation").setValue(getJobLocation());
         jobInformation.child(jobID).child("jobDescription").setValue(getJobDescription());
     }
@@ -143,6 +179,104 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    public void locateUser() {
+        activity = JobPosting.this;
+        context = JobPosting.this;
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            checkLocationPermission(activity, context, LOCATION_PERMISSION, LOCATION_PREF);
+        } else {
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+    }
+
+    private void checkLocationPermission(final Activity activity, final Context context, final String Permission, final String prefName) {
+
+        PermissionUtil.checkPermission(activity, context, Permission, prefName,
+                new PermissionUtil.PermissionAskListener() {
+                    @Override
+                    public void onPermissionAsk() {
+                        ActivityCompat.requestPermissions(JobPosting.this,
+                                new String[]{Permission},
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    }
+
+                    @Override
+                    public void onPermissionPreviouslyDenied() {
+                        //show a dialog explaining is permission denied previously , but app require it and then request permission
+
+                        showToast("Permission previously Denied.");
+
+                        ActivityCompat.requestPermissions(JobPosting.this,
+                                new String[]{Permission},
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    }
+
+                    @Override
+                    public void onPermissionDisabled() {
+                        // permission check box checked and permission denied previously .
+                        askUserToAllowPermissionFromSetting();
+                    }
+
+                    @Override
+                    public void onPermissionGranted() {
+                    }
+                });
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void askUserToAllowPermissionFromSetting() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set title
+        alertDialogBuilder.setTitle("Permission Required:");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Kindly allow permission to access your location, without this permission we can't save the location of your job.")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                        showToast("Permission forever Disabled.");
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     public void onClick(View v){
         //determine which button was pressed
         switch (v.getId()){
@@ -153,6 +287,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(getBaseContext(),errorMessage,Toast.LENGTH_LONG).show();
                 }else{
                     //if no errors, publish job in database and notify user of success
+                    turnLocationNametoCoordinates();
                     saveJobToDatabase();
                     Toast.makeText(getBaseContext(),"Job Successfully Created",Toast.LENGTH_LONG).show();
                 }
@@ -166,13 +301,25 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    public void turnLocationNametoCoordinates() {
 
+        String address = getJobLocation();
 
+        // The code below has been used from https://stackoverflow.com/questions/9698328/how-to-get-coordinates-of-an-address-in-android/9698408#9698408 on 12/03/2021 to convert user input to location coordinates
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(address, 1);
+          if(addresses.size() > 0) {
+                double latitude= addresses.get(0).getLatitude();
+                double longitude= addresses.get(0).getLongitude();
 
-
-
-
-
-
-
+                locationCoordinates = new LatLng(latitude, longitude);
+            } else {
+                showToast("Invalid location. Please enter the street and city of your location.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

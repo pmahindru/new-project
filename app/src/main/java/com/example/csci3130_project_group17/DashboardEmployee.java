@@ -27,10 +27,11 @@ public class DashboardEmployee extends AppCompatActivity {
         public void onClick(View view) {
             switchToViewJobs();
         }});
+
     }
 
-    public void switchToViewJobs() {
 
+    public void switchToViewJobs() {
         Intent viewJobsIntent = new Intent(this, ViewJobs.class);
         startActivity(viewJobsIntent);
     }
