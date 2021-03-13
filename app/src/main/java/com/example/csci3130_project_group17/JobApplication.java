@@ -142,6 +142,11 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
         startActivity(dashboardEmployee);
     }
 
+    private void swtich2ViewJob() {
+        Intent viewjobs = new Intent(this, ViewJobs.class);
+        startActivity(viewjobs);
+    }
+
     public void initializeDatabase(){
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
@@ -197,55 +202,58 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
 
     //phone number check if it is valid or not
     //taken from thr given link
-    //https://www.tutorialspoint.com/how-to-verify-enter-number-is-phone-number-or-not-using-regex-in-android
+    //https://www.geeksforgeeks.org/java-program-check-valid-mobile-number/
     public boolean Phonenumber(String phone){
-        String pattern = "^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$";
+        String pattern = "(0/91)?[7-9][0-9]{9}";
         return phone.matches(pattern);
     }
 
     //resume is uploaded or not
+    //regex is modify by me but reference from the given link but i didnt copy and paste the regex
+    //https://www.regextester.com/93592
+    //https://www.freeformatter.com/regex-tester.html
+    public boolean Location(){
+        //removing the white space from the address and then check with the regex.
+        String locate = location.getText().toString().replaceAll("\\s+","");
+        return locate.matches("^\\d+[A-z]+[,][A-z]+[,]+[A-z\\d]+[,][A-z]+");
+    }
+
+    //resume is uploaded or not
+    //regex is taken from the give link
+    //http://findnerd.com/list/view/How-to-Validate-File-extension-before-Upload-using-Regular-Expression-in-JavaScript-and-jQuery/23837/
     public boolean Resume(String resume){
         return resume.matches("([a-zA-Z0-9\\s_\\\\.\\-:])+(.doc|.docx|.pdf)$");
     }
 
-    private void messageshow() {
+    private void MessageDisplay(String msg){
         //alert square box that shows the answer
         AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
         // change the integer value into string value
-        alert_answer.setMessage("Application is submitted");
-        alert_answer.setPositiveButton("ok", null);
-        alert_answer.create();
-        alert_answer.show();
-    }
-
-    protected void errorMessageDisplay(String error){
-        //alert square box that shows the answer
-        AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
-        // change the integer value into string value
-        alert_answer.setMessage(error);
+        alert_answer.setMessage(msg);
         alert_answer.setPositiveButton("ok",null);
         alert_answer.create();
         alert_answer.show();
     }
 
     private void CheckEmailAndPasswordIsValid(String email, String firstname, String lastname, String phonenumber, String resume) {
-        if(isInputEmpty(email) || isInputEmpty(firstname) || isInputEmpty(lastname) || isInputEmpty(phonenumber) || isInputEmpty(resume)) {
-            errorMessageDisplay("One of the fields are empty");
+        if(isInputEmpty(email) || isInputEmpty(firstname) || isInputEmpty(lastname) || isInputEmpty(phonenumber) || isInputEmpty(resume) || currentLocation == null || !Location()) {
+            MessageDisplay("One of the fields are empty");
         }
         else{
             if(!emailCheck(email)) {
-                errorMessageDisplay("Email is invalid");
+                MessageDisplay("Email is invalid");
             }
             else if (!Phonenumber(phonenumber)){
-                errorMessageDisplay("Phone number is invalid");
+                MessageDisplay("Phone number is invalid");
             }
             else if (!Resume(resume)){
-                errorMessageDisplay("Please upload the pdf fle");
+                MessageDisplay("Please upload the pdf fle");
             }
-            else  if (emailCheck(email) && Resume(resume)){
+            else  if (emailCheck(email) && Resume(resume) && Phonenumber(phonenumber) && !isInputEmpty(firstname) && !isInputEmpty(lastname) && currentLocation != null || Location()){
                 addtodatabase(user);
-                messageshow();
                 updatepdffiletodatabase(datauri);
+                MessageDisplay("Application is submitted");
+                swtich2ViewJob();
             }
         }
     }
@@ -289,11 +297,11 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
                 resume.setText(name.getString(namenumber));
             }
             else {
-                errorMessageDisplay("size of the pdf is less than 0 or 0");
+                MessageDisplay("size of the pdf is less than 0 or 0");
             }
         }
         else {
-            errorMessageDisplay("error in pdf file");
+            MessageDisplay("error in pdf file");
         }
         this.datauri = data.getData();
     }
@@ -370,7 +378,7 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
                     public void onPermissionPreviouslyDenied() {
                         //show a dialog explaining is permission denied previously , but app require it and then request permission
 
-                        errorMessageDisplay("Permission previously Denied.");
+                        MessageDisplay("Permission previously Denied.");
 
                         ActivityCompat.requestPermissions(JobApplication.this,
                                 new String[]{JobApplication.LOCATION_PERMISSION},
@@ -385,7 +393,7 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
 
                     @Override
                     public void onPermissionGranted() {
-                        errorMessageDisplay("Permission Granted.");
+                        MessageDisplay("Permission Granted.");
                     }
                 });
     }
@@ -410,7 +418,7 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
                         startActivityForResult(intent, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                        errorMessageDisplay("Permission forever Disabled.");
+                        MessageDisplay("Permission forever Disabled.");
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -507,7 +515,8 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
 
                 //here we getting the first address
                 Address address = get_the_address.get(0);
-                System.out.println(address);
+
+                //just for the checking that i am gettiing current location or not
                 System.out.println("123123  = " + get_the_address.get(0));
 
                 //but here we are getting that specific line of the address
