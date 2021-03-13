@@ -27,6 +27,15 @@ public class DashboardEmployer extends AppCompatActivity {
                 switchToCreateJob();
             }
         });
+
+        Button viewHistory = (Button) findViewById(R.id.employerHistoryButton);
+
+        viewHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToHistory();
+            }
+        });
     }
     private void switchToCreateJob(){
         Intent CreateJobIntent = new Intent(this, JobPosting.class);
@@ -34,4 +43,8 @@ public class DashboardEmployer extends AppCompatActivity {
 
     }
 
+    public void switchToHistory(){
+        Intent HistoryIntent = new Intent(this, jobHistory.class);
+        startActivity(HistoryIntent);
+    }
 }
