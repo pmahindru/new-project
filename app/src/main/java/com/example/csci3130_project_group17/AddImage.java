@@ -137,3 +137,4 @@ public class AddImage extends AppCompatActivity {
     }
 
 }
+//Reference:Educatree. (2019, August 30). How to upload image with text to firebase database in Android || upload image in firebase || #7. Retrieved from https://www.youtube.com/watch?v=5_6YifZfODs
