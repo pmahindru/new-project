@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -27,7 +29,8 @@ public class jobHistory extends AppCompatActivity {
     jobHistoryAdapter adapter;
     String uID;
     String state = "open";
-
+    SharedPreferences preferences;
+    StoredData data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +41,9 @@ public class jobHistory extends AppCompatActivity {
         Intent intent = getIntent();
         initializeDatabase();
 
-        //TODO: replace uID w/ logged in user ID once that functionality is implemented
-        StoredData data = new StoredData(getApplicationContext());
+
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
         uID = data.getStoredUserID();
         TextView noJobsMessage = findViewById(R.id.noJobsMessageLayout);
 
