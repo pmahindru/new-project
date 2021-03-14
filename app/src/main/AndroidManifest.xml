@@ -64,7 +64,6 @@
             </intent-filter>
         </activity>
 
-
         <activity android:name=".SignUp" />
         <activity android:name=".JobPosting" />
         <activity android:name=".AddImage"></activity>
