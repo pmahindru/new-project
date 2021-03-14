@@ -45,78 +45,58 @@ import java.util.HashMap;
 
 public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
+    //Map related variables
     private GoogleMap mMap;
     LocationManager manager;
-
-    DatabaseReference jobInformation;
-
-    public RecyclerView recyclerView;
-    public RecyclerView.LayoutManager layoutManager;
-    public RecyclerView.Adapter recycleViewAdaptor;
-
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String LOCATION_PREF = "locationPref";
 
     Context context;
     Activity activity;
-    int radius = 5;
+    int radius = 1;
     int undecidedRadius = 0;
 
     private Circle mCircle;
     private Marker mMarker;
 
-    LatLng currentLocationCoordinates;
-    Location currentLocation = null;
+    CircleOptions circleOptions;
+    LatLng currentLocationCoordinates = null;
 
+    //Database related field
+    DatabaseReference jobInformation;
+
+    //Recyclcer view related fields
+    public RecyclerView recyclerView;
+    public RecyclerView.LayoutManager layoutManager;
+    public RecyclerView.Adapter recycleViewAdaptor;
+
+    //Job posts related field
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
-
-    //ArrayList<Places> placesList = new ArrayList<>();
-    //PlacesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_jobs2);
 
-        Intent intent = getIntent();
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Intialise the recycler view
+        intializeRecylcerView();
 
+        setClickListeners();
+        initializeDatabase();
+
+        if(currentLocationCoordinates !=null) {
+            pullJobs();
+        }
+        
+    }
+    private void intializeRecylcerView() {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recycleViewAdaptor = new RecycleViewAdaptor();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recycleViewAdaptor);
-
-        setClickListeners();
-        initializeDatabase();
-
-        if(currentLocation!=null) {
-            pullJobs();
-        }
-
-
-    }
-
-    private void initializeJobPostings() {
-
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recycleViewAdaptor = new RecycleViewAdaptor(jobsList);
-
-        recyclerView.setAdapter(recycleViewAdaptor);
-        recyclerView.setLayoutManager(layoutManager);
-
-    }
-
-    public void initializeDatabase(){
-        jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
-    }
-
-    protected void changeRadius() {
-        radius = undecidedRadius;
     }
 
     private void setClickListeners() {
@@ -128,7 +108,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             }});
 
 
-        Button locationCancelButton = (Button) findViewById(R.id.locationApplyButton);
+        Button locationCancelButton = (Button) findViewById(R.id.locationCancelButton);
 
         locationCancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -142,6 +122,20 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 changeRadius();
                 pullJobs();
                 showJobPosts();
+            }});
+
+        Button homeButton = (Button) findViewById(R.id.viewJobsHome);
+
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToHome();
+            }});
+
+        Button filterButton = (Button) findViewById(R.id.filterButton);
+
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToMapView();
             }});
 
 
@@ -165,53 +159,60 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
-    private void drawMarkerWithCircle(LatLng position) {
-        mMap.clear();
-        double radiusInMeters = radius * 1000.0;  // increase decrease this distancce as per your requirements
-        int strokeColor = 0xffff0000; //red outline
-        int shadeColor = 0x44ff0000; //opaque red fill
+    public void showJobPosts() {
+        View mapInfo =  findViewById(R.id.mapLayer);
+        RecyclerView jobPostings = findViewById(R.id.recyclerView);
 
-        CircleOptions circleOptions = new CircleOptions()
-                .center(position)
-                .radius(radiusInMeters)
-                .fillColor(shadeColor)
-                .strokeColor(strokeColor)
-                .strokeWidth(8);
-        mCircle = mMap.addCircle(circleOptions);
+        mapInfo.setVisibility(View.INVISIBLE);
+        jobPostings.setVisibility(View.VISIBLE);
+    }
+    
+    private void switchToMapView() {
+        if(currentLocationCoordinates!= null) {
+            View mapInfo =  findViewById(R.id.mapLayer);
+            RecyclerView jobPostings = findViewById(R.id.recyclerView);
+
+            jobPostings.setVisibility(View.INVISIBLE);
+            mapInfo.setVisibility(View.VISIBLE);
+        } else {
+            showToast("Please locate yourself before you filter.");
+        }
+
     }
 
+    private void switchToHome() {
+        Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
+        startActivity(dashboardEmployee);
+    }
+
+
+    public void initializeDatabase(){
+        jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+    }
+    
+
+
+    //Job related methods
     public void pullJobs() {
 
         jobInformation.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                jobsList.clear();
                 // Store all the job posts in the jobslist arraylist as a hashmap
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
-                    //double lat = (double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
-                    //double longi = (double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
-                    if(lat!= null && longi!=null)
-                    {
-                        //Location distBetween = new Location(lat,longi);
+                    if(lat!= null && longi!=null) {
+                        if(isInRange((double) lat, (double) longi)) {
+                            HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
+                            job.put("jobPostId",postSnapshot.getKey());
+                            jobsList.add(job);
+                        }
                     }
-                    System.out.println("here are the long and lat: " +lat +" , " +longi);
-                    HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
-                    //Location test = job.get("jobLocationCoordinates");
-                    jobsList.add((HashMap<String, String>) postSnapshot.getValue());
                 }
-
-
                 //all methods that require anything to do with the data retrieved will be called here
-
-                System.out.println(jobsList);
-                for(HashMap<String,String> jobItem: jobsList) {
-                    System.out.println(jobItem.get("jobTitle"));
-                }
-
                 initializeJobPostings();
-
-
             }
 
             @Override
@@ -223,29 +224,64 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
+    }
+    private void initializeJobPostings() {
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recycleViewAdaptor = new RecycleViewAdaptor(jobsList);
 
-
-
-
+        recyclerView.setAdapter(recycleViewAdaptor);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
-    public void showJobPosts() {
-        View mapInfo =  findViewById(R.id.mapLayer);
-        RecyclerView jobPostings = findViewById(R.id.recyclerView);
+    //Check if the given points are in the circle or not
+    public boolean isInRange(double latitude, double longitude) {
+        // For the next four lines, I have used the solution from https://stackoverflow.com/questions/22063842/check-if-a-latitude-and-longitude-is-within-a-circle (accessed on 13/02/2021) to get the distance between a point and radius.
+        float[] results = new float[1];
+        Location.distanceBetween(latitude, longitude, currentLocationCoordinates.latitude, currentLocationCoordinates.longitude, results);
+        float distanceInMeters = results[0];
+        boolean isWithinRange = distanceInMeters < circleOptions.getRadius();
 
-        mapInfo.setVisibility(View.INVISIBLE);
-        jobPostings.setVisibility(View.VISIBLE);
+        return isWithinRange;
+    }
 
+    //Location and map related methods
+    protected void changeRadius() {
+        radius = undecidedRadius;
+    }
+
+    private void drawMarkerWithCircle(LatLng position) {
+        mMap.clear();
+        int rad = 0;
+
+        if(radius == undecidedRadius) {
+            rad = radius;
+        } else {
+            rad = undecidedRadius;
+        }
+
+        double radiusInMeters = rad * 1000.0;  // increase decrease this distance as per your requirements
+        int strokeColor = 0xffff0000; //red outline
+        int shadeColor = 0x44ff0000; //opaque red fill
+
+        circleOptions = new CircleOptions()
+                .center(position)
+                .radius(radiusInMeters)
+                .fillColor(shadeColor)
+                .strokeColor(strokeColor)
+                .strokeWidth(8);
+        mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {
-
         View mapInfo =  findViewById(R.id.mapLayer);
         RecyclerView jobPostings = findViewById(R.id.recyclerView);
 
         jobPostings.setVisibility(View.INVISIBLE);
         mapInfo.setVisibility(View.VISIBLE);
 
+        //contents from here onwards are taken from the tutorial on google maps api
         activity = ViewJobs.this;
         context = ViewJobs.this;
 
@@ -272,11 +308,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, listener);
 
         mapFragment.getMapAsync(this);
-
     }
 
 
 
+    //This method is used from the tutorial on google maps api
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -324,13 +360,13 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         }
     }
 
+    //This listener is used from the tutorial on google maps api
     LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
 
             currentLocationCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
 
-            currentLocation = location;
 
             Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
 
@@ -365,7 +401,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         }
     };
 
-
+    //This method is used from the tutorial on google maps api
     private void checkLocationPermission(final Activity activity, final Context context, final String Permission, final String prefName) {
 
         PermissionUtil.checkPermission(activity, context, Permission, prefName,
@@ -401,10 +437,12 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 });
     }
 
+    //This method is used from the tutorial on google maps api
     public void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    //This method is used from the tutorial on google maps api
     private void askUserToAllowPermissionFromSetting() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
