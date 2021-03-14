@@ -6,6 +6,9 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
         applicationId "com.example.csci3130_project_group17"
