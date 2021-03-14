@@ -21,37 +21,37 @@ import com.google.firebase.database.ValueEventListener;
 public class JobDetail extends AppCompatActivity {
 
     //private ImageView imageEmployee, imageEmployer;
-    private TextView title, bDes, /*pDate, time, */location, payment, state, employeeN, employerN;
+    private TextView title, bDes, /*pDate, time, */location, payment/*, state, employeeN, employerN*/;
     private DatabaseReference jobInfo;
     private JobInfo job;
-    private UserInfo employee, employer;
+    //private UserInfo employee, employer;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.jobdetail);
+        setContentView(R.layout.jobdescribtion);
 
         Intent intent = getIntent();
         String jobId = intent.getExtras().getString("JobId");
 
         //imageEmployee = findViewById(R.id.jd_employee);
         //imageEmployer = findViewById(R.id.jd_Employer);
-        employeeN = findViewById(R.id.jd_employee_name);
-        employerN = findViewById(R.id.jd_employer_name);
+        //employeeN = findViewById(R.id.jd_employee_name);
+        //employerN = findViewById(R.id.jd_employer_name);
         title = findViewById(R.id.jd_title);
         bDes = findViewById(R.id.jd_brif_des);
         //pDate = findViewById(R.id.jd_posted_date);
         //time = findViewById(R.id.jd_occur_time);
         location = findViewById(R.id.jd_location);
         payment = findViewById(R.id.jd_payrate);
-        state = findViewById(R.id.jd_state);
+        //state = findViewById(R.id.jd_state);
 
         jobInfo = FirebaseDatabase.getInstance().getReference("JobInformation").child(jobId);
 
         readJobInfo();
-        readUserInfo();
+        //readUserInfo();
         fillInfo();
     }
 
@@ -69,7 +69,7 @@ public class JobDetail extends AppCompatActivity {
         });
     }
 
-    public void readUserInfo(){
+    /*public void readUserInfo(){
         DatabaseReference employeeInfo = FirebaseDatabase.getInstance().getReference("users")
                 .child(job.getEmployeeID());
 
@@ -99,7 +99,7 @@ public class JobDetail extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
     @SuppressLint("SetTextI18n")
     public void fillInfo(){
@@ -109,9 +109,9 @@ public class JobDetail extends AppCompatActivity {
         //time.setText(job.get);
         location.setText(job.getJobLocation());
         payment.setText(job.getJobPayRate());
-        state.setText(job.getState());
-        employerN.setText(employer.getFirstName()+" "+employer.getLastName());
-        employeeN.setText(employee.getFirstName()+" "+employee.getLastName());
+        //state.setText(job.getState());
+        //employerN.setText(employer.getFirstName()+" "+employer.getLastName());
+        //employeeN.setText(employee.getFirstName()+" "+employee.getLastName());
     }
 
 
