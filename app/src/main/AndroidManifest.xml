@@ -45,6 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".jobHistory"></activity>
 
         <activity android:name=".JobApplication">
             <intent-filter>
