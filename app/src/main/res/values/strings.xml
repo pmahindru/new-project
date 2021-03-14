@@ -1,6 +1,31 @@
 <resources>
     <string name="app_name">CSCI3130-Project-Group17</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="todo">TODO</string>
+    <string name="dont_have_an_account">Dont have an Account</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
     <string name="EMPTY_STRING">\"\"</string>
     <string name="TITLE">" Create an Account  "</string>
     <string name="SIGNUPBUTTON">" Create your Account"</string>
+    <string name="location">location</string>
+    <string name="phone_number">phone_number</string>
+    <string name="upload_your_resume">upload_your_resume</string>
+    <string name="apply">apply</string>
+    <string name="home">home</string>
+    <string name="last_name">last_name</string>
+    <string name="first_name">first_name</string>
+    <string name="job_application">job_application</string>
+    <string name="image">image</string>
+    <string name="Upload_Your_Resume">Upload your Resume</string>
+    <string name="JobApplication">JobApplication</string>
+    <string name="FirstName">First Name</string>
+    <string name="LastName">Last Name</string>
+    <string name="Location">Location</string>
+    <string name="PhoneNumber">Phone Number</string>
+    <string name="view_jobs">View Jobs</string>
+    <string name="logo">Logo</string>
+    <string name="PDF_FILE_SELECT">PDF FILE SELECT</string>
+    <string name="title_activity_view_jobs">Map</string>
 </resources>

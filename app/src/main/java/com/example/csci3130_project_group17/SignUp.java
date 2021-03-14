@@ -90,6 +90,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
         user.put("orgName", orgName);
         userstable.child(count).setValue(user);
+
     }
 
     protected boolean isInputEmpty(String str){

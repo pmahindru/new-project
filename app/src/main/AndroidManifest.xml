@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.csci3130_project_group17">
+
+    <!--upload a resume in pdf in the database i took a look from here-->
+    <!--https://www.youtube.com/watch?v=lY9zSr6cxko-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -9,7 +22,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CSCI3130ProjectGroup17">
-        <activity android:name=".MainActivity">
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".ViewJobs" />
+        <activity android:name=".DashboardEmployee" />
+        <activity android:name=".DashboardEmployer" />
+        <activity android:name=".LogIn">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".jobHistory"></activity>
+
+        <activity android:name=".JobApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,21 +55,19 @@
             </intent-filter>
         </activity>
 
-        <!--i added this to just check up -->
-        <activity android:name=".SignUp">
+
+        <activity android:name=".Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".JobPosting">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
+        <activity android:name=".SignUp" />
+        <activity android:name=".JobPosting" />
+        <activity android:name=".AddImage"></activity>
     </application>
 
 </manifest>
