@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import com.google.android.gms.maps.model.LatLng;
 
 public class JobTest {
     static Job job;
@@ -13,8 +14,8 @@ public class JobTest {
 
     @BeforeClass
     public static void setup() {
-        job = new Job("Birthday Chef","Chef", "Description", "New York", "22.40","open","22515", "33515");
-        job2 = new Job("Birthday Chef","Chef", "Description", "New York", "22.40","open","22515", "33515");
+        job = new Job("Birthday Chef","Chef", "Description", "New York", "22.40","open","22515", "33515", new LatLng(44.6414153248649, -63.57345220147679) );
+        job2 = new Job("Birthday Chef","Chef", "Description", "New York", "22.40","open","22515", "33515", new LatLng(44.6414153248649, -63.57345220147679) );
 
     }
 
