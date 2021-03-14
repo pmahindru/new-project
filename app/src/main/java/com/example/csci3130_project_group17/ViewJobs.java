@@ -78,6 +78,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_jobs2);
+
+        Intent intent = getIntent();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         recyclerView = findViewById(R.id.recyclerView);

@@ -287,7 +287,6 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(getBaseContext(),errorMessage,Toast.LENGTH_LONG).show();
                 }else{
                     //if no errors, publish job in database and notify user of success
-                    turnLocationNametoCoordinates();
                     saveJobToDatabase();
                     Toast.makeText(getBaseContext(),"Job Successfully Created",Toast.LENGTH_LONG).show();
                 }
