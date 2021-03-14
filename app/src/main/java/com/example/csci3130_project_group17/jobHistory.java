@@ -24,11 +24,14 @@ import java.util.List;
 
 public class jobHistory extends AppCompatActivity {
     DatabaseReference jobInformation;
+    DatabaseReference users;
     private List<Job> jobs;
     private RecyclerView recyclerView;
     jobHistoryAdapter adapter;
     String uID;
     String state = "open";
+    Boolean isEmployer = false;
+    String userIDSearchTerm = "employeeID";
     SharedPreferences preferences;
     StoredData data;
     @Override
@@ -45,6 +48,8 @@ public class jobHistory extends AppCompatActivity {
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
+        checkIfEmployer();
+        System.out.println(userIDSearchTerm);
 
         TextView noJobsMessage = findViewById(R.id.noJobsMessageLayout);
 
@@ -70,6 +75,26 @@ public class jobHistory extends AppCompatActivity {
 
     private void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+        users = FirebaseDatabase.getInstance().getReference().child("users");
+    }
+
+    private void checkIfEmployer() {
+        users.child(uID).child("employer").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                isEmployer = snapshot.getValue(Boolean.class);
+                if (isEmployer){
+                    System.out.println("is employer");
+                    userIDSearchTerm = "employerID";
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void loadData(TextView noJobsMessage ){
@@ -78,8 +103,8 @@ public class jobHistory extends AppCompatActivity {
             //get list of jobs
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Object employeeID = dataSnapshot.child("employeeID").getValue();
-                    if (employeeID != null && ((dataSnapshot.child("employeeID").getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
+                    Object userID = dataSnapshot.child(userIDSearchTerm).getValue();
+                    if (userID != null && ((dataSnapshot.child(userIDSearchTerm).getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
                         Job job = dataSnapshot.getValue(Job.class);
                         String id = dataSnapshot.getKey().toString();
                         job.setId(id);
