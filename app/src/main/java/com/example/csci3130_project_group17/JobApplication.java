@@ -70,6 +70,9 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
     UUID idOne = UUID.randomUUID();
     String count = String.valueOf(idOne);
 
+    //job post related information
+    HashMap<String, String> jobPost;
+
     //for location
     EditText location;
     private GoogleMap mMap;
@@ -88,6 +91,11 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.jobapplication);
 
         Intent intent = getIntent();
+        jobPost = (HashMap<String, String>) intent.getSerializableExtra("jobPost");
+
+        user.put("jobId", jobPost.get("jobPostId"));
+
+
 
         //initiating the Firebase
         initializeDatabase();

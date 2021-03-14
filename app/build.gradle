@@ -9,6 +9,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
 
     defaultConfig {
         applicationId "com.example.csci3130_project_group17"
@@ -64,6 +68,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.4.0'
 
     compile 'com.firebaseui:firebase-ui:0.6.0'
+
 
 
 }
