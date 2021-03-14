@@ -42,6 +42,7 @@ public class DashboardEmployee extends AppCompatActivity {
 
     public void switchToHistory(){
         Intent HistoryIntent = new Intent(this, jobHistory.class);
+        HistoryIntent.putExtra("userType", "EMPLOYEE");
         startActivity(HistoryIntent);
     }
 }
