@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+//Adapted from the tutorial at: https://www.geeksforgeeks.org/how-to-populate-recyclerview-with-firebase-data-using-firebaseui-in-android-studio/
+
 public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, ApplicantAdapter.ApplicantsViewHolder>{
 
     public ApplicantAdapter(@NonNull FirebaseRecyclerOptions<Applicant> options){
