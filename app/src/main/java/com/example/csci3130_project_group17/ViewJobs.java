@@ -209,15 +209,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                             job.put("jobPostId",postSnapshot.getKey());
                             jobsList.add(job);
                         }
-
                     }
-
-                    System.out.println(jobsList);
-
                 }
                 //all methods that require anything to do with the data retrieved will be called here
                 initializeJobPostings();
-
             }
 
             @Override
