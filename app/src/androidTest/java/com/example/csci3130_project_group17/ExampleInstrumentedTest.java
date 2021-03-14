@@ -27,4 +27,3 @@ public class ExampleInstrumentedTest {
     //this is based on the acceptance test.
 
 }
-
