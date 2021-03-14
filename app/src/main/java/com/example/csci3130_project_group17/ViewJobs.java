@@ -153,7 +153,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
-                mMap.clear();
                 drawMarkerWithCircle(currentLocationCoordinates);
             }
         });
@@ -252,7 +251,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void drawMarkerWithCircle(LatLng position) {
-        mMap.clear();
+
+        if(mMap!=null) {
+            mMap.clear();
+        }
+
         int rad = 0;
 
         if(radius == undecidedRadius) {
@@ -305,7 +308,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, listener);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 5, listener);
 
         mapFragment.getMapAsync(this);
     }
@@ -370,8 +373,12 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
             Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
 
-            mMap.clear();
-            drawMarkerWithCircle(currentLocationCoordinates);
+            if(mMap!=null) {
+                mMap.clear();
+                drawMarkerWithCircle(currentLocationCoordinates);
+            }
+
+
 
             if (mMap != null) {
                /* if (isFirstLaunch) {

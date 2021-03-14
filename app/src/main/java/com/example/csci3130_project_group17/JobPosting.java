@@ -163,7 +163,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     protected void saveJobToDatabase() {
         String jobID = UUID.randomUUID().toString();
-        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID);
+        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID, locationCoordinates);
         jobInformation.child(jobID).setValue(job);
     }
 
@@ -294,7 +294,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
                 } else {
                     //if no errors, publish job in database and notify user of success
-                    saveJobToDatabase();
+                    turnLocationNametoCoordinates();
                     Toast.makeText(getBaseContext(), "Job Successfully Created", Toast.LENGTH_LONG).show();
                 }
                 //switch to job page
@@ -325,6 +325,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                 double longitude= addresses.get(0).getLongitude();
 
                 locationCoordinates = new LatLng(latitude, longitude);
+                saveJobToDatabase();
             } else {
                 showToast("Invalid location. Please enter the street and city of your location.");
             }
