@@ -69,12 +69,18 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     CircleOptions circleOptions;
 
     LatLng currentLocationCoordinates;
-    Location currentLocation = null;
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public Location currentLocation = null;
 
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
-
-    //ArrayList<Places> placesList = new ArrayList<>();
-    //PlacesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +178,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         if(radius == undecidedRadius) {
             rad = radius;
         } else {
-            radius = undecidedRadius;
+            rad = undecidedRadius;
         }
 
         double radiusInMeters = radius * 1000.0;  // increase decrease this distancce as per your requirements
@@ -198,13 +204,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
                     if(lat!= null && longi!=null) {
-                        // For the next four lines, I have used the solution from https://stackoverflow.com/questions/22063842/check-if-a-latitude-and-longitude-is-within-a-circle (accessed on 13/02/2021) to get the distance between a point and radius.
-                        float[] results = new float[1];
-                        Location.distanceBetween((double)lat, (double) longi, currentLocation.getLatitude(), currentLocation.getLongitude(), results);
-                        float distanceInMeters = results[0];
-                        boolean isWithinRange = distanceInMeters < circleOptions.getRadius();
-
-                        if(isWithinRange) {
+                        if(isInRange((double) lat, (double) longi)) {
                             HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
                             jobsList.add(job);
                         }
@@ -226,6 +226,16 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
+    }
+
+    public boolean isInRange(double latitude, double longitude) {
+        // For the next four lines, I have used the solution from https://stackoverflow.com/questions/22063842/check-if-a-latitude-and-longitude-is-within-a-circle (accessed on 13/02/2021) to get the distance between a point and radius.
+        float[] results = new float[1];
+        Location.distanceBetween(latitude, longitude, currentLocation.getLatitude(), currentLocation.getLongitude(), results);
+        float distanceInMeters = results[0];
+        boolean isWithinRange = distanceInMeters < circleOptions.getRadius();
+
+        return isWithinRange;
     }
 
     public void showJobPosts() {
@@ -271,7 +281,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, listener);
 
         mapFragment.getMapAsync(this);
-
     }
 
 
