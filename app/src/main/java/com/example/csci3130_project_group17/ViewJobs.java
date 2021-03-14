@@ -60,11 +60,13 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     Context context;
     Activity activity;
-    int radius = 5;
+    int radius = 1;
     int undecidedRadius = 0;
 
     private Circle mCircle;
     private Marker mMarker;
+
+    CircleOptions circleOptions;
 
     LatLng currentLocationCoordinates;
     Location currentLocation = null;
@@ -98,7 +100,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void initializeJobPostings() {
-
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -106,7 +107,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         recyclerView.setAdapter(recycleViewAdaptor);
         recyclerView.setLayoutManager(layoutManager);
-
     }
 
     public void initializeDatabase(){
@@ -165,11 +165,19 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     private void drawMarkerWithCircle(LatLng position) {
         mMap.clear();
+        int rad = 0;
+
+        if(radius == undecidedRadius) {
+            rad = radius;
+        } else {
+            radius = undecidedRadius;
+        }
+
         double radiusInMeters = radius * 1000.0;  // increase decrease this distancce as per your requirements
         int strokeColor = 0xffff0000; //red outline
         int shadeColor = 0x44ff0000; //opaque red fill
 
-        CircleOptions circleOptions = new CircleOptions()
+        circleOptions = new CircleOptions()
                 .center(position)
                 .radius(radiusInMeters)
                 .fillColor(shadeColor)
@@ -187,28 +195,23 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
-                    //double lat = (double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
-                    //double longi = (double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
-                    if(lat!= null && longi!=null)
-                    {
-                        //Location distBetween = new Location(lat,longi);
+                    if(lat!= null && longi!=null) {
+                        // For the next four lines, I have used the solution from https://stackoverflow.com/questions/22063842/check-if-a-latitude-and-longitude-is-within-a-circle (accessed on 13/02/2021) to get the distance between a point and radius.
+                        float[] results = new float[1];
+                        Location.distanceBetween((double)lat, (double) longi, currentLocation.getLatitude(), currentLocation.getLongitude(), results);
+                        float distanceInMeters = results[0];
+                        boolean isWithinRange = distanceInMeters < circleOptions.getRadius();
+
+                        if(isWithinRange) {
+                            HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
+                            jobsList.add(job);
+                        }
+
                     }
-                    System.out.println("here are the long and lat: " +lat +" , " +longi);
-                    HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
-                    //Location test = job.get("jobLocationCoordinates");
-                    jobsList.add((HashMap<String, String>) postSnapshot.getValue());
+
                 }
-
-
                 //all methods that require anything to do with the data retrieved will be called here
-
-                System.out.println(jobsList);
-                for(HashMap<String,String> jobItem: jobsList) {
-                    System.out.println(jobItem.get("jobTitle"));
-                }
-
                 initializeJobPostings();
-
 
             }
 
@@ -220,10 +223,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 // ...
             }
         });
-
-
-
-
 
     }
 
@@ -237,13 +236,13 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     }
 
     public void locateUser() {
-
         View mapInfo =  findViewById(R.id.mapLayer);
         RecyclerView jobPostings = findViewById(R.id.recyclerView);
 
         jobPostings.setVisibility(View.INVISIBLE);
         mapInfo.setVisibility(View.VISIBLE);
 
+        //contents from here onwards are taken from the tutorial on google maps api
         activity = ViewJobs.this;
         context = ViewJobs.this;
 
@@ -275,6 +274,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
 
 
+    //This method is used from the tutorial on google maps api
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -322,6 +322,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         }
     }
 
+    //This listener is used from the tutorial on google maps api
     LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -363,7 +364,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         }
     };
 
-
+    //This method is used from the tutorial on google maps api
     private void checkLocationPermission(final Activity activity, final Context context, final String Permission, final String prefName) {
 
         PermissionUtil.checkPermission(activity, context, Permission, prefName,
@@ -399,10 +400,12 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 });
     }
 
+    //This method is used from the tutorial on google maps api
     public void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    //This method is used from the tutorial on google maps api
     private void askUserToAllowPermissionFromSetting() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(

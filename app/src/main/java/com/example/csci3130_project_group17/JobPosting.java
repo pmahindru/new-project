@@ -180,6 +180,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     }
 
     public void locateUser() {
+        //contents from here onwards are taken from the tutorial on google maps api
         activity = JobPosting.this;
         context = JobPosting.this;
 
@@ -201,6 +202,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    //This method is used from the tutorial on google maps api
     private void checkLocationPermission(final Activity activity, final Context context, final String Permission, final String prefName) {
 
         PermissionUtil.checkPermission(activity, context, Permission, prefName,
@@ -235,10 +237,12 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                 });
     }
 
+    //This method is used from the tutorial on google maps api
     public void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    //This method is used from the tutorial on google maps api
     private void askUserToAllowPermissionFromSetting() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(

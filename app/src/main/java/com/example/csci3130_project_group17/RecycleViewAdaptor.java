@@ -26,35 +26,24 @@ public class RecycleViewAdaptor extends RecyclerView.Adapter<RecycleViewAdaptor.
     public RecycleViewAdaptor() {
         this.test = new ArrayList<>();
         test.add("Please set your current location to see jobs near you");
-        /*
-        for (int i = 0; i < 100; i++) {
-            this.test.add("Test" + i);
-        }*/
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
         View view = inflater.inflate(R.layout.card_layout, parent, false);
-
         ViewHolder viewHolder = new ViewHolder(view);
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        if(this.jobs!=null)
-        {
+        if(this.jobs!=null) {
             holder.jobTitle.setText(jobs.get(position).get("jobTitle"));
-
             holder.location.setText(jobs.get(position).get("jobLocation"));
-
             holder.payRate.setText(jobs.get(position).get("jobPayRate"));
-
             holder.applyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,13 +51,10 @@ public class RecycleViewAdaptor extends RecyclerView.Adapter<RecycleViewAdaptor.
                     System.out.println("clicked the apply button");
                 }
             });
-
         }
         else {
             holder.jobTitle.setText(test.get(position));
         }
-
-
 
     }
 
