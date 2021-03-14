@@ -153,7 +153,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
-                drawMarkerWithCircle(currentLocationCoordinates);
+                if(mMap !=null) {
+                    drawMarkerWithCircle(currentLocationCoordinates);
+                }
+
             }
         });
     }
