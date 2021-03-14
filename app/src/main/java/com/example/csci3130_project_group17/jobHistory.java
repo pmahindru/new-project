@@ -41,34 +41,52 @@ public class jobHistory extends AppCompatActivity {
         Intent intent = getIntent();
         initializeDatabase();
 
-
+        //get userID of logged in user
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
+
         TextView noJobsMessage = findViewById(R.id.noJobsMessageLayout);
 
+        //get list of jobs from user depending toggle button
+        loadData(noJobsMessage);
+
+        ToggleButton jobStateToggle = findViewById(R.id.toggleButtonState);
+
+        //change type of jobs to be shown
+        jobStateToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeStateView();
+                //clear previous jobs shown
+                jobs.clear();
+                //get updated list of jobs
+                loadData(noJobsMessage);
+            }
+
+
+        });
+    }
+
+    private void initializeDatabase(){
+        jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+    }
+
+    private void loadData(TextView noJobsMessage ){
         jobInformation.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
+            //get list of jobs
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Object employeeID = dataSnapshot.child("employeeID").getValue();
-                    Object employeeState = dataSnapshot.child("employeeState").getValue();
-                    if (employeeID != null && ((dataSnapshot.child("employeeID").getValue()).equals(uID)) && employeeState != null && ((dataSnapshot.child("state").getValue()).equals(state))) {
+                    if (employeeID != null && ((dataSnapshot.child("employeeID").getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
                         Job job = dataSnapshot.getValue(Job.class);
                         String id = dataSnapshot.getKey().toString();
                         job.setId(id);
                         jobs.add(job);
                     }
                 }
-                if (jobs.size() <= 0) {
-                    TextView noJobsMessage = findViewById(R.id.noJobsMessageLayout);
-                    noJobsMessage.setVisibility(View.VISIBLE);
-                } else {
-                    noJobsMessage.setVisibility(View.INVISIBLE);
-                    adapter = new jobHistoryAdapter(jobs);
-                    recyclerView.setAdapter(adapter);
-                }
-
+                changeEmptyMessageVisability(noJobsMessage);
             }
 
             @Override
@@ -76,52 +94,26 @@ public class jobHistory extends AppCompatActivity {
             }
         });
 
-        ToggleButton jobStateToggle = findViewById(R.id.toggleButtonState);
-        jobStateToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (state.equals("open")) {
-                    state = "closed";
-                } else {
-                    state = "open";
-                }
-                jobs.clear();
 
-
-                jobInformation.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (((dataSnapshot.child("employeeID").getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
-                                Job job = dataSnapshot.getValue(Job.class);
-                                String id = dataSnapshot.getKey().toString();
-                                job.setId(id);
-                                jobs.add(job);
-                            }
-                        }
-                        if (jobs.size() <= 0) {
-                            TextView text = findViewById(R.id.noJobsMessageLayout);
-                            noJobsMessage.setVisibility(View.VISIBLE);
-                        } else {
-                            noJobsMessage.setVisibility(View.INVISIBLE);
-                            adapter = new jobHistoryAdapter(jobs);
-                            recyclerView.setAdapter(adapter);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-
-
-            }
-        });
     }
 
-    public void initializeDatabase(){
-        jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+    private void changeStateView() {
+        if (state.equals("open")) {
+            state = "closed";
+        } else {
+            state = "open";
+        }
+    }
+
+    //show message if user has no jobs
+    private void changeEmptyMessageVisability(TextView noJobsMessage) {
+        if (jobs.size() <= 0) {
+            noJobsMessage.setVisibility(View.VISIBLE);
+        } else {
+            noJobsMessage.setVisibility(View.INVISIBLE);
+            adapter = new jobHistoryAdapter(jobs);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
 }
