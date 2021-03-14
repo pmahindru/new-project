@@ -1,6 +1,5 @@
 package com.example.csci3130_project_group17;
 
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,16 +20,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,17 +34,14 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
@@ -77,7 +66,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     private Circle mCircle;
     private Marker mMarker;
 
-    LatLng currentLocation;
+    LatLng currentLocationCoordinates;
+    Location currentLocation = null;
 
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
 
@@ -99,7 +89,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         setClickListeners();
         initializeDatabase();
-        pullJobs();
+
+        if(currentLocation!=null) {
+            pullJobs();
+        }
+
 
     }
 
@@ -144,6 +138,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         locationApplyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 changeRadius();
+                pullJobs();
                 showJobPosts();
             }});
 
@@ -163,7 +158,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
                 mMap.clear();
-                drawMarkerWithCircle(currentLocation);
+                drawMarkerWithCircle(currentLocationCoordinates);
             }
         });
     }
@@ -190,6 +185,17 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Store all the job posts in the jobslist arraylist as a hashmap
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
+                    Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
+                    //double lat = (double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
+                    //double longi = (double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
+                    if(lat!= null && longi!=null)
+                    {
+                        //Location distBetween = new Location(lat,longi);
+                    }
+                    System.out.println("here are the long and lat: " +lat +" , " +longi);
+                    HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
+                    //Location test = job.get("jobLocationCoordinates");
                     jobsList.add((HashMap<String, String>) postSnapshot.getValue());
                 }
 
@@ -199,7 +205,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 System.out.println(jobsList);
                 for(HashMap<String,String> jobItem: jobsList) {
                     System.out.println(jobItem.get("jobTitle"));
-
                 }
 
                 initializeJobPostings();
@@ -311,9 +316,9 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         // Enable / Disable zooming functionality
         mMap.getUiSettings().setZoomGesturesEnabled(true);
 
-        if (currentLocation != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
-            drawMarkerWithCircle(currentLocation);
+        if (currentLocationCoordinates != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationCoordinates, 10));
+            drawMarkerWithCircle(currentLocationCoordinates);
         }
     }
 
@@ -321,22 +326,24 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         @Override
         public void onLocationChanged(Location location) {
 
-            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            currentLocationCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
+
+            currentLocation = location;
 
             Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
 
             mMap.clear();
-            drawMarkerWithCircle(currentLocation);
+            drawMarkerWithCircle(currentLocationCoordinates);
 
             if (mMap != null) {
                /* if (isFirstLaunch) {
-                    MarkerOptions mOptions = new MarkerOptions().position(currentLocation);
+                    MarkerOptions mOptions = new MarkerOptions().position(currentLocationCoordinates);
                     myMarker = mMap.addMarker(mOptions);
                     isFirstLaunch = false;
                 } else {
-                    myMarker.setPosition(currentLocation);
+                    myMarker.setPosition(currentLocationCoordinates);
                 }*/
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationCoordinates, 10));
             }
         }
 

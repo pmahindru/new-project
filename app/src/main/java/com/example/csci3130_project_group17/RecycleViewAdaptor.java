@@ -25,9 +25,11 @@ public class RecycleViewAdaptor extends RecyclerView.Adapter<RecycleViewAdaptor.
 
     public RecycleViewAdaptor() {
         this.test = new ArrayList<>();
+        test.add("Please set your current location to see jobs near you");
+        /*
         for (int i = 0; i < 100; i++) {
             this.test.add("Test" + i);
-        }
+        }*/
     }
 
     @NonNull
