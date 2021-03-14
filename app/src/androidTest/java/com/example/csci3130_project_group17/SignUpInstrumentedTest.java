@@ -90,11 +90,4 @@ public class SignUpInstrumentedTest {
         onView(withId(R.id.switchbutton)).perform(click());
         // add the check for if the activity switches to dashboard
     }
-
-
-
-
-
-
-
 }
