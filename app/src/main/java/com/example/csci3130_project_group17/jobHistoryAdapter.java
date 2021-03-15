@@ -42,21 +42,15 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
         Job job = jobsList.get(position);
 
         getEmployerName(job.getEmployerID(),historyViewHolder);
+        //fill vieww holder with job data
         historyViewHolder.title.setText(job.getJobTitle());
         historyViewHolder.rate.setText("$"+job.getJobPayRate()+"/hr");
         historyViewHolder.state.setText("State: " + job.getState());
-        if (job.getState().equals("open")){
-            historyViewHolder.closeBttn.setVisibility(View.VISIBLE);
-            historyViewHolder.closeBttn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    jobInformation.child(job.getId()).child("state").setValue("closed");
-                }});
-
-        }
-        else{
-            historyViewHolder.closeBttn.setVisibility(View.GONE);
-        }
+        changeVisibilityOfCloseBttn(historyViewHolder, job);
+        closeBttnOnclick(historyViewHolder, job);
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -79,10 +73,7 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
                         }else{
                             holder.name.setText("Employer: "+orgName);
                         }
-
-
                     }
-
                 }
             }
 
@@ -90,6 +81,24 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+    }
+
+    private void changeVisibilityOfCloseBttn(HistoryViewHolder historyViewHolder, Job job) {
+        if (job.getState().equals("open")){
+            historyViewHolder.closeBttn.setVisibility(View.VISIBLE);
+
+        }
+        else{
+            historyViewHolder.closeBttn.setVisibility(View.GONE);
+        }
+    }
+
+    private void closeBttnOnclick(HistoryViewHolder historyViewHolder, Job job) {
+        historyViewHolder.closeBttn.setOnClickListener(view -> {
+            jobInformation.child(job.getId()).child("state").setValue("closed");
+            jobsList.remove(job);
+            notifyDataSetChanged();
         });
     }
 
