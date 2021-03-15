@@ -1,7 +1,6 @@
 package com.example.csci3130_project_group17;
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -34,7 +33,7 @@ public class JobDetail extends AppCompatActivity {
         setContentView(R.layout.jobdescribtion);
 
         Intent intent = getIntent();
-        String jobId = intent.getExtras().getString("JobId");
+        String jobId = intent.getStringExtra("jobId");
 
         //imageEmployee = findViewById(R.id.jd_employee);
         //imageEmployer = findViewById(R.id.jd_Employer);
@@ -48,7 +47,7 @@ public class JobDetail extends AppCompatActivity {
         payment = findViewById(R.id.jd_payrate);
         //state = findViewById(R.id.jd_state);
 
-        jobInfo = FirebaseDatabase.getInstance().getReference("JobInformation").child(jobId);
+        jobInfo = FirebaseDatabase.getInstance().getReference().child("JobInformation").child(jobId);
 
         readJobInfo();
         //readUserInfo();
@@ -101,17 +100,18 @@ public class JobDetail extends AppCompatActivity {
         });
     }*/
 
-    @SuppressLint("SetTextI18n")
     public void fillInfo(){
-        title.setText(job.getJobTitle());
-        bDes.setText(job.getJobDescription());
-        //pDate.setText(job.get());
-        //time.setText(job.get);
-        location.setText(job.getJobLocation());
-        payment.setText(job.getJobPayRate());
-        //state.setText(job.getState());
-        //employerN.setText(employer.getFirstName()+" "+employer.getLastName());
-        //employeeN.setText(employee.getFirstName()+" "+employee.getLastName());
+        if(job != null){
+            title.setText(job.getJobTitle());
+            bDes.setText(job.getJobDescription());
+            //pDate.setText(job.get());
+            //time.setText(job.get);
+            location.setText(job.getJobLocation());
+            payment.setText(job.getJobPayRate());
+            //state.setText(job.getState());
+            //employerN.setText(employer.getFirstName()+" "+employer.getLastName());
+            //employeeN.setText(employee.getFirstName()+" "+employee.getLastName());
+        }
     }
 
 

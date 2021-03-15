@@ -15,8 +15,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/design_default_color_secondary"
+            android:background="#B1AFAF"
             android:id="@+id/jd_header">
+
+            //FrameLayout codes from Pranav Mahindru
+            <FrameLayout
+                android:id="@+id/jobapplication"
+                android:layout_width="0dp"
+                android:layout_height="105dp"
+                android:layout_weight="1"
+                android:background="#B1AFAF"/>
 
             <TextView
                 android:maxWidth="200dp"
@@ -134,10 +142,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="30dp"
-                android:text="aaaaaaaaaaaaaaaaa"
+                android:text=""
                 android:textSize="16sp"
                 android:id="@+id/jd_brif_des"
-                android:background="@color/design_default_color_secondary"/>
+                android:background="#B1AFAF"/>
         </LinearLayout>
 
         <Button
