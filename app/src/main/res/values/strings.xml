@@ -28,4 +28,11 @@
     <string name="logo">Logo</string>
     <string name="PDF_FILE_SELECT">PDF FILE SELECT</string>
     <string name="title_activity_view_jobs">Map</string>
+    <string name="activejobs">active_jobs</string>
+    <string name="active_jobs">Current Jobs</string>
+    <string name="JobTitle">jobtitle</string>
+    <string name="location">location</string>
+    <string name="payrate">payrate</string>
+    <string name="$payrate">$ Pay Rate</string>
+    <string name="viewchat">View Chats</string>
 </resources>
