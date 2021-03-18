@@ -4,27 +4,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class ViewApplicants extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     ApplicantAdapter adapter;
-    DatabaseReference db;
+    Query db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        String jobId = null;
+        String jobTitle = null;
+
+        if(getIntent().getExtras() != null){
+                Intent i = getIntent();
+
+                jobId = i.getStringExtra("jobId");
+                jobTitle = i.getStringExtra("jobTitle");
+        }
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_view_job_applicants);
 
-        db = FirebaseDatabase.getInstance().getReference().child("application");
 
+
+        db = FirebaseDatabase.getInstance().getReference("application").orderByChild("jobId").equalTo(jobId);
 
 
         recyclerView = findViewById(R.id.recyclerView2);
@@ -36,6 +51,14 @@ public class ViewApplicants extends AppCompatActivity {
         adapter = new ApplicantAdapter(options);
 
         recyclerView.setAdapter(adapter);
+
+
+
+        TextView applicationJobTitle = (TextView) findViewById(R.id.jobApplicantsJobTitle);
+
+        applicationJobTitle.setText(jobTitle);
+
+
     }
 
     @Override
