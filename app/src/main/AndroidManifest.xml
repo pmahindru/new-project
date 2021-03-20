@@ -35,9 +35,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ViewJobs" />
-        <activity android:name=".DashboardEmployee" />
-        <activity android:name=".DashboardEmployer" />
         <activity android:name=".LogIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".jobHistory"></activity>
 
         <activity android:name=".JobApplication">
             <intent-filter>
@@ -64,9 +60,24 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ActiveJobs">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name=".ViewJobs" />
+        <activity android:name=".DashboardEmployee" />
+        <activity android:name=".DashboardEmployer" />
+        <activity android:name=".jobHistory" />
         <activity android:name=".SignUp" />
         <activity android:name=".JobPosting" />
-        <activity android:name=".AddImage"></activity>
+        <activity android:name=".AddImage" />
+<!--        <activity android:name=".ActiveJobs" />-->
+
     </application>
 
 </manifest>

@@ -95,8 +95,6 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
 
         user.put("jobId", jobPost.get("jobPostId"));
 
-
-
         //initiating the Firebase
         initializeDatabase();
 
