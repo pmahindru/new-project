@@ -25,6 +25,7 @@
             android:layout_height="105dp"
             android:layout_weight="1"
             android:background="#B1AFAF" />
+
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
@@ -75,100 +76,50 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <!--
+    taken reference from the
+    https://stackoverflow.com/questions/1914477/how-do-i-remove-lines-between-listviews-on-android
+    https://abhiandroid.com/ui/arrayadapter-tutorial-example.html
+
+    -->
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="250dp"
+        android:divider="@null"
         tools:ignore="AdapterViewChildren,InvalidId"/>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/box"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginLeft="240dp"
-        android:layout_marginRight="240dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="360dp"
-        app:cardBackgroundColor="#B1AFAF"
-        app:cardElevation="20dp"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            android:id="@+id/jobTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/JobTitle"
-            android:textColor="#000000"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            tools:ignore="RtlSymmetry"
-            android:layout_marginStart="20dp" />
-
-        <TextView
-            android:id="@+id/locationfromdatabase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/locationfromdatabase"
-            android:textColor="#000000"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="60dp"
-            tools:ignore="RtlSymmetry"
-            android:layout_marginStart="20dp" />
-
-        <TextView
-            android:id="@+id/payrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Payrate"
-            android:textColor="#000000"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            tools:ignore="RtlSymmetry"
-            android:layout_marginStart="250dp" />
-
-        <TextView
-            android:id="@+id/viewchat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/viewchat"
-            android:textColor="#000000"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="60dp"
-            tools:ignore="RtlSymmetry"
-            android:layout_marginStart="250dp" />
-    </androidx.cardview.widget.CardView>
-
     <!--this is taken reference from the given link
-    https://www.geeksforgeeks.org/how-to-draw-horizontal-and-vertical-lines-in-an-android-app-using-xml/    -->
-    <View
-        android:id="@+id/horizontalline"
-        android:layout_width="wrap_content"
-        android:layout_height="2dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/switch2home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/box"
-        tools:ignore="MissingConstraints" />
+https://www.geeksforgeeks.org/how-to-draw-horizontal-and-vertical-lines-in-an-android-app-using-xml/    -->
+        <View
+            android:id="@+id/horizontalline"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/switch2home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/list"
+            tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/switch2home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginLeft="140dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginRight="150dp"
-        android:ems="8"
-        android:text="@string/home"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalline"
-        tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/switch2home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginRight="150dp"
+            android:ems="8"
+            android:text="@string/home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalline"
+            tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
