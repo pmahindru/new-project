@@ -127,8 +127,6 @@ public class ActiveJobs extends AppCompatActivity {
                     }
                 }
 
-                System.out.println(jobtitle + " --- "+  jobpayrate + " ------ " + joblocation );
-
                 //  https://abhiandroid.com/ui/arrayadapter-tutorial-example.html
                 arrjobtitle = jobtitle.toArray(new String[jobids.size()]);
                 arrjobpayrate = jobpayrate.toArray(new String[jobids.size()]);

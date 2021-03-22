@@ -3,11 +3,14 @@ package com.example.csci3130_project_group17;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import java.util.Arrays;
 
 //this class referenced from the https://abhiandroid.com/ui/listview
 public class Activejobs2 extends BaseAdapter {
@@ -91,19 +94,26 @@ public class Activejobs2 extends BaseAdapter {
         jobtitle = convertView.findViewById(R.id.jobTitle);
         location = convertView.findViewById(R.id.locationfromdatabase);
         payrate = convertView.findViewById(R.id.payrate);
-        viewchat = convertView.findViewById(R.id.viewchat);
-        viewchat.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent chat = new Intent(context, Chat.class);
-                context.startActivity(chat);
-            }
-        });
+        //        viewchat = convertView.findViewById(R.id.viewchat);
+//        viewchat.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                Intent chat = new Intent(context, Chat.class);
+//                context.startActivity(chat);
+//            }
+//        });
 
-        jobtitle.setText("Company Name " + "\n" + arrjobtitle[position]);
-        location.setText("Location " + "\n"+ arrjolocation[position]);
-        payrate.setText("Pay Rate " + "\n"+ arrjobpayrate[position]);
+        //this thing is taken from the gve link which is bold the specif text
+        //https://stackoverflow.com/questions/14371092/how-to-make-a-specific-text-on-textview-bold
+        String title = "<b> Company Name </b> <br>" + arrjobtitle[position];
+        String loca = "<b> Location </b> <br>" + arrjolocation[position];
+        String Payrate = "<b> PayRate </b> <br>" + arrjobpayrate[position];
+
+        jobtitle.setText(Html.fromHtml(title));
+        location.setText(Html.fromHtml(loca));
+        payrate.setText(Html.fromHtml(Payrate));
 
         return convertView;
     }
