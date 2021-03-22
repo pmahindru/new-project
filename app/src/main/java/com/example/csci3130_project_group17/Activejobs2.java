@@ -2,12 +2,14 @@ package com.example.csci3130_project_group17;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+//this class referenced from the https://abhiandroid.com/ui/listview
 public class Activejobs2 extends BaseAdapter {
     Context context;
     String[] arrjobtitle;
@@ -19,6 +21,7 @@ public class Activejobs2 extends BaseAdapter {
     TextView jobtitle;
     TextView location;
     TextView payrate;
+    TextView viewchat;
 
     public Activejobs2(Context applicationContext, String[] arrjobtitle, String[] arrjobpayrate, String[] arrjolocation) {
         this.context = applicationContext;
@@ -80,7 +83,7 @@ public class Activejobs2 extends BaseAdapter {
      * @param parent      The parent that this view will eventually be attached to
      * @return A View corresponding to the data at the specified position.
      */
-    @SuppressLint({"ViewHolder", "InflateParams"})
+    @SuppressLint({"ViewHolder", "InflateParams", "SetTextI18n"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -88,12 +91,22 @@ public class Activejobs2 extends BaseAdapter {
         jobtitle = convertView.findViewById(R.id.jobTitle);
         location = convertView.findViewById(R.id.locationfromdatabase);
         payrate = convertView.findViewById(R.id.payrate);
+        viewchat = convertView.findViewById(R.id.viewchat);
+        viewchat.setOnClickListener(new View.OnClickListener() {
 
-        jobtitle.setText(arrjobtitle[position]);
-        location.setText(arrjolocation[position]);
-        payrate.setText(arrjobpayrate[position]);
+            @Override
+            public void onClick(View view) {
+                Intent chat = new Intent(context, Chat.class);
+                context.startActivity(chat);
+            }
+        });
+
+        jobtitle.setText("Company Name " + "\n" + arrjobtitle[position]);
+        location.setText("Location " + "\n"+ arrjolocation[position]);
+        payrate.setText("Pay Rate " + "\n"+ arrjobpayrate[position]);
 
         return convertView;
     }
+
 }
 

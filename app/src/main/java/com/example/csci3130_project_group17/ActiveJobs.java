@@ -84,35 +84,21 @@ public class ActiveJobs extends AppCompatActivity {
     }
 
     private void Onclick() {
-//        TextView viewchat = findViewById(R.id.viewchat);
-//        viewchat.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                swtich2chat();
-//            }
-//        });
+        // take value of button
+        Button square_button2 = (Button)findViewById(R.id.switch2home);
+        square_button2.setOnClickListener(new View.OnClickListener() {
 
-//        // take value of button
-//        Button square_button2 = (Button)findViewById(R.id.switch2home);
-//        square_button2.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                swtich2home();
-//            }
-//        });
+            @Override
+            public void onClick(View view) {
+                swtich2home();
+            }
+        });
     }
 
-//    private void swtich2chat() {
-//        Intent chat = new Intent(this, Chat.class);
-//        startActivity(chat);
-//    }
-//
-//    private void swtich2home() {
-//        Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
-//        startActivity(dashboardEmployee);
-//    }
+    private void swtich2home() {
+        Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
+        startActivity(dashboardEmployee);
+    }
 
     private void elementsfromdatabase() {
         listView = findViewById(R.id.list);
@@ -159,8 +145,6 @@ public class ActiveJobs extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
-
 
     }
 
