@@ -1,40 +1,29 @@
 package com.example.csci3130_project_group17;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class ActiveJobs extends AppCompatActivity {
+public class ActiveJobs extends AppCompatActivity{
 
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
@@ -78,11 +67,17 @@ public class ActiveJobs extends AppCompatActivity {
 
         //initiating the Firebase
         initializeDatabase();
-
         elementsfromdatabase();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 
+    //on click for the homepage
     private void Onclick() {
         // take value of button
         Button square_button2 = (Button)findViewById(R.id.switch2home);
@@ -135,7 +130,7 @@ public class ActiveJobs extends AppCompatActivity {
                 //adapter is taken from the give link
                 //just had a reference
                 //https://abhiandroid.com/ui/listview
-                Activejobs2 activejobs2 = new Activejobs2(getApplicationContext(),arrjobtitle,arrjobpayrate,arrjolocation);
+                Activejobs2 activejobs2 = new Activejobs2(ActiveJobs.this,arrjobtitle,arrjobpayrate,arrjolocation);
                 listView.setAdapter(activejobs2);
 
             }
@@ -179,5 +174,4 @@ public class ActiveJobs extends AppCompatActivity {
         jobapplication = database.getReference("application");
         jobdetails = database.getReference("JobInformation");
     }
-
 }

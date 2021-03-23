@@ -7,8 +7,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
 
@@ -25,6 +30,7 @@ public class Activejobs2 extends BaseAdapter {
     TextView location;
     TextView payrate;
     TextView viewchat;
+
 
     public Activejobs2(Context applicationContext, String[] arrjobtitle, String[] arrjobpayrate, String[] arrjolocation) {
         this.context = applicationContext;
@@ -94,16 +100,9 @@ public class Activejobs2 extends BaseAdapter {
         jobtitle = convertView.findViewById(R.id.jobTitle);
         location = convertView.findViewById(R.id.locationfromdatabase);
         payrate = convertView.findViewById(R.id.payrate);
+        viewchat = convertView.findViewById(R.id.viewchat);
 
-        //        viewchat = convertView.findViewById(R.id.viewchat);
-//        viewchat.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                Intent chat = new Intent(context, Chat.class);
-//                context.startActivity(chat);
-//            }
-//        });
+
 
         //this thing is taken from the gve link which is bold the specif text
         //https://stackoverflow.com/questions/14371092/how-to-make-a-specific-text-on-textview-bold
@@ -114,6 +113,14 @@ public class Activejobs2 extends BaseAdapter {
         jobtitle.setText(Html.fromHtml(title));
         location.setText(Html.fromHtml(loca));
         payrate.setText(Html.fromHtml(Payrate));
+
+        viewchat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chat = new Intent(context,Chat.class);
+                context.startActivity(chat);
+            }
+        });
 
         return convertView;
     }

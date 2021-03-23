@@ -43,13 +43,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".JobApplication">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
 
         <activity android:name=".Chat">
@@ -60,15 +53,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ActiveJobs">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
         <activity android:name=".ViewJobs" />
         <activity android:name=".DashboardEmployee" />
         <activity android:name=".DashboardEmployer" />
@@ -76,7 +60,8 @@
         <activity android:name=".SignUp" />
         <activity android:name=".JobPosting" />
         <activity android:name=".AddImage" />
-<!--        <activity android:name=".ActiveJobs" />-->
+        <activity android:name=".ActiveJobs" />
+        <activity android:name=".JobApplication" />
 
     </application>
 
