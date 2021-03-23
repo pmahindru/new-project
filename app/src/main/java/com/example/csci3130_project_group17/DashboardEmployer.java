@@ -14,6 +14,43 @@ public class DashboardEmployer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employer);
 
+        //get stored user data
+        StoredData data = new StoredData(getApplicationContext());
+        String uID = data.getStoredUserID();
+
+        setClickListeners();
+    }
+
+    private void setClickListeners() {
+        Button createJobButton = (Button) findViewById(R.id.employerCreateJobButton);
+
+        createJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToCreateJob();
+            }
+        });
+
+        Button viewHistory = (Button) findViewById(R.id.employerHistoryButton);
+
+        viewHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToHistory();
+            }
+        });
+
+    }
+
+    public void switchToCreateJob() {
+        Intent createJobIntent = new Intent(this, JobPosting.class);
+        startActivity(createJobIntent);
+    }
+
+    public void switchToHistory(){
+        Intent HistoryIntent = new Intent(this, jobHistory.class);
+        startActivity(HistoryIntent);
+
         setClickListeners();
     }
 
