@@ -38,6 +38,9 @@ public class Chat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Intent intent = getIntent();
+
         SendButton = findViewById(R.id.Send);
         input = findViewById(R.id.textInput);
         ButtonHome = findViewById(R.id.Home);
