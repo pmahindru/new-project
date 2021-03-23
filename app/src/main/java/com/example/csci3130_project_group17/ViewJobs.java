@@ -88,7 +88,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         if(currentLocationCoordinates !=null) {
             pullJobs();
         }
-        
+
     }
     private void intializeRecylcerView() {
         recyclerView = findViewById(R.id.recyclerView);
@@ -154,7 +154,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
                 if(mMap !=null) {
-                    drawMarkerWithCircle(currentLocationCoordinates);
+//                    drawMarkerWithCircle(currentLocationCoordinates);
                 }
 
             }
@@ -168,7 +168,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         mapInfo.setVisibility(View.INVISIBLE);
         jobPostings.setVisibility(View.VISIBLE);
     }
-    
+
     private void switchToMapView() {
         if(currentLocationCoordinates!= null) {
             View mapInfo =  findViewById(R.id.mapLayer);
@@ -191,7 +191,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     public void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
-    
+
 
 
     //Job related methods
@@ -277,7 +277,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 .fillColor(shadeColor)
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
-        mCircle = mMap.addCircle(circleOptions);
+//        mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {

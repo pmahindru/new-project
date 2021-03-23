@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Address;
@@ -84,18 +85,26 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
     Activity activity;
     LatLng currentLocation;
 
+    //user information
+    SharedPreferences preferences;
+    StoredData data;
+    String uID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.jobapplication);
 
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
+        uID = data.getStoredUserID();
+
         Intent intent = getIntent();
         jobPost = (HashMap<String, String>) intent.getSerializableExtra("jobPost");
 
         user.put("jobId", jobPost.get("jobPostId"));
-
-
+        user.put("currentUserID", uID);
 
         //initiating the Firebase
         initializeDatabase();

@@ -1,4 +1,4 @@
-package com.example.csci3130_project_group17;
+ package com.example.csci3130_project_group17;
 
 
 import androidx.annotation.NonNull;
@@ -193,7 +193,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
     public void switchtologin(){
         //considering this is the main activity
-        Intent switchintent = new Intent(this,MainActivity.class);
+        Intent switchintent = new Intent(this,LogIn.class);
         startActivity(switchintent);
     }
 
@@ -223,7 +223,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     }
 
     public void switchToDashboard(){
-        //dashboard is not made, which is why there is no functionality to switch to it yet :)
+        //considering this is the main activity
+        Intent switchintent = new Intent(this,DashboardEmployee.class);
+        startActivity(switchintent);
     }
 
     public void errorMessageDisplay(String error){
@@ -264,9 +266,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                             errorMessageDisplay("An account with this email already exists");
                         }
                         else if (!errorFlag[0]){
+                            addtodatabase(user);
                             errorMessageDisplay("Your account has been created");
                             errorFlag[0] = false;
-                            addtodatabase(user);
+                            switchToDashboard();
                         }
                     }
                     @Override

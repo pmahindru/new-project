@@ -26,6 +26,8 @@ public class DashboardEmployee extends AppCompatActivity {
     private void setClickListeners() {
         Button viewJobs = (Button) findViewById(R.id.viewJobsButton);
         Button viewHistory = (Button) findViewById(R.id.employeehistoryButton);
+        Button activeJobs = (Button) findViewById(R.id.activeJobsButton);
+
         viewJobs.setOnClickListener(new View.OnClickListener() {
         public void onClick(View view) {
             switchToViewJobs();
@@ -35,6 +37,13 @@ public class DashboardEmployee extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switchToHistory();
+            }
+        });
+
+        activeJobs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToActiveJobs();
             }
         });
 
@@ -50,5 +59,10 @@ public class DashboardEmployee extends AppCompatActivity {
     public void switchToHistory(){
         Intent HistoryIntent = new Intent(this, jobHistory.class);
         startActivity(HistoryIntent);
+    }
+
+    public void switchToActiveJobs(){
+        Intent activejobs = new Intent(this, ActiveJobs.class);
+        startActivity(activejobs);
     }
 }
