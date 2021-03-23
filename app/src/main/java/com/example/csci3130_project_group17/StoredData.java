@@ -36,4 +36,9 @@ public class StoredData {
         editor.putString(key, value);
         editor.commit();
     }
+
+    public void clearStoredData(){
+        storedAppData.edit().clear().commit();
+    }
+
 }

@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class DashboardEmployee extends AppCompatActivity {
 
+    private StoredData data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +19,7 @@ public class DashboardEmployee extends AppCompatActivity {
         Intent intent = getIntent();
 
         //get stored user data
-        StoredData data = new StoredData(getApplicationContext());
+        data = new StoredData(getApplicationContext());
         String uID = data.getStoredUserID();
 
         setClickListeners();
@@ -40,11 +42,11 @@ public class DashboardEmployee extends AppCompatActivity {
             }
         });
 
-        activeJobs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchToActiveJobs();
-            }
+
+        Button logout = findViewById(R.id.logoutButton2);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {logout();};
         });
 
     }
@@ -61,8 +63,12 @@ public class DashboardEmployee extends AppCompatActivity {
         startActivity(HistoryIntent);
     }
 
-    public void switchToActiveJobs(){
-        Intent activejobs = new Intent(this, ActiveJobs.class);
-        startActivity(activejobs);
+    private void logout() {
+
+        data.clearStoredData();
+
+        Intent switchToLogin = new Intent(this, LogIn.class);
+        startActivity(switchToLogin);
+
     }
 }
