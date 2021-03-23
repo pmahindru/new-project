@@ -9,13 +9,15 @@ import android.widget.Button;
 
 public class DashboardEmployer extends AppCompatActivity {
 
+    private StoredData data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employer);
 
         //get stored user data
-        StoredData data = new StoredData(getApplicationContext());
+        data = new StoredData(getApplicationContext());
         String uID = data.getStoredUserID();
 
         setClickListeners();
@@ -40,6 +42,12 @@ public class DashboardEmployer extends AppCompatActivity {
             }
         });
 
+        Button logout = findViewById(R.id.logoutButton);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {logout();};
+        });
+
     }
 
     public void switchToCreateJob() {
@@ -54,15 +62,9 @@ public class DashboardEmployer extends AppCompatActivity {
         setClickListeners();
     }
 
-    private void setClickListeners() {
-        Button logout = findViewById(R.id.logoutButton);
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {logout();};
-        });
-    }
-
     private void logout() {
+
+        data.clearStoredData();
 
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);

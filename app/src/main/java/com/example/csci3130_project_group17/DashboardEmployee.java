@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class DashboardEmployee extends AppCompatActivity {
 
+    private StoredData data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +19,7 @@ public class DashboardEmployee extends AppCompatActivity {
         Intent intent = getIntent();
 
         //get stored user data
-        StoredData data = new StoredData(getApplicationContext());
+        data = new StoredData(getApplicationContext());
         String uID = data.getStoredUserID();
 
         setClickListeners();
@@ -61,7 +63,7 @@ public class DashboardEmployee extends AppCompatActivity {
 
     private void logout() {
 
-
+        data.clearStoredData();
 
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
