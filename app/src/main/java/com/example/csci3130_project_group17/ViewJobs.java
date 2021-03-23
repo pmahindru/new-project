@@ -154,7 +154,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
                 if(mMap !=null) {
-//                    drawMarkerWithCircle(currentLocationCoordinates);
+                    drawMarkerWithCircle(currentLocationCoordinates);
                 }
 
             }
@@ -277,7 +277,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 .fillColor(shadeColor)
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
-//        mCircle = mMap.addCircle(circleOptions);
+           mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {
