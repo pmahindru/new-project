@@ -9,18 +9,12 @@ import android.widget.Button;
 
 public class DashboardEmployee extends AppCompatActivity {
 
-    private StoredData data;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employee);
 
         Intent intent = getIntent();
-
-        //get stored user data
-        data = new StoredData(getApplicationContext());
-        String uID = data.getStoredUserID();
 
         setClickListeners();
     }
@@ -29,11 +23,12 @@ public class DashboardEmployee extends AppCompatActivity {
         Button viewJobs = (Button) findViewById(R.id.viewJobsButton);
         Button viewHistory = (Button) findViewById(R.id.employeehistoryButton);
         Button activeJobs = (Button) findViewById(R.id.activeJobsButton);
+        Button Logoutuser = findViewById(R.id.logoutButton2);
 
         viewJobs.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View view) {
-            switchToViewJobs();
-        }});
+            public void onClick(View view) {
+                switchToViewJobs();
+            }});
 
         viewHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,15 +37,20 @@ public class DashboardEmployee extends AppCompatActivity {
             }
         });
 
+        activeJobs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToActiveJobs();
+            }
+        });
 
-        Button logout = findViewById(R.id.logoutButton2);
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {logout();};
+        Logoutuser.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                swtichtologin();
+            }
         });
 
     }
-
 
     public void switchToViewJobs() {
         Intent viewJobsIntent = new Intent(this, ViewJobs.class);
@@ -63,12 +63,14 @@ public class DashboardEmployee extends AppCompatActivity {
         startActivity(HistoryIntent);
     }
 
-    private void logout() {
+    public void switchToActiveJobs(){
+        Intent activejobs = new Intent(this, ActiveJobs.class);
+        startActivity(activejobs);
+    }
 
-        data.clearStoredData();
-
+    public void swtichtologin(){
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
-
+        finish();
     }
 }

@@ -9,23 +9,17 @@ import android.widget.Button;
 
 public class DashboardEmployer extends AppCompatActivity {
 
-    private StoredData data;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employer);
 
-        //get stored user data
-        data = new StoredData(getApplicationContext());
-        String uID = data.getStoredUserID();
-
         setClickListeners();
     }
 
     private void setClickListeners() {
-        Button createJobButton = (Button) findViewById(R.id.employerCreateJobButton);
 
+        Button createJobButton = (Button) findViewById(R.id.employerCreateJobButton);
         createJobButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +28,6 @@ public class DashboardEmployer extends AppCompatActivity {
         });
 
         Button viewHistory = (Button) findViewById(R.id.employerHistoryButton);
-
         viewHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,9 +36,10 @@ public class DashboardEmployer extends AppCompatActivity {
         });
 
         Button logout = findViewById(R.id.logoutButton);
-
         logout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {logout();};
+            public void onClick(View view) {
+                swtichtologin();
+            };
         });
 
     }
@@ -58,18 +52,11 @@ public class DashboardEmployer extends AppCompatActivity {
     public void switchToHistory(){
         Intent HistoryIntent = new Intent(this, jobHistory.class);
         startActivity(HistoryIntent);
-
-        setClickListeners();
     }
 
-    private void logout() {
-
-        data.clearStoredData();
-
+    public void swtichtologin(){
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
-
+        finish();
     }
-
-
 }
