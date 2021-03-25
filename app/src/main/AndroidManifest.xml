@@ -22,14 +22,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CSCI3130ProjectGroup17">
-        <activity android:name=".ViewApplicants">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ViewJobs" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -43,6 +35,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+
+        <!-- All page are here -->
+
         <activity android:name=".LogIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +46,14 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".ViewApplicants">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
 
         <activity android:name=".Chat">
@@ -61,7 +64,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ViewJobs" />
+        <activity android:name=".ReviewApplicants">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ViewJobs"/>
         <activity android:name=".DashboardEmployee" />
         <activity android:name=".DashboardEmployer" />
         <activity android:name=".jobHistory" />

@@ -35,4 +35,8 @@
     <string name="Payrate">$ Pay Rate</string>
     <string name="viewchat">View Chats</string>
     <string name="locationfromdatabase">location</string>
+    <string name="Hire">hire</string>
+    <string name="review_applicant">Review Applicant</string>
+    <string name="email2">Email</string>
+    <string name="phone_number_employee">Phone Number</string>
 </resources>
