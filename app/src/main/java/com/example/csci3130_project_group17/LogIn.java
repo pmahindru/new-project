@@ -28,6 +28,7 @@ public class LogIn extends AppCompatActivity{
     StoredData appData;
     SharedPreferences data;
     String uID = null;
+    Boolean isEmployer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +165,8 @@ public class LogIn extends AppCompatActivity{
 
                         uID = dataSnapshot.getKey();
                         appData.storeUserID(uID);
+                        isEmployer = (boolean) dataSnapshot.child("employer").getValue();
+                        appData.storeUserType(isEmployer);
 
                         switchToDashboard(Objects.requireNonNull(dataSnapshot.child("employee").getValue()).equals(true));
 

@@ -62,6 +62,7 @@
         <activity android:name=".AddImage" />
         <activity android:name=".ActiveJobs" />
         <activity android:name=".JobApplication" />
+        <activity android:name=".ViewApplicants" />
 
     </application>
 

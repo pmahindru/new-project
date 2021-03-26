@@ -59,7 +59,7 @@
         android:layout_marginTop="76dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:text="Active Employees"
+        android:text="Applications"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toStartOf="@+id/employerHistoryButton"
         app:layout_constraintStart_toStartOf="parent"
