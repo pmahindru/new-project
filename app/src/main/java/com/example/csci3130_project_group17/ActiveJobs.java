@@ -25,6 +25,7 @@ import java.util.Locale;
 
 public class ActiveJobs extends AppCompatActivity{
 
+    Context appContext;
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
     DatabaseReference jobapplication = null;
@@ -34,6 +35,7 @@ public class ActiveJobs extends AppCompatActivity{
     SharedPreferences preferences;
     StoredData data;
     String uID;
+    Boolean isEmployer;
 
     String Full_address;
 
@@ -62,12 +64,17 @@ public class ActiveJobs extends AppCompatActivity{
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
-
+        isEmployer = data.getUserType();
+        appContext = getApplicationContext();
         Onclick();
 
         //initiating the Firebase
         initializeDatabase();
-        elementsfromdatabase();
+        if (isEmployer){
+            employerJobs();
+        } else {
+            elementsfromdatabase();
+        }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,8 +98,56 @@ public class ActiveJobs extends AppCompatActivity{
     }
 
     private void swtich2home() {
-        Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
-        startActivity(dashboardEmployee);
+        Intent returnDashbaord;
+        //switch to employer or employee dashboard depending on user type
+        if (isEmployer) {
+            returnDashbaord = new Intent(this, DashboardEmployer.class);
+        }else{
+            returnDashbaord = new Intent(this, DashboardEmployee.class);
+        }
+        startActivity(returnDashbaord);
+    }
+
+    private void employerJobs(){
+        listView = findViewById(R.id.list);
+        jobdetails.addListenerForSingleValueEvent(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1: snapshot.getChildren()){
+                    String employerID = snapshot1.child("employerID").getValue().toString();
+                    String state = snapshot1.child("state").getValue().toString();
+                    if ((state.equals("open")) && (employerID.equals(uID))) {
+                        String jobID = snapshot1.getKey();
+                        jobids.add(jobID);
+                        String jobTitle = snapshot1.child("jobTitle").getValue().toString();
+                        jobtitle.add(jobTitle);
+                        jobpayrate.add(snapshot1.child("jobPayRate").getValue().toString());
+                        double latLocation = (double) snapshot1.child("jobLocationCoordinates").child("latitude").getValue();
+                        double longLocation = (double) snapshot1.child("jobLocationCoordinates").child("longitude").getValue();
+                        getTheFullAddressOfTheUser(latLocation,longLocation);
+                        joblocation.add(Full_address);
+
+                    }
+
+
+                }
+
+                //  https://abhiandroid.com/ui/arrayadapter-tutorial-example.html
+                arrjobtitle = jobtitle.toArray(new String[jobids.size()]);
+                arrjobpayrate = jobpayrate.toArray(new String[jobids.size()]);
+                arrjolocation = joblocation.toArray(new String[jobids.size()]);
+
+                //adapter is taken from the give link
+                //just had a reference
+                //https://abhiandroid.com/ui/listview
+                Activejobs2 activejobs2 = new Activejobs2(appContext,arrjobtitle,arrjobpayrate,arrjolocation, jobids ,isEmployer);
+                listView.setAdapter(activejobs2);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void elementsfromdatabase() {
@@ -100,8 +155,10 @@ public class ActiveJobs extends AppCompatActivity{
         jobapplication.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1: snapshot.getChildren()){
-                    if (snapshot1.child("currentUserID").getValue().equals(uID)){
-                        jobids.add((String) snapshot1.child("jobId").getValue());
+                    if (snapshot1.child("currentUserID") !=null) {
+                        if ((snapshot1.child("currentUserID").getValue().equals(uID))) {
+                            jobids.add((String) snapshot1.child("jobId").getValue());
+                        }
                     }
                 }
             }
@@ -130,7 +187,7 @@ public class ActiveJobs extends AppCompatActivity{
                 //adapter is taken from the give link
                 //just had a reference
                 //https://abhiandroid.com/ui/listview
-                Activejobs2 activejobs2 = new Activejobs2(ActiveJobs.this,arrjobtitle,arrjobpayrate,arrjolocation);
+                Activejobs2 activejobs2 = new Activejobs2(ActiveJobs.this, arrjobtitle,arrjobpayrate,arrjolocation, jobids,isEmployer);
                 listView.setAdapter(activejobs2);
 
             }
