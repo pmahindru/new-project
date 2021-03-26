@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -34,7 +33,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     private Button createButton, ButtonHome, imageButton;
     private String errorMessage;
     DatabaseReference jobInformation;
-    LatLng locationCoordinates;
+    location location;
 
     Context context;
     Activity activity;
@@ -153,7 +152,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
     protected void saveJobToDatabase() {
         String jobID = UUID.randomUUID().toString();
-        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID, locationCoordinates);
+        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID);
+        job.setJobLocationCoordinates(location);
         jobInformation.child(jobID).setValue(job);
     }
 
@@ -313,8 +313,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
           if(addresses.size() > 0) {
                 double latitude= addresses.get(0).getLatitude();
                 double longitude= addresses.get(0).getLongitude();
-
-                locationCoordinates = new LatLng(latitude, longitude);
+                location = new location(latitude,longitude);
                 saveJobToDatabase();
             } else {
                 showToast("Invalid location. Please enter the street and city of your location.");
