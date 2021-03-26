@@ -35,15 +35,4 @@
     <string name="Payrate">$ Pay Rate</string>
     <string name="viewchat">View Chats</string>
     <string name="locationfromdatabase">location</string>
-
-
-<!--chat-->
-    <string name="no_users_found">No users found!</string>
-    <string name="enter_username">enter username</string>
-    <string name="click_here_to_register">Click here to register</string>
-    <string name="write_a_message">Type a message</string>
-    <string name="click_here_to_login">Click here to login</string>
-    <string name="enter_password">enter password</string>
-    <string name="register">Register</string>
-
 </resources>
