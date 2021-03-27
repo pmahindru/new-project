@@ -10,10 +10,11 @@ public class Review {
     //constructors
     public Review(){}
 
-    public Review(String reviewerID, String revieweeID, int rating) {
+    public Review(String reviewerID, String revieweeID, int rating, String comment) {
         this.reviewerID = reviewerID;
         this.revieweeID = revieweeID;
         this.rating = rating;
+        this.comment = comment;
     }
 
     //getters and setters
