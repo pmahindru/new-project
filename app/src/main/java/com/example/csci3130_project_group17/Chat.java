@@ -41,6 +41,8 @@ public class Chat extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        String userId = intent.getStringExtra("userId");
+
         SendButton = findViewById(R.id.Send);
         input = findViewById(R.id.textInput);
         ButtonHome = findViewById(R.id.Home);
