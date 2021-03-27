@@ -26,7 +26,7 @@ public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, Applica
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull  ApplicantsViewHolder holder, int position, @NonNull  Applicant model) {
+    protected void onBindViewHolder(ApplicantsViewHolder holder, int position, Applicant model) {
 
         holder.firstName.setText(model.getFirstName());
 
@@ -63,9 +63,8 @@ public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, Applica
 
 
     @NonNull
-
     @Override
-    public ApplicantAdapter.ApplicantsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ApplicantAdapter.ApplicantsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.applicant_card, parent, false);
 
