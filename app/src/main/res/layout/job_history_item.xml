@@ -65,6 +65,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="close" />
+
+                <Button
+                    android:id="@+id/reviewButtonHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Review"
+                    tools:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
