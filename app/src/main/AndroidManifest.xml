@@ -43,8 +43,6 @@
             </intent-filter>
         </activity>
 
-
-
         <activity android:name=".Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
