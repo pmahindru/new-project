@@ -58,6 +58,21 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        Intent intent = getIntent();
+
+        String userId = intent.getStringExtra("userId");
+
+        SendButton = findViewById(R.id.Send);
+        input = findViewById(R.id.textInput);
+        ButtonHome = findViewById(R.id.Home);
+        message = new ChatMessage();
+        ButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToMain();
+
+            }
+        });
         layout = findViewById(R.id.layout1);
         layout_2 = findViewById(R.id.layout2);
         sendButton = findViewById(R.id.sendButton);

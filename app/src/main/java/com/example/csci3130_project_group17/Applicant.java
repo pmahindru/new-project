@@ -6,6 +6,8 @@ public class Applicant {
 
     private String lastName;
 
+    private String currentUserID;
+
     public  Applicant() {};
 
     public void setFirstName(String firstName){
@@ -16,6 +18,8 @@ public class Applicant {
         this.lastName = lastName;
     }
 
+    public void setCurrentUserID(String id){this.currentUserID = id;}
+
     public String getFirstName(){
         return this.firstName;
     }
@@ -23,5 +27,8 @@ public class Applicant {
     public String getLastName(){
         return this.lastName;
     }
+
+    public String getCurrentUserID() {return this.currentUserID;}
+
 
 }
