@@ -1,7 +1,5 @@
 package com.example.csci3130_project_group17;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Job {
     private String id;
     private String jobTitle;
@@ -12,13 +10,13 @@ public class Job {
     private String state;
     private String employeeID;
     private String employerID;
-    private LatLng locationCoordinates;
+    private location jobLocationCoordinates;
 
     //constructors
     public Job() {
     }
 
-    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String state, String employeeID, String employerID, LatLng location) {
+    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String state, String employeeID, String employerID) {
         this.jobTitle = jobTitle;
         this.jobType = jobType;
         this.jobDescription = jobDescription;
@@ -27,7 +25,6 @@ public class Job {
         this.state = state;
         this.employeeID = employeeID;
         this.employerID = employerID;
-        this.locationCoordinates = location;
     }
 
     //getters and setters
@@ -105,12 +102,12 @@ public class Job {
         this.employerID = employerID;
     }
 
-    public LatLng getLocationCoordinates() {
-        return locationCoordinates;
+    public location getJobLocationCoordinates() {
+        return jobLocationCoordinates;
     }
 
-    public void setLocationCoordinates(LatLng locationCoordinates) {
-        this.locationCoordinates = locationCoordinates;
+    public void setJobLocationCoordinates(location jobLocationCoordinates) {
+        this.jobLocationCoordinates = jobLocationCoordinates;
     }
 
 }

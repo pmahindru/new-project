@@ -42,6 +42,12 @@ public class DashboardEmployer extends AppCompatActivity {
             };
         });
 
+        Button activeJobsBttn = findViewById(R.id.activeEmployeesButton);
+        activeJobsBttn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToJobApplications();
+            };
+        });
     }
 
     public void switchToCreateJob() {
@@ -58,5 +64,10 @@ public class DashboardEmployer extends AppCompatActivity {
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
         finish();
+    }
+
+    public void switchToJobApplications(){
+        Intent HistoryIntent = new Intent(this, ActiveJobs.class);
+        startActivity(HistoryIntent);
     }
 }

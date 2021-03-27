@@ -103,13 +103,13 @@ public class jobHistory extends AppCompatActivity {
             //get list of jobs
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Object userID = dataSnapshot.child(userIDSearchTerm).getValue();
-                    if (userID != null && ((dataSnapshot.child(userIDSearchTerm).getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
-                        Job job = dataSnapshot.getValue(Job.class);
-                        String id = dataSnapshot.getKey().toString();
-                        job.setId(id);
-                        jobs.add(job);
-                    }
+                    String id = dataSnapshot.getKey().toString();
+                        if (((dataSnapshot.child(userIDSearchTerm).getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
+                            Job job = dataSnapshot.getValue(Job.class);
+                            job.setJobLocationCoordinates(dataSnapshot.child("jobLocationCoordinates").getValue(location.class));
+                            job.setId(id);
+                            jobs.add(job);
+                        }
                 }
                 changeEmptyMessageVisability(noJobsMessage);
             }
