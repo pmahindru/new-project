@@ -14,38 +14,61 @@ public class DashboardEmployer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employer);
 
-        //get stored user data
-        StoredData data = new StoredData(getApplicationContext());
-        String uID = data.getStoredUserID();
         setClickListeners();
     }
 
     private void setClickListeners() {
-        Button createJobButton= (Button) findViewById(R.id.employerCreateJobButton);
+
+        Button createJobButton = (Button) findViewById(R.id.employerCreateJobButton);
         createJobButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            @Override
+            public void onClick(View v) {
                 switchToCreateJob();
             }
         });
 
         Button viewHistory = (Button) findViewById(R.id.employerHistoryButton);
-
         viewHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switchToHistory();
             }
         });
-    }
-    private void switchToCreateJob(){
-        Intent CreateJobIntent = new Intent(this, JobPosting.class);
-        startActivity(CreateJobIntent);
 
+        Button logout = findViewById(R.id.logoutButton);
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                swtichtologin();
+            };
+        });
+
+        Button activeJobsBttn = findViewById(R.id.activeEmployeesButton);
+        activeJobsBttn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToJobApplications();
+            };
+        });
+    }
+
+    public void switchToCreateJob() {
+        Intent createJobIntent = new Intent(this, JobPosting.class);
+        startActivity(createJobIntent);
     }
 
     public void switchToHistory(){
         Intent HistoryIntent = new Intent(this, jobHistory.class);
         HistoryIntent.putExtra("userType", "EMPLOYER");
+        startActivity(HistoryIntent);
+    }
+
+    public void swtichtologin(){
+        Intent switchToLogin = new Intent(this, LogIn.class);
+        startActivity(switchToLogin);
+        finish();
+    }
+
+    public void switchToJobApplications(){
+        Intent HistoryIntent = new Intent(this, ActiveJobs.class);
         startActivity(HistoryIntent);
     }
 }

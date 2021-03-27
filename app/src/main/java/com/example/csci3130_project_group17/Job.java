@@ -10,6 +10,7 @@ public class Job {
     private String state;
     private String employeeID;
     private String employerID;
+    private location jobLocationCoordinates;
 
     //constructors
     public Job() {
@@ -100,4 +101,13 @@ public class Job {
     public void setEmployerID(String employerID) {
         this.employerID = employerID;
     }
+
+    public location getJobLocationCoordinates() {
+        return jobLocationCoordinates;
+    }
+
+    public void setJobLocationCoordinates(location jobLocationCoordinates) {
+        this.jobLocationCoordinates = jobLocationCoordinates;
+    }
+
 }
