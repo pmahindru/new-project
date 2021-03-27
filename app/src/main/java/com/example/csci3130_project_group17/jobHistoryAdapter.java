@@ -1,4 +1,6 @@
 package com.example.csci3130_project_group17;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,15 @@ import java.util.List;
 
 public class jobHistoryAdapter extends RecyclerView.Adapter{
     private List<Job> jobsList;
+    private Context context;
     DatabaseReference users;
     DatabaseReference jobInformation;
+    DatabaseReference reviews;
 
     //constructor
-    public jobHistoryAdapter(List<Job> jobsList) {
+    public jobHistoryAdapter(List<Job> jobsList, Context context) {
         this.jobsList = jobsList;
+        this.context = context;
     }
 
     @NonNull
@@ -31,6 +36,7 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         users= FirebaseDatabase.getInstance().getReference().child("users");
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+        reviews = FirebaseDatabase.getInstance().getReference().child("reviews");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_history_item,parent,false);
         HistoryViewHolder historyViewHolder = new HistoryViewHolder(view);
         return historyViewHolder;
@@ -47,7 +53,9 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
         historyViewHolder.rate.setText("$"+job.getJobPayRate()+"/hr");
         historyViewHolder.state.setText("State: " + job.getState());
         changeVisibilityOfCloseBttn(historyViewHolder, job);
+        changeVisibilityOfReviewBttn(historyViewHolder,job);
         closeBttnOnclick(historyViewHolder, job);
+        reviewBttnOnclick(historyViewHolder,job);
     }
 
 
@@ -87,10 +95,18 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
     private void changeVisibilityOfCloseBttn(HistoryViewHolder historyViewHolder, Job job) {
         if (job.getState().equals("open")){
             historyViewHolder.closeBttn.setVisibility(View.VISIBLE);
-
         }
         else{
             historyViewHolder.closeBttn.setVisibility(View.GONE);
+        }
+    }
+
+    private void changeVisibilityOfReviewBttn(HistoryViewHolder historyViewHolder, Job job) {
+        if (job.getState().equals("open")){
+            historyViewHolder.reviewBttn.setVisibility(View.GONE);
+        }
+        else{
+            historyViewHolder.reviewBttn.setVisibility(View.VISIBLE);
         }
     }
 
@@ -98,10 +114,28 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
         historyViewHolder.closeBttn.setOnClickListener(view -> jobInformation.child(job.getId()).child("state").setValue("closed"));
     }
 
+    private void reviewBttnOnclick(HistoryViewHolder historyViewHolder, Job job) {
+        String jobID = job.getId();
+        String employerID = job.getEmployerID();
+        String employeeID = job.getEmployeeID();
+        historyViewHolder.reviewBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent reviewFormIntent = new Intent(context,LeaveReview.class);
+                reviewFormIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                reviewFormIntent.putExtra("jobId", jobID);
+                reviewFormIntent.putExtra("employerId", employerID);
+                reviewFormIntent.putExtra("employeeId", employeeID);
+                context.startActivity(reviewFormIntent);
+            }
+        });
+
+    }
+
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder {
         TextView title,name, state, rate;
-        Button closeBttn;
+        Button closeBttn, reviewBttn;
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.jobTitleLayout);
@@ -109,6 +143,7 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
             state = itemView.findViewById(R.id.jobStateLayout);
             rate = itemView.findViewById(R.id.jobTotalLayout);
             closeBttn = itemView.findViewById(R.id.closeJobButton);
+            reviewBttn = itemView.findViewById(R.id.reviewButtonHistory);
         }
     }
 }

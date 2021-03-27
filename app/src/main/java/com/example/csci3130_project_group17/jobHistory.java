@@ -34,6 +34,7 @@ public class jobHistory extends AppCompatActivity {
     String userIDSearchTerm = "employeeID";
     SharedPreferences preferences;
     StoredData data;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public class jobHistory extends AppCompatActivity {
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
+        context = getApplicationContext();
         checkIfEmployer();
         System.out.println(userIDSearchTerm);
 
@@ -136,7 +138,7 @@ public class jobHistory extends AppCompatActivity {
             noJobsMessage.setVisibility(View.VISIBLE);
         } else {
             noJobsMessage.setVisibility(View.INVISIBLE);
-            adapter = new jobHistoryAdapter(jobs);
+            adapter = new jobHistoryAdapter(jobs, context);
             recyclerView.setAdapter(adapter);
         }
     }
