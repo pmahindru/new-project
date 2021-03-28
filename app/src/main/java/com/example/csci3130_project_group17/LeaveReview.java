@@ -3,6 +3,7 @@ package com.example.csci3130_project_group17;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -100,7 +102,14 @@ public class LeaveReview extends AppCompatActivity {
             String comment = getComment();
             String revieweeID = getRevieweeID(jobEmployerID, jobEmployeeID);
             Review review = new Review(uID, reviewerName,jobIdForReview,revieweeID, rating, comment);
-            saveReviewToDatabase(review);
+            if (commentNotEmpty()){
+                saveReviewToDatabase(review);
+                Toast.makeText(getBaseContext(), "Review Submitted Successfully.", Toast.LENGTH_LONG).show();
+                switchBackToHistory();
+            } else{
+                Toast.makeText(getBaseContext(), "Please Enter A Comment!", Toast.LENGTH_LONG).show();
+            }
+
         });
     }
 
@@ -125,6 +134,21 @@ public class LeaveReview extends AppCompatActivity {
     public void saveReviewToDatabase(Review review){
         String reviewID = UUID.randomUUID().toString();
         reviews.child(reviewID).setValue(review);
+    }
+
+    public boolean commentNotEmpty(){
+        EditText commentBox = findViewById(R.id.reviewCommentInput);
+        String comment = commentBox.getText().toString().trim();
+        if (comment.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public void switchBackToHistory(){
+        Intent intent = new Intent(this, jobHistory.class);
+        startActivity(intent);
     }
 
 
