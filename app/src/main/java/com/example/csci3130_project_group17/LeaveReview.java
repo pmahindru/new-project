@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class LeaveReview extends AppCompatActivity {
@@ -28,7 +29,7 @@ public class LeaveReview extends AppCompatActivity {
     String jobIdForReview;
     String jobEmployerID;
     String jobEmployeeID;
-    String revieeName;
+    String reviewerName;
     SharedPreferences preferences;
     StoredData data;
     String uID;
@@ -39,56 +40,67 @@ public class LeaveReview extends AppCompatActivity {
     RadioButton selectedRadio;
     int rating;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave_review);
 
-
+        //get ids for employer, employee
         Intent i = getIntent();
+        jobIdForReview = i.getStringExtra("jobId");
+        jobEmployerID = i.getStringExtra("employerId");
+        jobEmployeeID = i.getStringExtra("employeeId");
+
+        //get stored data about user
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 
-        jobIdForReview = i.getStringExtra("jobId");
-        System.out.println(jobIdForReview);
-        jobEmployerID = i.getStringExtra("employerId");
-        System.out.println("cur user: \t" + uID);
-        jobEmployeeID = i.getStringExtra("employeeId");
-        System.out.println("employer: \t" + jobEmployerID);
-        System.out.println("employer: \t" + jobEmployeeID);
-        System.out.println("reviewee: \t" + getRevieweeID(jobEmployerID,jobEmployeeID));
-
-
         initalizeDatabase();
-
 
         submitButton = findViewById(R.id.submitReviewButton);
         radios = findViewById(R.id.reviewRadios);
-        radios.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int radioID = radios.getCheckedRadioButtonId();
-                selectedRadio = findViewById(radioID);
-                rating = Integer.parseInt(selectedRadio.getText().toString());
-                System.out.println(rating);
-            }
+        radios.setOnCheckedChangeListener((group, checkedId) -> {
+            int radioID = radios.getCheckedRadioButtonId();
+            selectedRadio = findViewById(radioID);
+            rating = Integer.parseInt(selectedRadio.getText().toString());
+            System.out.println(rating);
         });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        //get name of reviewer
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                String comment = getComment();
-                String revieweeID = getRevieweeID(jobEmployerID, jobEmployeeID);
-                Review review = new Review(uID, revieweeID, rating, comment);
-                saveReviewToDatabase(review);
-                System.out.println(revieweeID);
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    String currentUserID = dataSnapshot.getKey();
+                    if(Objects.requireNonNull(currentUserID).equals(uID)){
+                        String firstName = Objects.requireNonNull(dataSnapshot.child("firstName").getValue()).toString();
+                        String lastName = Objects.requireNonNull(dataSnapshot.child("lastName").getValue()).toString();
+                        String orgName = Objects.requireNonNull(dataSnapshot.child("orgName").getValue()).toString();
+                        //if user has not set first or last name return org name
+                        if (firstName.isEmpty() && lastName.isEmpty()){
+                            reviewerName = orgName;
+                            return;
+                        }else{
+                            reviewerName = firstName + " " + lastName;
+                            return;
+                        }
+                    }
+                }
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        //get review info and sabe to database on submit click
+        submitButton.setOnClickListener(v -> {
+            String comment = getComment();
+            String revieweeID = getRevieweeID(jobEmployerID, jobEmployeeID);
+            Review review = new Review(uID, reviewerName,jobIdForReview,revieweeID, rating, comment);
+            saveReviewToDatabase(review);
         });
     }
 
@@ -109,37 +121,9 @@ public class LeaveReview extends AppCompatActivity {
             return jobEmployerID;
         }
     }
-    /**
-    private  void getReviewerName(String userID){
-/**
-        users.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String id = dataSnapshot.getKey().toString();
-                    if (((dataSnapshot.child(id).getValue()).equals(userID))) {
-                        String firstName = dataSnapshot.child(userID).child("firstName").getValue().toString();
-                        if (isEmployer && firstName.isEmpty()){
-                            revieeName = dataSnapshot.child(userID).child("orgName").getValue().toString();
-                        }else{
-                            String lastName = dataSnapshot.child(userID).child("lastName").getValue().toString();
-                            revieeName = firstName + " " +lastName;
-                        }
 
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-*/
     public void saveReviewToDatabase(Review review){
         String reviewID = UUID.randomUUID().toString();
-
         reviews.child(reviewID).setValue(review);
     }
 
