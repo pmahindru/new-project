@@ -10,19 +10,18 @@ import static org.junit.Assert.assertTrue;
 public class ReviewTest {
     static Review reviewNormal;
     static Review emptyReview;
-    static Review checkRatingReview;
-    static Review reviewNoComment;
+    static Review emptyReview2;
     static Review reviewEdgeCase1;
     static Review reviewEdgeCase2;
 
 
     @BeforeClass
     public static void setup() {
-        reviewNormal = new Review("idReviewer","idReviewee", 3);
+        reviewNormal = new Review("idReviewer","Sandra Oh", "455332", "idReviewee", 3, "comment");
         emptyReview = new Review();
-        reviewEdgeCase1 = new Review("reviewer", "rewviewee", 0);
-        reviewEdgeCase2 = new Review("reviewer", "rewviewee", 6);
-        reviewNoComment = new Review("Reviewer","Reviewee", 5);
+        emptyReview2 = new Review();
+        reviewEdgeCase1 = new Review("reviewer", "Ronald Weasley", "123456", "rewviewee", 0, "my comment");
+        reviewEdgeCase2 = new Review("reviewer", "Ronald Weasley", "123456", "rewviewee", 6, "my comment");
     }
 
     @Test
@@ -49,7 +48,7 @@ public class ReviewTest {
     @Test
     public void CheckNormalRatingValid(){
         //normal case
-        assertTrue(reviewNoComment.CheckRatingValueIsValid());
+        assertTrue(reviewNormal.CheckRatingValueIsValid());
     }
 
     @Test
@@ -66,8 +65,7 @@ public class ReviewTest {
 
     @Test
     public void CheckIfCommentPresent(){
-        assertFalse(reviewNoComment.CommentLeft());
-        reviewNoComment.setComment("comment");
-        assertTrue(reviewNoComment.CommentLeft());
+        assertTrue(reviewNormal.CommentLeft());
+        assertFalse(emptyReview2.CommentLeft());
     }
 }
