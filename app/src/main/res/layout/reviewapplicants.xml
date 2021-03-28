@@ -109,14 +109,15 @@
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
         android:layout_marginBottom="25dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/FirstName"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/Email_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView_employeepicture"
-        tools:ignore="MissingConstraints"
-        android:autofillHints="" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/Email_employee"
@@ -124,18 +125,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="0dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
         android:layout_marginBottom="25dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/email"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/Phone_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Firstname_employee"
-        tools:ignore="MissingConstraints,TextFields"
-        android:autofillHints="" />
+        tools:ignore="MissingConstraints,TextFields" />
 
     <TextView
         android:id="@+id/Phone_employee"
@@ -143,18 +144,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="0dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
         android:layout_marginBottom="25dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/phone_number_employee"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/Location_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Email_employee"
-        tools:ignore="DuplicateIds,MissingConstraints,TextFields"
-        android:autofillHints="" />
+        tools:ignore="DuplicateIds,MissingConstraints,TextFields" />
 
     <TextView
         android:id="@+id/Location_employee"
@@ -162,18 +163,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="0dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
         android:layout_marginBottom="25dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/Location"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/Resume_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Phone_employee"
-        tools:ignore="DuplicateIds,MissingConstraints"
-        android:autofillHints="" />
+        tools:ignore="DuplicateIds,MissingConstraints" />
 
     <TextView
         android:id="@+id/Resume_employee"
@@ -185,14 +186,17 @@
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
         android:layout_marginBottom="30dp"
+        android:autofillHints=""
         android:ems="10"
-        android:hint="@string/Upload_Your_Resume"
+        android:clickable="true"
+        android:focusable="true"
+        android:hint="@string/resume"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/Hire"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Location_employee"
-        tools:ignore="MissingConstraints"
-        android:autofillHints="" />
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/Hire"
