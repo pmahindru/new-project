@@ -4,15 +4,20 @@ public class Review {
 
     private String reviewerID;
     private String revieweeID;
+    private String reviewerName;
+    private String jobID;
     private int rating;
     private String comment;
 
     //constructors
     public Review(){}
 
-    public Review(String reviewerID, String revieweeID, int rating, String comment) {
+
+    public Review(String reviewerID, String reviewerName, String jobID, String revieweeID, int rating, String comment) {
         this.reviewerID = reviewerID;
+        this.reviewerName = reviewerName;
         this.revieweeID = revieweeID;
+        this.jobID = jobID;
         this.rating = rating;
         this.comment = comment;
     }
@@ -26,12 +31,28 @@ public class Review {
         this.reviewerID = reviewerID;
     }
 
+    public String getReviewerName() {
+        return reviewerName;
+    }
+
+    public void setReviewerName(String reviewerName) {
+        this.reviewerName = reviewerName;
+    }
+
     public String getRevieweeID() {
         return revieweeID;
     }
 
     public void setRevieweeID(String revieweeID) {
         this.revieweeID = revieweeID;
+    }
+
+    public String getJobID() {
+        return jobID;
+    }
+
+    public void setJobID(String jobID) {
+        this.jobID = jobID;
     }
 
     public int getRating() {
