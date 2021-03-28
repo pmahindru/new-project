@@ -99,19 +99,18 @@
     </androidx.cardview.widget.CardView>
 
 
-    <EditText
+    <TextView
         android:id="@+id/Firstname_employee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="300dp"
-        android:layout_marginEnd="181dp"
-        android:layout_marginRight="181dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="310dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="@string/FirstName"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/Email_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,19 +118,18 @@
         tools:ignore="MissingConstraints"
         android:autofillHints="" />
 
-    <EditText
+    <TextView
         android:id="@+id/Email_employee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="181dp"
-        android:layout_marginRight="181dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="@string/email"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/Phone_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,19 +137,18 @@
         tools:ignore="MissingConstraints,TextFields"
         android:autofillHints="" />
 
-    <EditText
+    <TextView
         android:id="@+id/Phone_employee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="181dp"
-        android:layout_marginRight="181dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="@string/phone_number_employee"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/Location_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,19 +156,18 @@
         tools:ignore="DuplicateIds,MissingConstraints,TextFields"
         android:autofillHints="" />
 
-    <EditText
+    <TextView
         android:id="@+id/Location_employee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="181dp"
-        android:layout_marginRight="181dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="@string/Location"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/Resume_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -179,19 +175,18 @@
         tools:ignore="DuplicateIds,MissingConstraints"
         android:autofillHints="" />
 
-    <EditText
+    <TextView
         android:id="@+id/Resume_employee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="181dp"
-        android:layout_marginRight="181dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="30dp"
         android:ems="10"
         android:hint="@string/Upload_Your_Resume"
-        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/Hire"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -207,7 +202,7 @@
         android:layout_marginLeft="70dp"
         android:layout_marginEnd="240dp"
         android:layout_marginRight="240dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:ems="8"
         android:text="@string/Hire"
         app:layout_constraintBottom_toTopOf="@+id/horizontalline"

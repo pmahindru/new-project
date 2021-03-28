@@ -13,5 +13,7 @@ public class ReviewApplicants extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reviewapplicants);
 
+
+
     }
 }
