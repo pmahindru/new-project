@@ -10,16 +10,6 @@ public class Applicant {
 
     public  Applicant() {};
 
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName){
-        this.lastName = lastName;
-    }
-
-    public void setCurrentUserID(String id){this.currentUserID = id;}
-
     public String getFirstName(){
         return this.firstName;
     }

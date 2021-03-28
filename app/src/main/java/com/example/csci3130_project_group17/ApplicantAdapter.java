@@ -42,22 +42,19 @@ public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, Applica
             public void onClick(View v) {
                 Intent chatIntent = new Intent(v.getContext(), Chat.class);
                 chatIntent.putExtra("userId", model.getCurrentUserID());
-                chatIntent.putExtra("firstName", model.getFirstName());
-                chatIntent.putExtra("lastName", model.getLastName());
-
                 startActivity(v.getContext(), chatIntent, null);
             }
         });
 
-        /**holder.reviewButton.setOnClickListener(new View.OnClickListener() {
+        holder.reviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reviewIntent = new Intent(v.getContext(), reviewApplicant.class);
+                Intent reviewIntent = new Intent(v.getContext(), ReviewApplicants.class);
                 reviewIntent.putExtra("userId", model.getCurrentUserID());
                 startActivity(v.getContext(), reviewIntent, null);
 
             }
-        });**/
+        });
 
     }
 

@@ -75,13 +75,6 @@ public class ActiveJobs extends AppCompatActivity{
         } else {
             elementsfromdatabase();
         }
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
     }
 
     //on click for the homepage

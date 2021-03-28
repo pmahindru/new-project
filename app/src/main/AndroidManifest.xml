@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSCI3130ProjectGroup17">
 
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
