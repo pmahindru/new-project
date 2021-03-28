@@ -6,15 +6,11 @@ public class Applicant {
 
     private String lastName;
 
+    private String currentUserID;
+
+    private String jobId;
+
     public  Applicant() {};
-
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName){
-        this.lastName = lastName;
-    }
 
     public String getFirstName(){
         return this.firstName;
@@ -23,5 +19,10 @@ public class Applicant {
     public String getLastName(){
         return this.lastName;
     }
+
+    public String getCurrentUserID() {return this.currentUserID;}
+
+    public String getjobId() {return this.jobId;}
+
 
 }

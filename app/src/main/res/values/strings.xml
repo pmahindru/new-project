@@ -39,4 +39,6 @@
     <string name="review_applicant">Review Applicant</string>
     <string name="email2">Email</string>
     <string name="phone_number_employee">Phone Number</string>
+    <string name="write_a_message">write message</string>
+    <string name="applicant_name">Applicant Name</string>
 </resources>
