@@ -8,6 +8,8 @@ public class Applicant {
 
     private String currentUserID;
 
+    private String jobId;
+
     public  Applicant() {};
 
     public String getFirstName(){
@@ -19,6 +21,8 @@ public class Applicant {
     }
 
     public String getCurrentUserID() {return this.currentUserID;}
+
+    public String getjobId() {return this.jobId;}
 
 
 }

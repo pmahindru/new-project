@@ -51,6 +51,7 @@ public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, Applica
             public void onClick(View v) {
                 Intent reviewIntent = new Intent(v.getContext(), ReviewApplicants.class);
                 reviewIntent.putExtra("userId", model.getCurrentUserID());
+                reviewIntent.putExtra("jobId", model.getjobId());
                 startActivity(v.getContext(), reviewIntent, null);
 
             }
