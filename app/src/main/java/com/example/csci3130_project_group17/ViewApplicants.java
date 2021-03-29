@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -24,13 +26,11 @@ public class ViewApplicants extends AppCompatActivity {
 
 
         String jobId = null;
-        String jobTitle = null;
 
         if(getIntent().getExtras() != null){
                 Intent i = getIntent();
 
                 jobId = i.getStringExtra("jobId");
-                jobTitle = i.getStringExtra("jobTitle");
         }
 
         super.onCreate(savedInstanceState);
@@ -52,13 +52,14 @@ public class ViewApplicants extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
-
-
-        TextView applicationJobTitle = (TextView) findViewById(R.id.jobApplicantsJobTitle);
-
-        applicationJobTitle.setText(jobTitle);
-
-
+        Button home = findViewById(R.id.switch2home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),DashboardEmployer.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

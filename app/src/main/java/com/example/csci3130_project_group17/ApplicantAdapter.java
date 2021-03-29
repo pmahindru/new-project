@@ -13,6 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
@@ -31,6 +36,20 @@ public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, Applica
         holder.firstName.setText(model.getFirstName());
 
         holder.lastName.setText(model.getLastName());
+
+        holder.jobdetails.child(model.getjobId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    holder.jobId.setText((String) snapshot.child("jobTitle").getValue());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         setOnClickListeners(holder, model);
     }
@@ -70,16 +89,21 @@ public class ApplicantAdapter extends FirebaseRecyclerAdapter<Applicant, Applica
     }
 
     class ApplicantsViewHolder extends RecyclerView.ViewHolder {
-        TextView firstName, lastName;
+        TextView firstName, lastName, jobId;
         Button chatButton, reviewButton;
+        FirebaseDatabase database;
+        DatabaseReference jobdetails;
 
         public ApplicantsViewHolder(@NonNull View itemView){
             super(itemView);
 
             firstName = itemView.findViewById(R.id.applicantFirstName);
             lastName = itemView.findViewById(R.id.applicantLastName);
+            jobId = itemView.findViewById(R.id.jobApplicantsJobTitle);
             chatButton = itemView.findViewById(R.id.chatButton);
             reviewButton = itemView.findViewById(R.id.reviewButton);
+            database =  FirebaseDatabase.getInstance();
+            jobdetails = database.getReference("JobInformation");
 
         }
     }
