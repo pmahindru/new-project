@@ -66,8 +66,6 @@ dependencies {
     implementation 'com.google.gms:google-services:4.3.5'
     //implementation 'com.google.firebase:firebase-core:11.8.0'
     //implementation 'com.google.android.gms:play-services:12.0.1'
-    implementation 'com.google.firebase:firebase-auth:20.0.3'
-
     api 'com.google.firebase:firebase-core:18.0.2'
 
     api 'com.firebaseui:firebase-ui:0.6.0'
