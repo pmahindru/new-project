@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--taken from the lab-->
 <resources>
 
     <dimen name="activity_vertical_margin">10dp</dimen>

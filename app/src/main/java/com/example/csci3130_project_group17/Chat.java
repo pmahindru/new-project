@@ -28,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +54,7 @@ public class Chat extends AppCompatActivity {
     DatabaseReference userinfo = null;
     DatabaseReference Jobinfo = null;
     DatabaseReference currentmessage = null;
+    DatabaseReference currentmessage2 = null;
 
     //getting name and the jobinfo
     Boolean check;
@@ -111,6 +114,7 @@ public class Chat extends AppCompatActivity {
         userinfo = database.getReference("users");
         Jobinfo = database.getReference("JobInformation");
         currentmessage = database.getReference("Messages");
+        currentmessage2 = database.getReference("Messages");
     }
 
     public void getTheNameOfEmployeeAndEmployer(){
@@ -174,17 +178,16 @@ public class Chat extends AppCompatActivity {
 
         String Chatwith_Full_Name_User = chatwith_.get(0) + "-" + chatwith_.get(1);
 
+        System.out.println(jobid);
+
         //checking for the current full name
-        userinfo.child(uID);
-        userinfo.addListenerForSingleValueEvent(new ValueEventListener() {
+        userinfo.child(uID).addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String curr_username = (String) snapshot.child("firstName").getValue() + "-" + (String) snapshot.child("lastName").getValue();
-
                     if (check) {
-                    }
-                    else {
-                        currentmessage = currentmessage.child(curr_username + "_" + Chatwith_Full_Name_User);
+                        currentmessage2 = currentmessage.child(curr_username + "_" + Chatwith_Full_Name_User);
+                        currentmessage = currentmessage.child(Chatwith_Full_Name_User + "_" + curr_username);
                         sendButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -195,21 +198,106 @@ public class Chat extends AppCompatActivity {
                                     map.put("message", messageText);
                                     map.put("user", curr_username);
                                     currentmessage.push().setValue(map);
+                                    currentmessage2.push().setValue(map);
                                     messageArea.setText("");
                                 }
                             }
                         });
                         currentmessage.addChildEventListener(new ChildEventListener() {
                             @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                Map map = dataSnapshot.getValue(Map.class);
+                            public void onChildAdded(@NotNull DataSnapshot dataSnapshot, String s) {
+                                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                                 String message = map.get("message").toString();
                                 String userName = map.get("user").toString();
 
-                                if(userName.equals(curr_username)){
+                                if (userName.equals(curr_username)) {
                                     addMessageBox(message, 1);
+                                } else {
+                                    addMessageBox(message, 2);
                                 }
-                                else{
+                            }
+
+                            /**
+                             * This method is triggered when the data at a child location has changed.
+                             *
+                             * @param snapshot          An immutable snapshot of the data at the new data at the child location
+                             * @param previousChildName The key name of sibling location ordered before the child. This will
+                             */
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                            }
+
+                            /**
+                             * This method is triggered when a child is removed from the location to which this listener was
+                             * added.
+                             *
+                             * @param snapshot An immutable snapshot of the data at the child that was removed.
+                             */
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                            }
+
+                            /**
+                             * This method is triggered when a child location's priority changes. See {@link
+                             * DatabaseReference#setPriority(Object)} and <a
+                             * href="https://firebase.google.com/docs/database/android/retrieve-data#data_order"
+                             * target="_blank">Ordered Data</a> for more information on priorities and ordering data.
+                             *
+                             * @param snapshot          An immutable snapshot of the data at the location that moved.
+                             * @param previousChildName The key name of the sibling location ordered before the child
+                             */
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                            }
+
+                            /**
+                             * This method will be triggered in the event that this listener either failed at the server, or
+                             * is removed as a result of the security and Firebase rules. For more information on securing
+                             * your data, see: <a href="https://firebase.google.com/docs/database/security/quickstart"
+                             * target="_blank"> Security Quickstart</a>
+                             *
+                             * @param error A description of the error that occurred
+                             */
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+                        });
+                    }
+                    else {
+                        currentmessage2 = currentmessage.child(curr_username + "_" + Chatwith_Full_Name_User);
+                        currentmessage = currentmessage.child(Chatwith_Full_Name_User + "_" + curr_username);
+                        System.out.println(currentmessage + " --------------------------------------- " + currentmessage2);
+                        sendButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String messageText = messageArea.getText().toString();
+
+                                if (!messageText.equals("")) {
+                                    Map<String, String> map = new HashMap<String, String>();
+                                    map.put("message", messageText);
+                                    map.put("user", curr_username);
+                                    System.out.println(map);
+                                    currentmessage.push().setValue(map);
+                                    currentmessage2.push().setValue(map);
+                                    messageArea.setText("");
+                                }
+                            }
+                        });
+                        currentmessage.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NotNull DataSnapshot dataSnapshot, String s) {
+                                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                                String message = map.get("message").toString();
+                                String userName = map.get("user").toString();
+
+                                if (userName.equals(curr_username)) {
+                                    addMessageBox(message, 1);
+                                } else {
                                     addMessageBox(message, 2);
                                 }
                             }
@@ -267,6 +355,7 @@ public class Chat extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
