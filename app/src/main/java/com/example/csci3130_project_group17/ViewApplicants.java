@@ -37,10 +37,7 @@ public class ViewApplicants extends AppCompatActivity {
 
         setContentView(R.layout.activity_view_job_applicants);
 
-
-
         db = FirebaseDatabase.getInstance().getReference("application").orderByChild("jobId").equalTo(jobId);
-
 
         recyclerView = findViewById(R.id.recyclerView2);
 
