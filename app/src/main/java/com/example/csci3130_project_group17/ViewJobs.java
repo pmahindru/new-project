@@ -195,6 +195,17 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                     }
                 });
 
+        searchBar.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                //Toast t = Toast.makeText(ViewJobs.this, "close", Toast.LENGTH_SHORT);
+                //t.show();
+
+                initializeJobPostings(jobsList);
+
+                return false;
+            }
+        });
 
         SeekBar rangeInput = (SeekBar) findViewById(R.id.rangeInput);
         rangeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
