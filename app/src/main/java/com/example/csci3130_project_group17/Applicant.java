@@ -8,17 +8,9 @@ public class Applicant {
 
     private String currentUserID;
 
+    private String jobId;
+
     public  Applicant() {};
-
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName){
-        this.lastName = lastName;
-    }
-
-    public void setCurrentUserID(String id){this.currentUserID = id;}
 
     public String getFirstName(){
         return this.firstName;
@@ -29,6 +21,8 @@ public class Applicant {
     }
 
     public String getCurrentUserID() {return this.currentUserID;}
+
+    public String getjobId() {return this.jobId;}
 
 
 }

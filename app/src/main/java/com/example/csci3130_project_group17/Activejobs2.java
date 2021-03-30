@@ -129,6 +129,7 @@ public class Activejobs2 extends BaseAdapter {
                 }else{
                     Intent chat = new Intent(context,Chat.class);
                     chat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    chat.putExtra("jobId", id);
                     context.startActivity(chat);
                 }
             }

@@ -44,4 +44,12 @@
     <string name="_1">1</string>
     <string name="submit_review">Submit Review</string>
     <string name="leave_comment">Leave A Comment:</string>
+    <string name="Hire">hire</string>
+    <string name="review_applicant">Review Applicant</string>
+    <string name="email2">Email</string>
+    <string name="phone_number_employee">Phone Number</string>
+    <string name="write_a_message">write message</string>
+    <string name="applicant_name">Applicant Name</string>
+    <string name="resume">Resume</string>
+    <string name="view_applicant">View Applicant</string>
 </resources>
