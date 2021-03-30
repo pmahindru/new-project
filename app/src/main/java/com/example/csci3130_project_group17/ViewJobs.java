@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +24,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -54,7 +56,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     Context context;
     Activity activity;
-    int radius = 1;
+    int radius = 8;
     int undecidedRadius = 0;
 
     private Circle mCircle;
@@ -71,6 +73,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     public RecyclerView.LayoutManager layoutManager;
     public RecyclerView.Adapter recycleViewAdaptor;
 
+    SharedPreferences preferences;
+    StoredData data;
+    String savedLocation;
+
     //Job posts related field
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
 
@@ -85,9 +91,27 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         setClickListeners();
         initializeDatabase();
 
-        if(currentLocationCoordinates !=null) {
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
+        savedLocation = data.getUserLocation();
+
+        if(savedLocation.isEmpty()) {
+
+        } else {
+            String[] savedCoordinates = savedLocation.split(",");
+            System.out.println(savedLocation.isEmpty());
+
+            double lat = Double.parseDouble(savedCoordinates[0]);
+            double longitude = Double.parseDouble(savedCoordinates[1]);
+            System.out.println();
+
+            currentLocationCoordinates = new LatLng(lat, longitude);
+
+            System.out.println(currentLocationCoordinates);
+            defineRadius(currentLocationCoordinates);
             pullJobs();
         }
+
 
     }
     private void intializeRecylcerView() {
@@ -139,6 +163,38 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             }});
 
 
+        SearchView searchBar = findViewById(R.id.searchBar);
+
+        searchBar.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+
+                    // Override onQueryTextSubmit method
+                    // which is call
+                    // when submitquery is searched
+
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        // If the list contains the search query
+                        // than filter the adapter
+                        // using the filter method
+                        // with the query as its argument
+                        System.out.println("query submitted");
+                        return false;
+
+                    }
+
+                    // This method is overridden to filter
+                    // the adapter according to a search query
+                    // when the user is typing search
+                    @Override
+                    public boolean onQueryTextChange(String newText)
+                    {
+                        System.out.println(newText);
+                        return false;
+                    }
+                });
+
+
         SeekBar rangeInput = (SeekBar) findViewById(R.id.rangeInput);
         rangeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -153,8 +209,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
+                System.out.println(progress);
                 if(mMap !=null) {
-//                    drawMarkerWithCircle(currentLocationCoordinates);
+                    defineRadius(currentLocationCoordinates);
+                    drawMarkerWithCircle();
                 }
 
             }
@@ -204,6 +262,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 // Store all the job posts in the jobslist arraylist as a hashmap
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
+                    System.out.println(lat);
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
                     if(lat!= null && longi!=null) {
                         if(isInRange((double) lat, (double) longi)) {
@@ -214,6 +273,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                     }
                 }
                 //all methods that require anything to do with the data retrieved will be called here
+                System.out.println(jobsList);
                 initializeJobPostings();
             }
 
@@ -243,7 +303,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         float[] results = new float[1];
         Location.distanceBetween(latitude, longitude, currentLocationCoordinates.latitude, currentLocationCoordinates.longitude, results);
         float distanceInMeters = results[0];
+        System.out.println(distanceInMeters);
         boolean isWithinRange = distanceInMeters < circleOptions.getRadius();
+        System.out.println(circleOptions.getRadius());
+        System.out.println(isWithinRange);
 
         return isWithinRange;
     }
@@ -253,19 +316,15 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         radius = undecidedRadius;
     }
 
-    private void drawMarkerWithCircle(LatLng position) {
+    public void defineRadius(LatLng position) {
 
         if(mMap!=null) {
             mMap.clear();
         }
 
-        int rad = 0;
+        // Fix a way to also see radius when choosing range
 
-        if(radius == undecidedRadius) {
-            rad = radius;
-        } else {
-            rad = undecidedRadius;
-        }
+        int rad = radius;
 
         double radiusInMeters = rad * 1000.0;  // increase decrease this distance as per your requirements
         int strokeColor = 0xffff0000; //red outline
@@ -277,7 +336,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 .fillColor(shadeColor)
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
-//        mCircle = mMap.addCircle(circleOptions);
+    }
+
+    private void drawMarkerWithCircle() {
+        mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {
@@ -362,7 +424,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         if (currentLocationCoordinates != null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationCoordinates, 10));
-            drawMarkerWithCircle(currentLocationCoordinates);
+            defineRadius(currentLocationCoordinates);
+            drawMarkerWithCircle();
         }
     }
 
@@ -372,13 +435,16 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         public void onLocationChanged(Location location) {
 
             currentLocationCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
+            String tempLocation = location.getLatitude() + "," + location.getLongitude();
+            data.storeUserLocation(tempLocation);
 
 
             Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
 
             if(mMap!=null) {
                 mMap.clear();
-                drawMarkerWithCircle(currentLocationCoordinates);
+                defineRadius(currentLocationCoordinates);
+                drawMarkerWithCircle();
             }
 
 

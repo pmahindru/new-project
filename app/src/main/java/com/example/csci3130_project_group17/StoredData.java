@@ -3,11 +3,14 @@ package com.example.csci3130_project_group17;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class StoredData {
     private SharedPreferences storedAppData;
     private String storedDataName = "userPrefs";
     private String storedUserIdKey = "uID";
     private String storedUserTypeKey = "employer";
+    private String storedUserLocation = "userLocation";
 
     public StoredData(SharedPreferences storedAppData) {
         this.storedAppData = storedAppData;
@@ -34,6 +37,14 @@ public class StoredData {
 
     public void storeUserID(String uID) {
         storeByKeyValue(storedUserIdKey, uID);
+    }
+
+    public void storeUserLocation(String location) {
+        storeByKeyValue(storedUserLocation, location);
+    }
+
+    public String getUserLocation() {
+        return getStoredDataByKey(storedUserLocation);
     }
 
     public void storeByKeyValue(String key, String value) {
