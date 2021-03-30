@@ -179,6 +179,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                         // using the filter method
                         // with the query as its argument
                         System.out.println("query submitted");
+                        search(query);
                         return false;
 
                     }
@@ -217,6 +218,18 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
+    }
+
+    public void search(String query) {
+        ArrayList<HashMap<String,String>> jobs = new ArrayList<HashMap<String, String>>();
+        for(HashMap<String,String> job: jobsList) {
+            System.out.println(job.get("jobTitle").toLowerCase().contains(query.toLowerCase()) +"  " +job.get("jobTitle"));
+            if(job.get("jobTitle").toLowerCase().contains(query.toLowerCase())){
+                jobs.add(job);
+            }
+        }
+        initializeJobPostings(jobs);
+
     }
 
     public void showJobPosts() {
@@ -274,7 +287,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 }
                 //all methods that require anything to do with the data retrieved will be called here
                 System.out.println(jobsList);
-                initializeJobPostings();
+                initializeJobPostings(jobsList);
             }
 
             @Override
@@ -287,11 +300,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         });
 
     }
-    private void initializeJobPostings() {
+    private void initializeJobPostings(ArrayList<HashMap<String,String>> jobs) {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        recycleViewAdaptor = new RecycleViewAdaptor(jobsList);
+        recycleViewAdaptor = new RecycleViewAdaptor(jobs);
 
         recyclerView.setAdapter(recycleViewAdaptor);
         recyclerView.setLayoutManager(layoutManager);
