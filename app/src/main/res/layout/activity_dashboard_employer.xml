@@ -7,12 +7,21 @@
     tools:context=".DashboardEmployer">
 
     <Button
+        android:id="@+id/employerProfileButton"
+        android:layout_width="113dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="36dp"
+        android:text="Profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@+id/activeEmployeesButton"
+        tools:layout_editor_absoluteX="62dp" />
+
+    <Button
         android:id="@+id/employerPaymentsButton"
         android:layout_width="113dp"
         android:layout_height="109dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="77dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:text="Payments"
@@ -27,7 +36,6 @@
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="77dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:text="Create Job"
@@ -41,7 +49,7 @@
         android:layout_height="109dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:text="History"
@@ -56,7 +64,7 @@
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:text="Applications"

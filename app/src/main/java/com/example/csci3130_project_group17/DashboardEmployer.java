@@ -48,6 +48,13 @@ public class DashboardEmployer extends AppCompatActivity {
                 switchToJobApplications();
             };
         });
+
+        Button profileBttn = findViewById(R.id.employerProfileButton);
+        profileBttn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToProfile();
+            };
+        });
     }
 
     public void switchToCreateJob() {
@@ -70,5 +77,10 @@ public class DashboardEmployer extends AppCompatActivity {
     public void switchToJobApplications(){
         Intent HistoryIntent = new Intent(this, ActiveJobs.class);
         startActivity(HistoryIntent);
+    }
+
+    public void switchToProfile(){
+        Intent ProfileIntent = new Intent(this, Profile.class);
+        startActivity(ProfileIntent);
     }
 }

@@ -63,6 +63,7 @@
         <activity android:name=".ActiveJobs" />
         <activity android:name=".JobApplication" />
         <activity android:name=".ViewApplicants" />
+        <activity android:name=".Profile" />
 
     </application>
 
