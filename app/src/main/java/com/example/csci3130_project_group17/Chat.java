@@ -1,143 +1,152 @@
 package com.example.csci3130_project_group17;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseListOptions;
-import com.google.firebase.auth.FirebaseAuth;
-
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-
+//this code is taken from the lab and modify by Pranav and Tongqi
 public class Chat extends AppCompatActivity {
-    private Button SendButton, ButtonHome;
-    private View input;
-    private FirebaseListAdapter<ChatMessage> adapter;
 
-    ChatMessage message;
+    //chat things
+    LinearLayout layout;
+    RelativeLayout layout_2;
+    ImageView sendButton;
+    EditText messageArea;
+    ScrollView scrollView;
+
+    //user information
+    String uID;
+    StoredData data;
+    SharedPreferences preferences;
+
+    //this is for the read and write in the database
+    FirebaseDatabase database =  null;
+    DatabaseReference userinfo = null;
+    DatabaseReference Jobinfo = null;
+
+    //getting name and the jobinfo
+    Boolean check;
+    String jobid;
+    String firstname_employee;
+    String lastname_employee;
+    String firstname_employer;
+    String lastname_employer;
+    String employerid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        Intent intent = getIntent();
+        layout = findViewById(R.id.layout1);
+        layout_2 = findViewById(R.id.layout2);
+        sendButton = findViewById(R.id.sendButton);
+        messageArea = findViewById(R.id.messageArea);
+        scrollView = findViewById(R.id.scrollView);
 
-        SendButton = findViewById(R.id.Send);
-        input = findViewById(R.id.textInput);
-        ButtonHome = findViewById(R.id.Home);
-        message = new ChatMessage();
-        ButtonHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchToMain();
+        //get userID of logged in user
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
+        uID = data.getStoredUserID();
 
-            }
-        });
+        initializeDatabase();
+        getTheNameOfEmployeeAndEmployer();
+    }
 
-        SendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText input = (EditText)findViewById(R.id.textInput);
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                // Read the input field and push a new instance
-                // of ChatMessage to the Firebase database
-                FirebaseDatabase.getInstance()
-                        .getReference("chats")
-                        .push()
-                        .setValue(new ChatMessage(input.getText().toString(),"tim"
-                                )
-                        );
-
-                // Clear the input
-                input.setText("");
-                displayChatMessages();
-                Toast.makeText(getBaseContext(), "This is my Toast message!",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+    public void initializeDatabase(){
+        //initialize your database and related fields here
+        database =  FirebaseDatabase.getInstance();
+        userinfo = database.getReference("users");
+        Jobinfo = database.getReference("JobInformation");
     }
 
 
-
-    protected void switchToMain(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-
-
-
-    
-
-
-    private void displayChatMessages() {
-        ListView listOfMessages = findViewById(R.id.chatcontent);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats");
-
-        /*
-        FirebaseListOptions<ChatMessage> options =
-                new FirebaseListOptions.Builder<ChatMessage>()
-                        .setQuery(query,ChatMessage.class)
-                        .setLayout(R.layout.chatmessage)
-                        .build();
-
-        adapter = new FirebaseListAdapter<ChatMessage>(options) {
-            @Override
-            protected void populateView(View v, ChatMessage model, int position) {
-                // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
-
-                // Set their text
-                messageText.setText(model.getMessageText());
-                messageUser.setText(model.getMessageUser());
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                        model.getMessageTime()));
+    private void getTheNameOfEmployeeAndEmployer(){
+        userinfo.child(uID).addListenerForSingleValueEvent(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    firstname_employee = (String) snapshot.child("firstName").getValue();
+                    lastname_employee = (String) snapshot.child("lastName").getValue();
+                    check = (boolean) snapshot.child("employee").getValue();
+                }
             }
-        };
-        */
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                ChatMessage newPost = dataSnapshot.getValue(ChatMessage.class);
-
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
-        listOfMessages.setAdapter(adapter);
+
+        if (check){
+            Intent intent = getIntent();
+            jobid = intent.getStringExtra("jobId");
+            Jobinfo.child(jobid).addListenerForSingleValueEvent(new ValueEventListener() {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        employerid = (String) snapshot.child("employerID").getValue();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+
+            userinfo.child(employerid).addListenerForSingleValueEvent(new ValueEventListener() {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        firstname_employer = (String) snapshot.child("firstName").getValue();
+                        lastname_employer = (String) snapshot.child("lastName").getValue();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+        else {
+
+        }
     }
 
+    public void addMessageBox(String message, int type){
+        TextView textView = new TextView(Chat.this);
+        textView.setText(message);
 
+        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp2.weight = 7.0f;
+
+        if(type == 1) {
+            lp2.gravity = Gravity.LEFT;
+            textView.setBackgroundResource(R.drawable.bubble_in);
+        }
+        else{
+            lp2.gravity = Gravity.RIGHT;
+            textView.setBackgroundResource(R.drawable.bubble_out);
+        }
+        textView.setLayoutParams(lp2);
+        layout.addView(textView);
+        scrollView.fullScroll(View.FOCUS_DOWN);
+    }
 }
+
+
+

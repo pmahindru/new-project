@@ -39,6 +39,7 @@
         <activity android:name=".JobPosting"/>
 
         <activity android:name=".ReviewApplicants">
+        <activity android:name=".Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
