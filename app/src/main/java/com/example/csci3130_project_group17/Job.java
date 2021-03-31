@@ -28,8 +28,6 @@ public class Job {
     }
 
     //getters and setters
-
-
     public String getId() {
         return id;
     }

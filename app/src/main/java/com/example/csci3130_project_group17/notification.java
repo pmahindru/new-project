@@ -10,24 +10,28 @@ import android.os.Bundle;
 public class notification extends AppCompatActivity {
 
 
-    //user information
-    SharedPreferences job_preferences;
-    JobPosting_notification job_data;
-    String job_uID;
+    //job information for the notification
+    SharedPreferences preferences2;
+    JobPosting_notification data2;
+    String jobID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+        preferences2 = getSharedPreferences("jobsPrefs", Context.MODE_PRIVATE);
+        data2 = new JobPosting_notification(preferences2);
+        jobID = data2.getStoredUserID2();
 
-        job_preferences = getSharedPreferences("current_jobs", Context.MODE_PRIVATE);
-        job_data = new  JobPosting_notification(job_preferences);
-        job_uID = job_data.getStoredUserID2();
 
-        System.out.println(job_uID+"-------------------------------------------------------------------");
+        onclickbutton();
 
+        System.out.println(jobID+"----------------------job---------------------------------------------");
+        data2.clearStoredData2();
     }
 
+    private void onclickbutton() {
 
+    }
 }

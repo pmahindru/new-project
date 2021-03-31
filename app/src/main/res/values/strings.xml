@@ -52,4 +52,9 @@
     <string name="applicant_name">Applicant Name</string>
     <string name="resume">Resume</string>
     <string name="view_applicant">View Applicant</string>
+    <string name="notification">Notification</string>
+    <string name="jobtitle_notification">Jobtitle</string>
+    <string name="review_jobs_notification">Review Jobs</string>
+    <string name="delete_notification">Delete</string>
+    <string name="location_notification">Location</string>
 </resources>

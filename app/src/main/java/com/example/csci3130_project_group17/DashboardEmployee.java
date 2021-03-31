@@ -2,6 +2,7 @@ package com.example.csci3130_project_group17;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,8 @@ public class DashboardEmployee extends AppCompatActivity {
         Button viewHistory = (Button) findViewById(R.id.employeehistoryButton);
         Button activeJobs = (Button) findViewById(R.id.activeJobsButton);
         Button Logoutuser = findViewById(R.id.logoutButton2);
+
+        Button notification = findViewById(R.id.aNotification);
 
         viewJobs.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -50,6 +53,12 @@ public class DashboardEmployee extends AppCompatActivity {
             }
         });
 
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swtichtonotification();
+            }
+        });
     }
 
     public void switchToViewJobs() {
@@ -71,6 +80,12 @@ public class DashboardEmployee extends AppCompatActivity {
     public void swtichtologin(){
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
+        finish();
+    }
+
+    public void swtichtonotification(){
+        Intent switchTonotification = new Intent(this, Notification.class);
+        startActivity(switchTonotification);
         finish();
     }
 }

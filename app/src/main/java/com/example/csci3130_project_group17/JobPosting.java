@@ -39,14 +39,18 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     Context context;
     Activity activity;
 
-    JobPosting_notification appData_notification;
-    SharedPreferences data_notification;
-    String uID_notification = null;
 
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String LOCATION_PREF = "locationPref";
     String uID;
+
+
+    //storing new jobs for the notification
+    JobPosting_notification appData_notification;
+    SharedPreferences data_notification;
+    String jobID_notification = null;
+    Boolean isEmployer_notification = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_job_posting);
 
         Intent jobIntent = getIntent();
-        data_notification = getSharedPreferences("current_jobs", Context.MODE_PRIVATE);
+        data_notification = getSharedPreferences("jobsPrefs", Context.MODE_PRIVATE);
         appData_notification = new JobPosting_notification(data_notification);
 
         StoredData data = new StoredData(getApplicationContext());
@@ -162,8 +166,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         String jobID = UUID.randomUUID().toString();
         Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID);
         job.setJobLocationCoordinates(location);
-        uID_notification = jobID;
-        appData_notification.storeUserID(uID);
+        jobID_notification = jobID;
+        appData_notification.storedjobID(jobID_notification);
         jobInformation.child(jobID).setValue(job);
     }
 
