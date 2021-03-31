@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -38,6 +39,10 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     Context context;
     Activity activity;
 
+    JobPosting_notification appData_notification;
+    SharedPreferences data_notification;
+    String uID_notification = null;
+
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     public static final String LOCATION_PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String LOCATION_PREF = "locationPref";
@@ -49,6 +54,9 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_job_posting);
 
         Intent jobIntent = getIntent();
+        data_notification = getSharedPreferences("current_jobs", Context.MODE_PRIVATE);
+        appData_notification = new JobPosting_notification(data_notification);
+
         StoredData data = new StoredData(getApplicationContext());
         uID = data.getStoredUserID();
 
@@ -154,6 +162,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         String jobID = UUID.randomUUID().toString();
         Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID);
         job.setJobLocationCoordinates(location);
+        uID_notification = jobID;
+        appData_notification.storeUserID(uID);
         jobInformation.child(jobID).setValue(job);
     }
 
