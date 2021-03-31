@@ -57,6 +57,11 @@
         <activity android:name=".JobPosting"/>
 
         <activity android:name=".ReviewApplicants"/>
+
+        <activity android:name=".SignUp"/>
+        <activity android:name=".JobPosting"/>
+
+        <activity android:name=".ReviewApplicants"/>
         <activity android:name=".ViewJobs" />
         <activity android:name=".DashboardEmployee" />
         <activity android:name=".DashboardEmployer" />
@@ -66,6 +71,8 @@
         <activity android:name=".ActiveJobs" />
         <activity android:name=".JobApplication" />
         <activity android:name=".ViewApplicants" />
+        <activity android:name=".LeaveReview" />
+
     </application>
 
 </manifest>
