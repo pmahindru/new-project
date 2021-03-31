@@ -35,4 +35,5 @@
     <string name="Payrate">$ Pay Rate</string>
     <string name="viewchat">View Chats</string>
     <string name="locationfromdatabase">location</string>
+    <string name="filter">Filter</string>
 </resources>

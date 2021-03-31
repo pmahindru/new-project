@@ -1,5 +1,6 @@
 package com.example.csci3130_project_group17;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -168,29 +169,15 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         searchBar.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
 
-                    // Override onQueryTextSubmit method
-                    // which is call
-                    // when submitquery is searched
-
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        // If the list contains the search query
-                        // than filter the adapter
-                        // using the filter method
-                        // with the query as its argument
-                        System.out.println("query submitted");
                         search(query);
                         return false;
-
                     }
 
-                    // This method is overridden to filter
-                    // the adapter according to a search query
-                    // when the user is typing search
                     @Override
                     public boolean onQueryTextChange(String newText)
                     {
-                        System.out.println(newText);
                         return false;
                     }
                 });
@@ -198,11 +185,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         searchBar.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                //Toast t = Toast.makeText(ViewJobs.this, "close", Toast.LENGTH_SHORT);
-                //t.show();
-
                 initializeJobPostings(jobsList);
-
                 return false;
             }
         });
@@ -245,10 +228,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     public void showJobPosts() {
         View mapInfo =  findViewById(R.id.mapLayer);
-        RecyclerView jobPostings = findViewById(R.id.recyclerView);
+        ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
 
         mapInfo.setVisibility(View.INVISIBLE);
-        jobPostings.setVisibility(View.VISIBLE);
+        showJobsLayer.setVisibility(View.VISIBLE);
     }
 
     private void switchToMapView() {
@@ -368,9 +351,9 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     public void locateUser() {
         View mapInfo =  findViewById(R.id.mapLayer);
-        RecyclerView jobPostings = findViewById(R.id.recyclerView);
+        ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
 
-        jobPostings.setVisibility(View.INVISIBLE);
+        showJobsLayer.setVisibility(View.INVISIBLE);
         mapInfo.setVisibility(View.VISIBLE);
 
         //contents from here onwards are taken from the tutorial on google maps api
