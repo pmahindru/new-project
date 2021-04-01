@@ -69,6 +69,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     //Database related field
     DatabaseReference jobInformation;
+    DatabaseReference employerInformation;
 
     //Recyclcer view related fields
     public RecyclerView recyclerView;
@@ -269,8 +270,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                     }
 
                     ArrayList<HashMap<String,String>> jobs = filter(rating,"rating", jobsList);
+                    jobs = filter(pay, "pay", jobs);
                     System.out.println(jobs);
-
                 }
             });
 
@@ -291,6 +292,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
             for(HashMap<String,String> job: arrayList) {
                 System.out.println(job);
+                jobs.add(job);
                 /*
                 if(job.get("jobTitle").toLowerCase()){
                     jobs.add(job);
@@ -300,6 +302,13 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
             initializeJobPostings(jobs);*/
             }
         } else {
+            for(HashMap<String,String> job: arrayList) {
+                System.out.println(job);
+
+                if(Double.parseDouble(job.get("jobPayRate"))>= query){
+                    jobs.add(job);
+                }
+            }
 
         }
         return jobs;
@@ -323,6 +332,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     public void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
+        employerInformation = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
 
