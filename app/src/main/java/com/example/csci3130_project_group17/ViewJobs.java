@@ -44,9 +44,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
-public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
+public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
 
     //Map related variables
     private GoogleMap mMap;
@@ -80,6 +81,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     //Job posts related field
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
+
+    //Filter variables
+    HashMap<String, Integer> tempFilterPreferences = new HashMap<String, Integer>();
+    int rating = -1;
+    int pay = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,22 +132,18 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     private void setClickListeners() {
         Button locateButton = (Button) findViewById(R.id.locateButton);
-
         locateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 locateUser();
             }});
 
-
         Button locationCancelButton = (Button) findViewById(R.id.locationCancelButton);
-
         locationCancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 showJobPosts();
             }});
 
         Button locationApplyButton = (Button) findViewById(R.id.locationApplyButton);
-
         locationApplyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 changeRadius();
@@ -150,22 +152,20 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
             }});
 
         Button homeButton = (Button) findViewById(R.id.viewJobsHome);
-
         homeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 switchToHome();
             }});
 
         Button filterButton = (Button) findViewById(R.id.filterButton);
-
         filterButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                switchToMapView();
+                switchToFilterOptions();
+
             }});
 
 
         SearchView searchBar = findViewById(R.id.searchBar);
-
         searchBar.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
 
@@ -217,12 +217,92 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     public void search(String query) {
         ArrayList<HashMap<String,String>> jobs = new ArrayList<HashMap<String, String>>();
         for(HashMap<String,String> job: jobsList) {
-            System.out.println(job.get("jobTitle").toLowerCase().contains(query.toLowerCase()) +"  " +job.get("jobTitle"));
             if(job.get("jobTitle").toLowerCase().contains(query.toLowerCase())){
                 jobs.add(job);
             }
         }
         initializeJobPostings(jobs);
+
+    }
+
+    public void switchToFilterOptions() {
+        if(currentLocationCoordinates!= null) {
+            View filterLayer = findViewById(R.id.filterLayer);
+            ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
+
+            filterLayer.setVisibility(View.VISIBLE);
+            showJobsLayer.setVisibility(View.INVISIBLE);
+
+
+            Button filterCancelButton = (Button) findViewById(R.id.jobFilterCancelButton);
+            filterCancelButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    View filterLayer = findViewById(R.id.filterLayer);
+                    ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
+
+                    filterLayer.setVisibility(View.INVISIBLE);
+                    showJobsLayer.setVisibility(View.VISIBLE);
+                }
+            });
+
+            Button filterLocationButton = (Button) findViewById(R.id.filterLocationButton);
+            filterLocationButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    View filterLayer = findViewById(R.id.filterLayer);
+                    ConstraintLayout mapLayer = findViewById(R.id.mapLayer);
+
+                    filterLayer.setVisibility(View.INVISIBLE);
+                    mapLayer.setVisibility(View.VISIBLE);
+                }
+            });
+
+            Button filterApplyButton = (Button) findViewById(R.id.jobFilterApplyButton);
+            filterApplyButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    System.out.println(tempFilterPreferences.containsKey("rating"));
+                    if(tempFilterPreferences.containsKey("rating")) {
+                        rating = tempFilterPreferences.get("rating");
+                    }
+                    System.out.println(tempFilterPreferences.containsKey("pay"));
+                    if(tempFilterPreferences.containsKey("pay")) {
+                        rating = tempFilterPreferences.get("pay");
+                    }
+
+                    ArrayList<HashMap<String,String>> jobs = filter(rating,"rating", jobsList);
+                    System.out.println(jobs);
+
+                }
+            });
+
+            int[] filterButtons = new int[]{R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.button10};
+            for(int button : filterButtons) {
+                Button tempButton = (Button) findViewById(button);
+                tempButton.setOnClickListener(this::onClick);
+            }
+        } else {
+            showToast("Please locate yourself before you filter.");
+        }
+
+
+    }
+    public ArrayList<HashMap<String, String>> filter(int query, String filterKey, ArrayList<HashMap<String, String>> arrayList) {
+        ArrayList<HashMap<String,String>> jobs = new ArrayList<HashMap<String, String>>();
+        if(filterKey.equalsIgnoreCase("rating")) {
+
+            for(HashMap<String,String> job: arrayList) {
+                System.out.println(job);
+                /*
+                if(job.get("jobTitle").toLowerCase()){
+                    jobs.add(job);
+                }
+            }
+
+            initializeJobPostings(jobs);*/
+            }
+        } else {
+
+        }
+        return jobs;
 
     }
 
@@ -234,18 +314,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         showJobsLayer.setVisibility(View.VISIBLE);
     }
 
-    private void switchToMapView() {
-        if(currentLocationCoordinates!= null) {
-            View mapInfo =  findViewById(R.id.mapLayer);
-            RecyclerView jobPostings = findViewById(R.id.recyclerView);
-
-            jobPostings.setVisibility(View.INVISIBLE);
-            mapInfo.setVisibility(View.VISIBLE);
-        } else {
-            showToast("Please locate yourself before you filter.");
-        }
-
-    }
 
     private void switchToHome() {
         Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
@@ -256,7 +324,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
     public void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
-
 
 
     //Job related methods
@@ -416,16 +483,12 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         // Enable / Disable zooming controls
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
         // Enable / Disable my location button
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
         // Enable / Disable Compass icon
         mMap.getUiSettings().setCompassEnabled(true);
-
         // Enable / Disable Rotate gesture
         mMap.getUiSettings().setRotateGesturesEnabled(true);
-
         // Enable / Disable zooming functionality
         mMap.getUiSettings().setZoomGesturesEnabled(true);
 
@@ -562,5 +625,36 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         // show it
         alertDialog.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        Button button = (Button) v;
+        System.out.println(button.getText().toString());
+        System.out.println(button.getId());
+
+        int[] ratings = new int[]{R.id.button3, R.id.button4, R.id.button5, R.id.button6};
+        int[] paysRates = new int[]{R.id.button7, R.id.button8, R.id.button9, R.id.button10};
+
+        if(Arrays.asList(ratings).contains(button.getId())){
+            System.out.println(tempFilterPreferences.containsKey("rating"));
+            if(button.getText().toString().equalsIgnoreCase("Any")) {
+                tempFilterPreferences.put("rating", -1);
+            } else {
+                int numberOnly= Integer.parseInt(button.getText().toString().replaceAll("[^0-9]", ""));
+                tempFilterPreferences.put("rating", numberOnly);
+            }
+
+        } else {
+            System.out.println(tempFilterPreferences.containsKey("pay"));
+            if(button.getText().toString().equalsIgnoreCase("Any")) {
+                tempFilterPreferences.put("pay", -1);
+            } else {
+                int numberOnly= Integer.parseInt(button.getText().toString().replaceAll("[^0-9]", ""));
+                tempFilterPreferences.put("pay", numberOnly);
+            }
+
+        }
+
     }
 }
