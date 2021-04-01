@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_700"
+    tools:context=".LeaveReview">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#DCD0F1"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="100dp">
+
+        <TextView
+            android:id="@+id/reviewPageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/leave_a_review"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/reviewRatingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/rate_out_of_5"
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:id="@+id/reviewRadios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/ratingRadio5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/_5"
+                android:textColorHint="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/ratingRadio4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="@string/_4" />
+
+            <RadioButton
+                android:id="@+id/ratingRadio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/_3" />
+
+            <RadioButton
+                android:id="@+id/ratingRadio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/_2" />
+
+            <RadioButton
+                android:id="@+id/ratingRadio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/_1" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/reviewCommentLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/leave_comment"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/reviewCommentInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="How was your experience?"
+            android:inputType="textMultiLine"
+            android:isScrollContainer="true"
+            android:maxHeight="100dp"
+            android:maxLines="4"
+            android:minHeight="100dp"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/submitReviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/submit_review" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
