@@ -1,10 +1,12 @@
 package com.example.csci3130_project_group17;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,12 +24,6 @@ public class MainActivity extends AppCompatActivity {
     public void switch2JobPosting(View view){
         Intent jobIntent = new Intent(this, JobPosting.class);
         startActivity(jobIntent);
-    }
-
-    public void switch2JobDetail(View view){
-        Intent intent = new Intent(this, JobDetail.class);
-        intent.putExtra("jobId", "5200c54f-45fb-4d0f-a9d4-51b670427395");
-        startActivity(intent);
     }
 
 }

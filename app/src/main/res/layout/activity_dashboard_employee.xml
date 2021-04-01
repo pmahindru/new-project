@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".DashboardEmployee">
 
     <Button
         android:id="@+id/viewJobsButton"
@@ -68,7 +69,7 @@
         android:layout_height="64dp"
         android:layout_marginStart="150dp"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="648dp"
+        android:layout_marginTop="520dp"
         android:layout_marginEnd="150dp"
         android:layout_marginRight="150dp"
         android:text="Logout"
