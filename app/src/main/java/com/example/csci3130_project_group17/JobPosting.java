@@ -50,7 +50,6 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     JobPosting_notification appData_notification;
     SharedPreferences data_notification;
     String jobID_notification = null;
-    Boolean isEmployer_notification = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +78,6 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     public void initializedatabase() {
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
     }
-
-
 
     //get method
     protected String getJobTitle() {

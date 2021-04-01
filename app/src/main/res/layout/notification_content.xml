@@ -16,22 +16,21 @@ https://android-examples.blogspot.com/2016/10/android-cardview-inside-listview.h
         android:layout_width="match_parent"
         android:layout_height="190dp"
         android:layout_margin="13dp"
-        android:background="#B1AFAF"
         android:minHeight="120dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#B1AFAF"
+            android:background="#DCD0F1"
             android:textColor="#000000"
             android:text="@string/notification"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:background="#B1AFAF"
-            android:layout_marginTop="40dp"
+            android:background="#DCD0F1"
+            android:layout_marginTop="24dp"
             android:layout_gravity="left"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded">

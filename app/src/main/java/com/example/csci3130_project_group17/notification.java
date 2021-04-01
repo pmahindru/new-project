@@ -112,7 +112,7 @@ public class notification extends AppCompatActivity {
                         location.add(getTheFullAddressOfTheUser((double) snapshot.child("jobLocationCoordinates").child("latitude").getValue(), (double) snapshot.child("jobLocationCoordinates").child("longitude").getValue()));
                         Notification_JobPostingClass notification_jobPostingClass = new Notification_JobPostingClass(getApplicationContext(), name, location, uID);
 
-                        //show notification to all the users
+                            //show notification to all the users
                             userids.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot1) {
@@ -130,8 +130,6 @@ public class notification extends AppCompatActivity {
 
                                 }
                             });
-
-//                    data2.clearStoredData2();
                     }
                 }
                 @Override

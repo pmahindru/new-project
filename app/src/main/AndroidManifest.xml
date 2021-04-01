@@ -45,13 +45,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".notification">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".notification" android:label="@string/notification"/>
 
         <activity android:name=".SignUp"/>
         <activity android:name=".JobPosting"/>
