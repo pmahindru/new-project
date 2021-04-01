@@ -206,7 +206,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
                     if(lat!= null && longi!=null) {
-                        if(isInRange((double) lat, (double) longi)) {
+                        if(isInRange(lat, longi)) {
                             HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
                             job.put("jobPostId",postSnapshot.getKey());
                             jobsList.add(job);

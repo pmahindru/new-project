@@ -44,35 +44,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".notification" android:label="@string/notification"/>
-
         <activity android:name=".SignUp"/>
-        <activity android:name=".JobPosting"/>
+        <activity android:name=".JobPosting" />
         <activity android:name=".ReviewApplicants"/>
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".JobDetail">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-
-        </activity>
-        <activity android:name=".ViewJobs"/>
+        <activity android:name=".JobDetail" android:label="Job Description"/>
+        <activity android:name=".notification" android:label="@string/notification"/>
         <activity android:name=".ViewJobs" />
         <activity android:name=".DashboardEmployee" />
         <activity android:name=".DashboardEmployer" />
-        <activity android:name=".jobHistory" />
-        <activity android:name=".Chat"/>
-        <activity android:name=".AddImage" />
-        <activity android:name=".ActiveJobs" />
-        <activity android:name=".JobApplication" />
-        <activity android:name=".ViewApplicants" />
-        <activity android:name=".LeaveReview" />
+        <activity android:name=".jobHistory" android:label="Job History"/>
+        <activity android:name=".Chat" android:label="Chat"/>
+        <activity android:name=".AddImage" android:label="@string/image"/>
+        <activity android:name=".ActiveJobs" android:label="@string/active_jobs"/>
+        <activity android:name=".JobApplication" android:label="@string/job_application"/>
+        <activity android:name=".ViewApplicants" android:label="@string/view_applicant"/>
+        <activity android:name=".LeaveReview" android:label="@string/review_applicant"/>
 
     </application>
 

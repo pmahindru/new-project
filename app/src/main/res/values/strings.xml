@@ -16,7 +16,7 @@
     <string name="home">home</string>
     <string name="last_name">last_name</string>
     <string name="first_name">first_name</string>
-    <string name="job_application">job_application</string>
+    <string name="job_application">Job Application</string>
     <string name="image">image</string>
     <string name="Upload_Your_Resume">Upload your Resume</string>
     <string name="JobApplication">JobApplication</string>
@@ -57,4 +57,7 @@
     <string name="review_jobs_notification">Review Jobs</string>
     <string name="delete_notification">Delete</string>
     <string name="location_notification">Location</string>
+    <string name="employer_profile">Employer Profile</string>
+    <string name="description">Description</string>
+    <string name="jobtype">Type</string>
 </resources>

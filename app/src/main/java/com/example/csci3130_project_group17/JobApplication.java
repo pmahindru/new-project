@@ -72,7 +72,7 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
     String count = String.valueOf(idOne);
 
     //job post related information
-    HashMap<String, String> jobPost;
+    String jobPost;
 
     //for location
     EditText location;
@@ -101,9 +101,9 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
         uID = data.getStoredUserID();
 
         Intent intent = getIntent();
-        jobPost = (HashMap<String, String>) intent.getSerializableExtra("jobPost");
-
-        user.put("jobId", jobPost.get("jobPostId"));
+        jobPost = intent.getStringExtra("JobKey");
+        System.out.println(jobPost+ "-----------------------------------------------------------");
+        user.put("jobId", jobPost);
         user.put("currentUserID", uID);
 
         //initiating the Firebase
