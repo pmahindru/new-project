@@ -16,18 +16,15 @@ public class Notification_JobPostingClass extends BaseAdapter {
     ArrayList<String> jobname;
     ArrayList<String> Location;
     LayoutInflater inflater;
-    TextView delete_notification;
-    String currentuser;
 
     //initializing the text-view of the job details
     TextView jobtitle;
     TextView location;
 
-    public Notification_JobPostingClass(Context applicationContext, ArrayList<String> name, ArrayList<String> location, String uId) {
+    public Notification_JobPostingClass(Context applicationContext, ArrayList<String> name, ArrayList<String> location) {
         this.context = applicationContext;
         this.jobname = name;
         this.Location = location;
-        this.currentuser = uId;
         inflater =  (LayoutInflater.from(applicationContext));
     }
 
@@ -95,16 +92,6 @@ public class Notification_JobPostingClass extends BaseAdapter {
         jobtitle.setText(Html.fromHtml(title));
         location.setText(Html.fromHtml(loca));
 
-
-        delete_notification = convertView.findViewById(R.id.deletenotification);
-        delete_notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jobname.remove(position);
-                Location.remove(position);
-                notifyDataSetChanged();
-            }
-        });
         return convertView;
     }
 }

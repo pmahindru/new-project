@@ -11,6 +11,7 @@ public class Job {
     private String employeeID;
     private String employerID;
     private location jobLocationCoordinates;
+    private String imageurl;
 
     //constructors
     public Job() {
@@ -25,6 +26,19 @@ public class Job {
         this.state = state;
         this.employeeID = employeeID;
         this.employerID = employerID;
+        this.imageurl = "";
+    }
+
+    public Job(String jobTitle, String jobType, String jobDescription, String jobLocation, String jobPayRate, String state, String employeeID, String employerID, String url) {
+        this.jobTitle = jobTitle;
+        this.jobType = jobType;
+        this.jobDescription = jobDescription;
+        this.jobLocation = jobLocation;
+        this.jobPayRate = jobPayRate;
+        this.state = state;
+        this.employeeID = employeeID;
+        this.employerID = employerID;
+        this.imageurl = url;
     }
 
     //getters and setters
@@ -98,6 +112,14 @@ public class Job {
 
     public void setEmployerID(String employerID) {
         this.employerID = employerID;
+    }
+
+    public String getImageurl() {
+        return imageurl;
+    }
+
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
     }
 
     public location getJobLocationCoordinates() {

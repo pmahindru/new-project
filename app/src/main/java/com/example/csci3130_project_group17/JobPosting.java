@@ -3,27 +3,36 @@ package com.example.csci3130_project_group17;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,6 +59,11 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     JobPosting_notification appData_notification;
     SharedPreferences data_notification;
     String jobID_notification = null;
+    String jobID = UUID.randomUUID().toString();
+
+    StorageReference storageReference;
+    Uri FilePathUri;
+    uploadinfo imageUploadInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +77,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         StoredData data = new StoredData(getApplicationContext());
         uID = data.getStoredUserID();
 
+        storageReference = FirebaseStorage.getInstance().getReference("jobimages");
+
         createButton = findViewById(R.id.createJobButton);
         createButton.setOnClickListener(this);
         ButtonHome = findViewById(R.id.homeButton);
@@ -72,6 +88,53 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
 
         initializedatabase();
         locateUser();
+    }
+
+    private void imagepost() {
+        //method for choosing image from cellphone
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"),7);
+
+    }
+
+    private String getExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
+    }
+    //method for upload image and jobname
+    public void Fileuploader(){
+        String error = getErrorMessage();
+        StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getExtension(FilePathUri));
+        reference.putFile(FilePathUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //text of successfully upload the image
+                Toast.makeText(getApplicationContext(), "Image Successfully Uploaded", Toast.LENGTH_LONG).show();
+                imageUploadInfo = new uploadinfo(taskSnapshot.getUploadSessionUri().toString());
+            }
+        });
+    }
+
+    //display image on the image view bar
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 7 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            FilePathUri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), FilePathUri);
+                Fileuploader();
+            }
+            catch (IOException e) {
+
+                e.printStackTrace();
+            }
+        }
     }
 
     //inital database
@@ -160,8 +223,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     }
 
     protected void saveJobToDatabase() {
-        String jobID = UUID.randomUUID().toString();
-        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID);
+        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID,imageUploadInfo.getImageURL());
         job.setJobLocationCoordinates(location);
         jobID_notification = jobID;
         appData_notification.storedjobID(jobID_notification);
@@ -171,11 +233,6 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     protected void switchToMain() {
         Intent intent = new Intent(this, DashboardEmployer.class);
         startActivity(intent);
-    }
-
-    protected void switchToAddImage() {
-        Intent intent1 = new Intent(this, AddImage.class);
-        startActivity(intent1);
     }
 
     protected void switchToJobPage() {
@@ -307,7 +364,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.imageButton:
                 //switch to add image page
-                switchToAddImage();
+                imagepost();
                 break;
         }
     }

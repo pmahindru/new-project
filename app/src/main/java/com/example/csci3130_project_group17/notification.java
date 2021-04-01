@@ -87,7 +87,7 @@ public class notification extends AppCompatActivity {
                         }
                     }
                 }
-                onclickbuttonjobnotification(jobID,userIDs,isEmployer,uID);
+                onclickbuttonjobnotification(jobID,userIDs,isEmployer);
             }
 
             @Override
@@ -97,7 +97,7 @@ public class notification extends AppCompatActivity {
         });
     }
 
-    private void onclickbuttonjobnotification(String currrent_jobID, ArrayList<String> all_userIds, Boolean isEmployer, String uID) {
+    private void onclickbuttonjobnotification(String currrent_jobID, ArrayList<String> all_userIds, Boolean isEmployer) {
         listView = findViewById(R.id.list_notification);
 
         ArrayList<String> name = new ArrayList<>();
@@ -110,7 +110,7 @@ public class notification extends AppCompatActivity {
                     if (snapshot.exists()) {
                         name.add((String) snapshot.child("jobTitle").getValue());
                         location.add(getTheFullAddressOfTheUser((double) snapshot.child("jobLocationCoordinates").child("latitude").getValue(), (double) snapshot.child("jobLocationCoordinates").child("longitude").getValue()));
-                        Notification_JobPostingClass notification_jobPostingClass = new Notification_JobPostingClass(getApplicationContext(), name, location, uID);
+                        Notification_JobPostingClass notification_jobPostingClass = new Notification_JobPostingClass(getApplicationContext(), name, location);
 
                             //show notification to all the users
                             userids.addListenerForSingleValueEvent(new ValueEventListener() {
