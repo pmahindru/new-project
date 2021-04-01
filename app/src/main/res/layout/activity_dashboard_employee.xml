@@ -51,7 +51,7 @@
 
     <Button
         android:id="@+id/aNotification"
-        android:layout_width="139dp"
+        android:layout_width="142dp"
         android:layout_height="109dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="60dp"

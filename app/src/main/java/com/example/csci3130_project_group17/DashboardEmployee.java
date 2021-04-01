@@ -25,7 +25,6 @@ public class DashboardEmployee extends AppCompatActivity {
         Button viewHistory = (Button) findViewById(R.id.employeehistoryButton);
         Button activeJobs = (Button) findViewById(R.id.activeJobsButton);
         Button Logoutuser = findViewById(R.id.logoutButton2);
-
         Button notification = findViewById(R.id.aNotification);
 
         viewJobs.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +83,7 @@ public class DashboardEmployee extends AppCompatActivity {
     }
 
     public void swtichtonotification(){
-        Intent switchTonotification = new Intent(this, Notification.class);
+        Intent switchTonotification = new Intent(this, notification.class);
         startActivity(switchTonotification);
-        finish();
     }
 }

@@ -37,7 +37,7 @@ https://android-examples.blogspot.com/2016/10/android-cardview-inside-listview.h
             tools:ignore="RtlHardcoded">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/jobtitle_notification"
                 android:text="@string/jobtitle_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

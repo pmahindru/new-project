@@ -48,6 +48,14 @@ public class DashboardEmployer extends AppCompatActivity {
                 switchToJobApplications();
             };
         });
+
+        Button notification = findViewById(R.id.employeraNotification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swtichtonotification();
+            }
+        });
     }
 
     public void switchToCreateJob() {
@@ -69,5 +77,10 @@ public class DashboardEmployer extends AppCompatActivity {
     public void switchToJobApplications(){
         Intent HistoryIntent = new Intent(this, ActiveJobs.class);
         startActivity(HistoryIntent);
+    }
+
+    public void swtichtonotification(){
+        Intent switchTonotification = new Intent(this, notification.class);
+        startActivity(switchTonotification);
     }
 }
