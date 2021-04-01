@@ -1,18 +1,10 @@
 package com.example.csci3130_project_group17;
 
-import android.provider.Settings;
-
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +49,7 @@ public class jobHistoryTest {
 
     @Test
     public void checkIfRecyclerViewDisplayed (){
-        onView(ViewMatchers.withId(R.id.historyRecyclerView))
+        onView(ViewMatchers.withId(R.id.notification_list))
                 .check(matches(isDisplayed()));
     }
 

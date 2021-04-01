@@ -12,7 +12,7 @@
         android:layout_height="109dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="77dp"
+        android:layout_marginTop="37dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:text="Payments"
@@ -27,7 +27,7 @@
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="77dp"
+        android:layout_marginTop="37dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:text="Create Job"
@@ -41,7 +41,7 @@
         android:layout_height="109dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:text="History"
@@ -56,7 +56,7 @@
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:text="Applications"
@@ -64,6 +64,21 @@
         app:layout_constraintEnd_toStartOf="@+id/employerHistoryButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/employerCreateJobButton" />
+
+    <Button
+        android:id="@+id/employeraNotification"
+        android:layout_width="142dp"
+        android:layout_height="109dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:text="Notification"
+        app:layout_constraintEnd_toStartOf="@+id/employerHistoryButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activeEmployeesButton"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/logoutButton"
@@ -80,6 +95,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <View
         android:id="@+id/view4"
         android:layout_width="600dp"
@@ -95,8 +111,23 @@
         android:id="@+id/view"
         android:layout_width="600dp"
         android:layout_height="1dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
