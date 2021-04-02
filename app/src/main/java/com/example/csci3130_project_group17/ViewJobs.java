@@ -69,7 +69,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     //Database related field
     DatabaseReference jobInformation;
-    DatabaseReference employerInformation;
 
     //Recyclcer view related fields
     public RecyclerView recyclerView;
@@ -82,10 +81,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     //Job posts related field
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String,String>> filteredJobsList = new ArrayList<HashMap<String, String>>();
 
     //Filter variables
     HashMap<String, Integer> tempFilterPreferences = new HashMap<String, Integer>();
-    int rating = -1;
     int pay = -1;
 
     @Override
@@ -107,21 +106,27 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
         } else {
             String[] savedCoordinates = savedLocation.split(",");
-            System.out.println(savedLocation.isEmpty());
 
             double lat = Double.parseDouble(savedCoordinates[0]);
             double longitude = Double.parseDouble(savedCoordinates[1]);
-            System.out.println();
 
             currentLocationCoordinates = new LatLng(lat, longitude);
 
-            System.out.println(currentLocationCoordinates);
+            if(!data.getUserLocationRange().isEmpty()) {
+                radius = Integer.parseInt(data.getUserLocationRange());
+            }
+
+            if(!data.getStoredPayRate().isEmpty()) {
+                pay = Integer.parseInt(data.getStoredPayRate());
+            }
+
             defineRadius(currentLocationCoordinates);
             pullJobs();
+
         }
-
-
     }
+
+
     private void intializeRecylcerView() {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -205,7 +210,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
-                System.out.println(progress);
                 if(mMap !=null) {
                     defineRadius(currentLocationCoordinates);
                     drawMarkerWithCircle();
@@ -260,22 +264,24 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
             Button filterApplyButton = (Button) findViewById(R.id.jobFilterApplyButton);
             filterApplyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    System.out.println(tempFilterPreferences.containsKey("rating"));
-                    if(tempFilterPreferences.containsKey("rating")) {
-                        rating = tempFilterPreferences.get("rating");
-                    }
-                    System.out.println(tempFilterPreferences.containsKey("pay"));
                     if(tempFilterPreferences.containsKey("pay")) {
-                        rating = tempFilterPreferences.get("pay");
+                        pay = tempFilterPreferences.get("pay");
                     }
 
-                    ArrayList<HashMap<String,String>> jobs = filter(rating,"rating", jobsList);
-                    jobs = filter(pay, "pay", jobs);
-                    System.out.println(jobs);
+                    ArrayList<HashMap<String,String>> jobs = filter(pay, "pay", jobsList);
+                    data.setStoredPayRate(pay);
+                    initializeJobPostings(jobs);
+
+                    View filterLayer = findViewById(R.id.filterLayer);
+                    ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
+
+                    filterLayer.setVisibility(View.INVISIBLE);
+                    showJobsLayer.setVisibility(View.VISIBLE);
+
                 }
             });
 
-            int[] filterButtons = new int[]{R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.button10};
+            int[] filterButtons = new int[]{R.id.button7, R.id.button8, R.id.button9, R.id.button10};
             for(int button : filterButtons) {
                 Button tempButton = (Button) findViewById(button);
                 tempButton.setOnClickListener(this::onClick);
@@ -283,36 +289,20 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
         } else {
             showToast("Please locate yourself before you filter.");
         }
-
-
     }
+
     public ArrayList<HashMap<String, String>> filter(int query, String filterKey, ArrayList<HashMap<String, String>> arrayList) {
         ArrayList<HashMap<String,String>> jobs = new ArrayList<HashMap<String, String>>();
-        if(filterKey.equalsIgnoreCase("rating")) {
-
+        if(filterKey.equalsIgnoreCase("pay")){
             for(HashMap<String,String> job: arrayList) {
-                System.out.println(job);
-                jobs.add(job);
-                /*
-                if(job.get("jobTitle").toLowerCase()){
-                    jobs.add(job);
+                if(job.get("jobPayRate").matches("[0-9]+")) {
+                    if(Double.parseDouble(job.get("jobPayRate"))>= query){
+                        jobs.add(job);
+                    }
                 }
             }
-
-            initializeJobPostings(jobs);*/
-            }
-        } else {
-            for(HashMap<String,String> job: arrayList) {
-                System.out.println(job);
-
-                if(Double.parseDouble(job.get("jobPayRate"))>= query){
-                    jobs.add(job);
-                }
-            }
-
         }
         return jobs;
-
     }
 
     public void showJobPosts() {
@@ -332,13 +322,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     public void initializeDatabase(){
         jobInformation = FirebaseDatabase.getInstance().getReference().child("JobInformation");
-        employerInformation = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
 
     //Job related methods
     public void pullJobs() {
-
         jobInformation.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -346,7 +334,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                 // Store all the job posts in the jobslist arraylist as a hashmap
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
-                    System.out.println(lat);
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
                     if(lat!= null && longi!=null) {
                         if(isInRange((double) lat, (double) longi)) {
@@ -357,8 +344,15 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                     }
                 }
                 //all methods that require anything to do with the data retrieved will be called here
-                System.out.println(jobsList);
-                initializeJobPostings(jobsList);
+                //System.out.println(jobsList);
+
+
+                if(!data.getStoredPayRate().isEmpty()) {
+                    ArrayList<HashMap<String, String>> jobs = filter(pay, "pay", jobsList);
+                    initializeJobPostings(jobs);
+                } else {
+                    initializeJobPostings(jobsList);
+                }
             }
 
             @Override
@@ -369,8 +363,9 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                 // ...
             }
         });
-
     }
+
+
     private void initializeJobPostings(ArrayList<HashMap<String,String>> jobs) {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -379,6 +374,9 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
         recyclerView.setAdapter(recycleViewAdaptor);
         recyclerView.setLayoutManager(layoutManager);
+
+        SearchView searchView = findViewById(R.id.searchBar);
+        searchView.setVisibility(View.VISIBLE);
     }
 
     //Check if the given points are in the circle or not
@@ -387,10 +385,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
         float[] results = new float[1];
         Location.distanceBetween(latitude, longitude, currentLocationCoordinates.latitude, currentLocationCoordinates.longitude, results);
         float distanceInMeters = results[0];
-        System.out.println(distanceInMeters);
         boolean isWithinRange = distanceInMeters < circleOptions.getRadius();
-        System.out.println(circleOptions.getRadius());
-        System.out.println(isWithinRange);
 
         return isWithinRange;
     }
@@ -398,6 +393,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
     //Location and map related methods
     protected void changeRadius() {
         radius = undecidedRadius;
+        data.storeUserLocationRange(radius);
+        defineRadius(currentLocationCoordinates);
     }
 
     public void defineRadius(LatLng position) {
@@ -527,8 +524,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                 drawMarkerWithCircle();
             }
 
-
-
             if (mMap != null) {
                /* if (isFirstLaunch) {
                     MarkerOptions mOptions = new MarkerOptions().position(currentLocationCoordinates);
@@ -640,30 +635,24 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
     @Override
     public void onClick(View v) {
         Button button = (Button) v;
-        System.out.println(button.getText().toString());
-        System.out.println(button.getId());
-
-        int[] ratings = new int[]{R.id.button3, R.id.button4, R.id.button5, R.id.button6};
         int[] paysRates = new int[]{R.id.button7, R.id.button8, R.id.button9, R.id.button10};
+        boolean flag = false;
 
-        if(Arrays.asList(ratings).contains(button.getId())){
-            System.out.println(tempFilterPreferences.containsKey("rating"));
-            if(button.getText().toString().equalsIgnoreCase("Any")) {
-                tempFilterPreferences.put("rating", -1);
-            } else {
-                int numberOnly= Integer.parseInt(button.getText().toString().replaceAll("[^0-9]", ""));
-                tempFilterPreferences.put("rating", numberOnly);
+        for(int id : paysRates) {
+            if(button.getId() == id) {
+                flag = true;
             }
+        }
 
-        } else {
-            System.out.println(tempFilterPreferences.containsKey("pay"));
+        if(flag) {
             if(button.getText().toString().equalsIgnoreCase("Any")) {
                 tempFilterPreferences.put("pay", -1);
+
             } else {
                 int numberOnly= Integer.parseInt(button.getText().toString().replaceAll("[^0-9]", ""));
                 tempFilterPreferences.put("pay", numberOnly);
-            }
 
+            }
         }
 
     }

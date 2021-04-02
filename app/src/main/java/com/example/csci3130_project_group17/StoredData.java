@@ -11,6 +11,8 @@ public class StoredData {
     private String storedUserIdKey = "uID";
     private String storedUserTypeKey = "employer";
     private String storedUserLocation = "userLocation";
+    private String storedLocationRange = "userLocationRange";
+    private String storedPayRate = "userPayRate";
 
     public StoredData(SharedPreferences storedAppData) {
         this.storedAppData = storedAppData;
@@ -37,6 +39,22 @@ public class StoredData {
 
     public void storeUserID(String uID) {
         storeByKeyValue(storedUserIdKey, uID);
+    }
+
+    public void storeUserLocationRange(int radius) {
+        storeByKeyValue(storedLocationRange, String.valueOf(radius));
+    }
+
+    public String getUserLocationRange() {
+        return getStoredDataByKey(storedLocationRange);
+    }
+
+    public void setStoredPayRate(int pay) {
+        storeByKeyValue(storedPayRate, String.valueOf(pay));
+    }
+
+    public String getStoredPayRate() {
+        return getStoredDataByKey(storedPayRate);
     }
 
     public void storeUserLocation(String location) {
