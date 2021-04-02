@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
+public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
     //Map related variables
     private GoogleMap mMap;
@@ -58,7 +58,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     Context context;
     Activity activity;
-    int radius = 8;
+    int radius = 1;
     int undecidedRadius = 0;
 
     private Circle mCircle;
@@ -75,17 +75,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
     public RecyclerView.LayoutManager layoutManager;
     public RecyclerView.Adapter recycleViewAdaptor;
 
-    SharedPreferences preferences;
-    StoredData data;
-    String savedLocation;
-
     //Job posts related field
     ArrayList<HashMap<String,String>> jobsList = new ArrayList<HashMap<String, String>>();
-    ArrayList<HashMap<String,String>> filteredJobsList = new ArrayList<HashMap<String, String>>();
-
-    //Filter variables
-    HashMap<String, Integer> tempFilterPreferences = new HashMap<String, Integer>();
-    int pay = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,35 +89,11 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
         setClickListeners();
         initializeDatabase();
 
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
-        savedLocation = data.getUserLocation();
-
-        if(savedLocation.isEmpty()) {
-
-        } else {
-            String[] savedCoordinates = savedLocation.split(",");
-
-            double lat = Double.parseDouble(savedCoordinates[0]);
-            double longitude = Double.parseDouble(savedCoordinates[1]);
-
-            currentLocationCoordinates = new LatLng(lat, longitude);
-
-            if(!data.getUserLocationRange().isEmpty()) {
-                radius = Integer.parseInt(data.getUserLocationRange());
-            }
-
-            if(!data.getStoredPayRate().isEmpty()) {
-                pay = Integer.parseInt(data.getStoredPayRate());
-            }
-
-            defineRadius(currentLocationCoordinates);
+        if(currentLocationCoordinates !=null) {
             pullJobs();
-
         }
+
     }
-
-
     private void intializeRecylcerView() {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -138,63 +105,49 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
     private void setClickListeners() {
         Button locateButton = (Button) findViewById(R.id.locateButton);
+
         locateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 locateUser();
             }});
 
+
         Button locationCancelButton = (Button) findViewById(R.id.locationCancelButton);
+
         locationCancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 showJobPosts();
             }});
 
         Button locationApplyButton = (Button) findViewById(R.id.locationApplyButton);
+
         locationApplyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 changeRadius();
                 pullJobs();
                 showJobPosts();
             }});
+        Button mapViewButton = (Button) findViewById(R.id.mapview);
+        mapViewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToMapView();
+            }});
+
 
         Button homeButton = (Button) findViewById(R.id.viewJobsHome);
+
         homeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 switchToHome();
             }});
 
         Button filterButton = (Button) findViewById(R.id.filterButton);
+
         filterButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                switchToFilterOptions();
-
+                switchToPreference();
             }});
 
-
-        SearchView searchBar = findViewById(R.id.searchBar);
-        searchBar.setOnQueryTextListener(
-                new SearchView.OnQueryTextListener() {
-
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        search(query);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText)
-                    {
-                        return false;
-                    }
-                });
-
-        searchBar.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                initializeJobPostings(jobsList);
-                return false;
-            }
-        });
 
         SeekBar rangeInput = (SeekBar) findViewById(R.id.rangeInput);
         rangeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -211,108 +164,37 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 undecidedRadius = progress;
                 if(mMap !=null) {
-                    defineRadius(currentLocationCoordinates);
-                    drawMarkerWithCircle();
+//                    drawMarkerWithCircle(currentLocationCoordinates);
                 }
 
             }
         });
     }
 
-    public void search(String query) {
-        ArrayList<HashMap<String,String>> jobs = new ArrayList<HashMap<String, String>>();
-        for(HashMap<String,String> job: jobsList) {
-            if(job.get("jobTitle").toLowerCase().contains(query.toLowerCase())){
-                jobs.add(job);
-            }
-        }
-        initializeJobPostings(jobs);
+    public void showJobPosts() {
+        View mapInfo =  findViewById(R.id.mapLayer);
+        RecyclerView jobPostings = findViewById(R.id.recyclerView);
 
+        mapInfo.setVisibility(View.INVISIBLE);
+        jobPostings.setVisibility(View.VISIBLE);
+    }
+    private void switchToPreference() {
+        Intent preferencce = new Intent(this, Preference.class);
+        startActivity(preferencce);
     }
 
-    public void switchToFilterOptions() {
+    private void switchToMapView() {
         if(currentLocationCoordinates!= null) {
-            View filterLayer = findViewById(R.id.filterLayer);
-            ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
+            View mapInfo =  findViewById(R.id.mapLayer);
+            RecyclerView jobPostings = findViewById(R.id.recyclerView);
 
-            filterLayer.setVisibility(View.VISIBLE);
-            showJobsLayer.setVisibility(View.INVISIBLE);
-
-
-            Button filterCancelButton = (Button) findViewById(R.id.jobFilterCancelButton);
-            filterCancelButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    View filterLayer = findViewById(R.id.filterLayer);
-                    ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
-
-                    filterLayer.setVisibility(View.INVISIBLE);
-                    showJobsLayer.setVisibility(View.VISIBLE);
-                }
-            });
-
-            Button filterLocationButton = (Button) findViewById(R.id.filterLocationButton);
-            filterLocationButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    View filterLayer = findViewById(R.id.filterLayer);
-                    ConstraintLayout mapLayer = findViewById(R.id.mapLayer);
-
-                    filterLayer.setVisibility(View.INVISIBLE);
-                    mapLayer.setVisibility(View.VISIBLE);
-                }
-            });
-
-            Button filterApplyButton = (Button) findViewById(R.id.jobFilterApplyButton);
-            filterApplyButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    if(tempFilterPreferences.containsKey("pay")) {
-                        pay = tempFilterPreferences.get("pay");
-                    }
-
-                    ArrayList<HashMap<String,String>> jobs = filter(pay, "pay", jobsList);
-                    data.setStoredPayRate(pay);
-                    initializeJobPostings(jobs);
-
-                    View filterLayer = findViewById(R.id.filterLayer);
-                    ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
-
-                    filterLayer.setVisibility(View.INVISIBLE);
-                    showJobsLayer.setVisibility(View.VISIBLE);
-
-                }
-            });
-
-            int[] filterButtons = new int[]{R.id.button7, R.id.button8, R.id.button9, R.id.button10};
-            for(int button : filterButtons) {
-                Button tempButton = (Button) findViewById(button);
-                tempButton.setOnClickListener(this::onClick);
-            }
+            jobPostings.setVisibility(View.INVISIBLE);
+            mapInfo.setVisibility(View.VISIBLE);
         } else {
             showToast("Please locate yourself before you filter.");
         }
+
     }
-
-    public ArrayList<HashMap<String, String>> filter(int query, String filterKey, ArrayList<HashMap<String, String>> arrayList) {
-        ArrayList<HashMap<String,String>> jobs = new ArrayList<HashMap<String, String>>();
-        if(filterKey.equalsIgnoreCase("pay")){
-            for(HashMap<String,String> job: arrayList) {
-                if(job.get("jobPayRate").matches("[0-9]+")) {
-                    if(Double.parseDouble(job.get("jobPayRate"))>= query){
-                        jobs.add(job);
-                    }
-                }
-            }
-        }
-        return jobs;
-    }
-
-    public void showJobPosts() {
-        View mapInfo =  findViewById(R.id.mapLayer);
-        ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
-
-        mapInfo.setVisibility(View.INVISIBLE);
-        showJobsLayer.setVisibility(View.VISIBLE);
-    }
-
 
     private void switchToHome() {
         Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
@@ -325,8 +207,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
     }
 
 
+
     //Job related methods
     public void pullJobs() {
+
         jobInformation.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -344,15 +228,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                     }
                 }
                 //all methods that require anything to do with the data retrieved will be called here
-                //System.out.println(jobsList);
-
-
-                if(!data.getStoredPayRate().isEmpty()) {
-                    ArrayList<HashMap<String, String>> jobs = filter(pay, "pay", jobsList);
-                    initializeJobPostings(jobs);
-                } else {
-                    initializeJobPostings(jobsList);
-                }
+                initializeJobPostings();
             }
 
             @Override
@@ -363,20 +239,16 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                 // ...
             }
         });
+
     }
-
-
-    private void initializeJobPostings(ArrayList<HashMap<String,String>> jobs) {
+    private void initializeJobPostings() {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        recycleViewAdaptor = new RecycleViewAdaptor(jobs);
+        recycleViewAdaptor = new RecycleViewAdaptor(jobsList);
 
         recyclerView.setAdapter(recycleViewAdaptor);
         recyclerView.setLayoutManager(layoutManager);
-
-        SearchView searchView = findViewById(R.id.searchBar);
-        searchView.setVisibility(View.VISIBLE);
     }
 
     //Check if the given points are in the circle or not
@@ -393,19 +265,21 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
     //Location and map related methods
     protected void changeRadius() {
         radius = undecidedRadius;
-        data.storeUserLocationRange(radius);
-        defineRadius(currentLocationCoordinates);
     }
 
-    public void defineRadius(LatLng position) {
+    private void drawMarkerWithCircle(LatLng position) {
 
         if(mMap!=null) {
             mMap.clear();
         }
 
-        // Fix a way to also see radius when choosing range
+        int rad = 0;
 
-        int rad = radius;
+        if(radius == undecidedRadius) {
+            rad = radius;
+        } else {
+            rad = undecidedRadius;
+        }
 
         double radiusInMeters = rad * 1000.0;  // increase decrease this distance as per your requirements
         int strokeColor = 0xffff0000; //red outline
@@ -417,17 +291,14 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                 .fillColor(shadeColor)
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
-    }
-
-    private void drawMarkerWithCircle() {
-        mCircle = mMap.addCircle(circleOptions);
+//        mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {
         View mapInfo =  findViewById(R.id.mapLayer);
-        ConstraintLayout showJobsLayer = findViewById(R.id.jobPostLayer);
+        RecyclerView jobPostings = findViewById(R.id.recyclerView);
 
-        showJobsLayer.setVisibility(View.INVISIBLE);
+        jobPostings.setVisibility(View.INVISIBLE);
         mapInfo.setVisibility(View.VISIBLE);
 
         //contents from here onwards are taken from the tutorial on google maps api
@@ -490,19 +361,22 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
         // Enable / Disable zooming controls
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
         // Enable / Disable my location button
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
         // Enable / Disable Compass icon
         mMap.getUiSettings().setCompassEnabled(true);
+
         // Enable / Disable Rotate gesture
         mMap.getUiSettings().setRotateGesturesEnabled(true);
+
         // Enable / Disable zooming functionality
         mMap.getUiSettings().setZoomGesturesEnabled(true);
 
         if (currentLocationCoordinates != null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationCoordinates, 10));
-            defineRadius(currentLocationCoordinates);
-            drawMarkerWithCircle();
+            drawMarkerWithCircle(currentLocationCoordinates);
         }
     }
 
@@ -512,17 +386,16 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
         public void onLocationChanged(Location location) {
 
             currentLocationCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
-            String tempLocation = location.getLatitude() + "," + location.getLongitude();
-            data.storeUserLocation(tempLocation);
 
 
             Log.d("Location", "" + location.getLatitude() + "," + location.getLongitude());
 
             if(mMap!=null) {
                 mMap.clear();
-                defineRadius(currentLocationCoordinates);
-                drawMarkerWithCircle();
+                drawMarkerWithCircle(currentLocationCoordinates);
             }
+
+
 
             if (mMap != null) {
                /* if (isFirstLaunch) {
@@ -630,30 +503,5 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
         // show it
         alertDialog.show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        Button button = (Button) v;
-        int[] paysRates = new int[]{R.id.button7, R.id.button8, R.id.button9, R.id.button10};
-        boolean flag = false;
-
-        for(int id : paysRates) {
-            if(button.getId() == id) {
-                flag = true;
-            }
-        }
-
-        if(flag) {
-            if(button.getText().toString().equalsIgnoreCase("Any")) {
-                tempFilterPreferences.put("pay", -1);
-
-            } else {
-                int numberOnly= Integer.parseInt(button.getText().toString().replaceAll("[^0-9]", ""));
-                tempFilterPreferences.put("pay", numberOnly);
-
-            }
-        }
-
     }
 }
