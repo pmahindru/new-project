@@ -1,5 +1,6 @@
 package com.example.csci3130_project_group17;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,12 +70,14 @@ public class Chat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
         //get userID of logged in user
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
         check = data.getUserType();
 
+        //method calling
         initializeDatabase();
         getTheNameOfEmployeeAndEmployer();
         Onclick();
@@ -115,6 +117,7 @@ public class Chat extends AppCompatActivity {
     }
 
     public void getTheNameOfEmployeeAndEmployer(){
+        //if it is the employer then get the name of the employer
         if (check){
             Intent intent = getIntent();
             userId = intent.getStringExtra("userId");
@@ -133,6 +136,8 @@ public class Chat extends AppCompatActivity {
                 }
             });
         }
+
+        //if it is employee then get the name of the employee
         else {
             Intent intent = getIntent();
             jobid = intent.getStringExtra("jobId");
@@ -142,7 +147,6 @@ public class Chat extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()){
                         employerid = (String) snapshot.child("employerID").getValue();
-
                         //checking for the null
                         assert employerid != null;
                         //checking for the employer full name
@@ -159,7 +163,6 @@ public class Chat extends AppCompatActivity {
                             }
                         });
                     }
-
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -168,187 +171,30 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    //save the chat in the database
     public void SaveMessageInTheDatabase(ArrayList<String>chatwith_) {
+
         sendButton = findViewById(R.id.sendButton);
         messageArea = findViewById(R.id.messageArea);
 
 
         String Chatwith_Full_Name_User = chatwith_.get(0) + "-" + chatwith_.get(1);
 
-        System.out.println(jobid);
-
         //checking for the current full name
+        checkUserIsEmployeeOrEmployer(Chatwith_Full_Name_User);
+    }
+
+    //check if the current user exist and check for the employee and employer too
+    private void checkUserIsEmployeeOrEmployer(String chatwith_Full_Name_User) {
         userinfo.child(uID).addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String curr_username = (String) snapshot.child("firstName").getValue() + "-" + (String) snapshot.child("lastName").getValue();
                     if (check) {
-                        currentmessage2 = currentmessage.child(curr_username + "_" + Chatwith_Full_Name_User);
-                        currentmessage = currentmessage.child(Chatwith_Full_Name_User + "_" + curr_username);
-                        sendButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String messageText = messageArea.getText().toString();
-
-                                if (!messageText.equals("")) {
-                                    Map<String, String> map = new HashMap<String, String>();
-                                    map.put("message", messageText);
-                                    map.put("user", curr_username);
-                                    currentmessage.push().setValue(map);
-                                    currentmessage2.push().setValue(map);
-                                    messageArea.setText("");
-                                }
-                            }
-                        });
-                        currentmessage.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(@NotNull DataSnapshot dataSnapshot, String s) {
-                                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                                String message = map.get("message").toString();
-                                String userName = map.get("user").toString();
-
-                                if (userName.equals(curr_username)) {
-                                    addMessageBox(message, 1);
-                                } else {
-                                    addMessageBox(message, 2);
-                                }
-                            }
-
-                            /**
-                             * This method is triggered when the data at a child location has changed.
-                             *
-                             * @param snapshot          An immutable snapshot of the data at the new data at the child location
-                             * @param previousChildName The key name of sibling location ordered before the child. This will
-                             */
-                            @Override
-                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                            }
-
-                            /**
-                             * This method is triggered when a child is removed from the location to which this listener was
-                             * added.
-                             *
-                             * @param snapshot An immutable snapshot of the data at the child that was removed.
-                             */
-                            @Override
-                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                            }
-
-                            /**
-                             * This method is triggered when a child location's priority changes. See {@link
-                             * DatabaseReference#setPriority(Object)} and <a
-                             * href="https://firebase.google.com/docs/database/android/retrieve-data#data_order"
-                             * target="_blank">Ordered Data</a> for more information on priorities and ordering data.
-                             *
-                             * @param snapshot          An immutable snapshot of the data at the location that moved.
-                             * @param previousChildName The key name of the sibling location ordered before the child
-                             */
-                            @Override
-                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                            }
-
-                            /**
-                             * This method will be triggered in the event that this listener either failed at the server, or
-                             * is removed as a result of the security and Firebase rules. For more information on securing
-                             * your data, see: <a href="https://firebase.google.com/docs/database/security/quickstart"
-                             * target="_blank"> Security Quickstart</a>
-                             *
-                             * @param error A description of the error that occurred
-                             */
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-
-                        });
+                        employerChatWithEmployee(curr_username, chatwith_Full_Name_User);
                     }
                     else {
-                        currentmessage2 = currentmessage.child(curr_username + "_" + Chatwith_Full_Name_User);
-                        currentmessage = currentmessage.child(Chatwith_Full_Name_User + "_" + curr_username);
-                        System.out.println(currentmessage + " --------------------------------------- " + currentmessage2);
-                        sendButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String messageText = messageArea.getText().toString();
-
-                                if (!messageText.equals("")) {
-                                    Map<String, String> map = new HashMap<String, String>();
-                                    map.put("message", messageText);
-                                    map.put("user", curr_username);
-                                    System.out.println(map);
-                                    currentmessage.push().setValue(map);
-                                    currentmessage2.push().setValue(map);
-                                    messageArea.setText("");
-                                }
-                            }
-                        });
-                        currentmessage.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(@NotNull DataSnapshot dataSnapshot, String s) {
-                                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                                String message = map.get("message").toString();
-                                String userName = map.get("user").toString();
-
-                                if (userName.equals(curr_username)) {
-                                    addMessageBox(message, 1);
-                                } else {
-                                    addMessageBox(message, 2);
-                                }
-                            }
-
-                            /**
-                             * This method is triggered when the data at a child location has changed.
-                             *
-                             * @param snapshot          An immutable snapshot of the data at the new data at the child location
-                             * @param previousChildName The key name of sibling location ordered before the child. This will
-                             */
-                            @Override
-                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                            }
-
-                            /**
-                             * This method is triggered when a child is removed from the location to which this listener was
-                             * added.
-                             *
-                             * @param snapshot An immutable snapshot of the data at the child that was removed.
-                             */
-                            @Override
-                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                            }
-
-                            /**
-                             * This method is triggered when a child location's priority changes. See {@link
-                             * DatabaseReference#setPriority(Object)} and <a
-                             * href="https://firebase.google.com/docs/database/android/retrieve-data#data_order"
-                             * target="_blank">Ordered Data</a> for more information on priorities and ordering data.
-                             *
-                             * @param snapshot          An immutable snapshot of the data at the location that moved.
-                             * @param previousChildName The key name of the sibling location ordered before the child
-                             */
-                            @Override
-                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                            }
-
-                            /**
-                             * This method will be triggered in the event that this listener either failed at the server, or
-                             * is removed as a result of the security and Firebase rules. For more information on securing
-                             * your data, see: <a href="https://firebase.google.com/docs/database/security/quickstart"
-                             * target="_blank"> Security Quickstart</a>
-                             *
-                             * @param error A description of the error that occurred
-                             */
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-
-                        });
+                        employeeChatWithEmployer(curr_username, chatwith_Full_Name_User);
                     }
                 }
             }
@@ -359,11 +205,169 @@ public class Chat extends AppCompatActivity {
         });
     }
 
+    //employee Chat With Employer
+    private void employeeChatWithEmployer(String curr_username, String chatwith_Full_Name_User) {
+        currentmessage2 = currentmessage.child(curr_username + "_" + chatwith_Full_Name_User);
+        currentmessage = currentmessage.child(chatwith_Full_Name_User + "_" + curr_username);
+        System.out.println(currentmessage + " --------------------------------------- " + currentmessage2);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String messageText = messageArea.getText().toString();
+
+                if (!messageText.equals("")) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("message", messageText);
+                    map.put("user", curr_username);
+                    System.out.println(map);
+                    currentmessage.push().setValue(map);
+                    currentmessage2.push().setValue(map);
+                    messageArea.setText("");
+                }
+            }
+        });
+        currentmessage.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                String message = map.get("message").toString();
+                String userName = map.get("user").toString();
+
+                if (userName.equals(curr_username)) {
+                    addMessageBox(message, 1);
+                } else {
+                    addMessageBox(message, 2);
+                }
+            }
+            /**
+             * This method is triggered when the data at a child location has changed.
+             *
+             * @param snapshot          An immutable snapshot of the data at the new data at the child location
+             * @param previousChildName The key name of sibling location ordered before the child. This will
+             */
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+            /**
+             * This method is triggered when a child is removed from the location to which this listener was
+             * added.
+             *
+             * @param snapshot An immutable snapshot of the data at the child that was removed.
+             */
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+            /**
+             * This method is triggered when a child location's priority changes. See {@link
+             * DatabaseReference#setPriority(Object)} and <a
+             * href="https://firebase.google.com/docs/database/android/retrieve-data#data_order"
+             * target="_blank">Ordered Data</a> for more information on priorities and ordering data.
+             *
+             * @param snapshot          An immutable snapshot of the data at the location that moved.
+             * @param previousChildName The key name of the sibling location ordered before the child
+             */
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+            /**
+             * This method will be triggered in the event that this listener either failed at the server, or
+             * is removed as a result of the security and Firebase rules. For more information on securing
+             * your data, see: <a href="https://firebase.google.com/docs/database/security/quickstart"
+             * target="_blank"> Security Quickstart</a>
+             *
+             * @param error A description of the error that occurred
+             */
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    //employer Chat With Employee
+    private void employerChatWithEmployee(String curr_username, String chatwith_Full_Name_User) {
+        currentmessage2 = currentmessage.child(curr_username + "_" + chatwith_Full_Name_User);
+        currentmessage = currentmessage.child(chatwith_Full_Name_User + "_" + curr_username);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String messageText =  messageArea.getText().toString();
+
+                if (!messageText.equals("")) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("message", messageText);
+                    map.put("user", curr_username);
+                    currentmessage.push().setValue(map);
+                    currentmessage2.push().setValue(map);
+                    messageArea.setText("");
+                }
+            }
+        });
+        currentmessage.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                String message = map.get("message").toString();
+                String userName = map.get("user").toString();
+
+                if (userName.equals(curr_username)) {
+                    addMessageBox(message, 1);
+                } else {
+                    addMessageBox(message, 2);
+                }
+            }
+            /**
+             * This method is triggered when the data at a child location has changed.
+             *
+             * @param snapshot          An immutable snapshot of the data at the new data at the child location
+             * @param previousChildName The key name of sibling location ordered before the child. This will
+             */
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+            /**
+             * This method is triggered when a child is removed from the location to which this listener was
+             * added.
+             *
+             * @param snapshot An immutable snapshot of the data at the child that was removed.
+             */
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+            /**
+             * This method is triggered when a child location's priority changes. See {@link
+             * DatabaseReference#setPriority(Object)} and <a
+             * href="https://firebase.google.com/docs/database/android/retrieve-data#data_order"
+             * target="_blank">Ordered Data</a> for more information on priorities and ordering data.
+             *
+             * @param snapshot          An immutable snapshot of the data at the location that moved.
+             * @param previousChildName The key name of the sibling location ordered before the child
+             */
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+            /**
+             * This method will be triggered in the event that this listener either failed at the server, or
+             * is removed as a result of the security and Firebase rules. For more information on securing
+             * your data, see: <a href="https://firebase.google.com/docs/database/security/quickstart"
+             * target="_blank"> Security Quickstart</a>
+             *
+             * @param error A description of the error that occurred
+             */
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    //show chat in the screen
+    @SuppressLint("ResourceAsColor")
     public void addMessageBox(String message, int type){
         layout = findViewById(R.id.layout1);
         layout_2 = findViewById(R.id.layout2);
         scrollView = findViewById(R.id.scrollView);
         TextView textView = new TextView(Chat.this);
+        // color of the text is taken from the given link https://stackoverflow.com/questions/4499208/android-setting-text-view-color-from-java-code
+        textView.setTextColor(this.getResources().getColor(R.color.black));
         textView.setText(message);
 
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -377,6 +381,7 @@ public class Chat extends AppCompatActivity {
             lp2.gravity = Gravity.RIGHT;
             textView.setBackgroundResource(R.drawable.bubble_out);
         }
+        lp2.setMargins(0,15,0,15);
         textView.setLayoutParams(lp2);
         layout.addView(textView);
         scrollView.fullScroll(View.FOCUS_DOWN);
