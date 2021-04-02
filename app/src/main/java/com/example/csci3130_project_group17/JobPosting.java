@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -113,7 +114,11 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 //text of successfully upload the image
                 Toast.makeText(getApplicationContext(), "Image Successfully Uploaded", Toast.LENGTH_LONG).show();
-                imageUploadInfo = new uploadinfo(taskSnapshot.getUploadSessionUri().toString());
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isComplete());
+                Uri uri = uriTask.getResult();
+                assert uri != null;
+                imageUploadInfo = new uploadinfo(uri.toString());
             }
         });
     }

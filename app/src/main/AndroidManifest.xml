@@ -54,7 +54,6 @@
         <activity android:name=".DashboardEmployer" />
         <activity android:name=".jobHistory" android:label="Job History"/>
         <activity android:name=".Chat" android:label="Chat"/>
-        <activity android:name=".AddImage" android:label="@string/image"/>
         <activity android:name=".ActiveJobs" android:label="@string/active_jobs"/>
         <activity android:name=".JobApplication" android:label="@string/job_application"/>
         <activity android:name=".ViewApplicants" android:label="@string/view_applicant"/>
