@@ -3,10 +3,8 @@ package com.example.csci3130_project_group17;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,10 +12,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,10 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -53,10 +46,14 @@ public class notification extends AppCompatActivity {
     StoredData data;
     String uID;
     Boolean isEmployer;
-
     Button homepage;
 
+    //job information for the notification from the review applicant
+    SharedPreferences preferences3;
+    Notification_ReviewApplicant_To_Employee data3;
+    String jobID_reviewapplcaint;
 
+    Notification_ReviewApplicant_To_Employee notification_reviewApplicant_to_employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +62,8 @@ public class notification extends AppCompatActivity {
 
         initializeDatabase();
         getuserid();
-
         onclick();
-
     }
-
     private void onclick() {
         homepage = findViewById(R.id.switch2home);
         homepage.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +75,7 @@ public class notification extends AppCompatActivity {
         });
     }
 
+    //this is for the userid
     private void getuserid(){
         preferences2 = getSharedPreferences("jobsPrefs", Context.MODE_PRIVATE);
         data2 = new JobPosting_notification(preferences2);
@@ -116,6 +111,7 @@ public class notification extends AppCompatActivity {
         });
     }
 
+    //this is for the notification when there is new job posting
     private void onclickbuttonjobnotification(String currrent_jobID, ArrayList<String> all_userIds, Boolean isEmployer) {
         listView = findViewById(R.id.list_notification);
 
@@ -142,7 +138,7 @@ public class notification extends AppCompatActivity {
                                             }
                                         }
                                     }
-
+                                    showHiredNotificationFromReviewApplicants();
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
@@ -163,11 +159,82 @@ public class notification extends AppCompatActivity {
         }
     }
 
+    //this is for the notification when the person is hired
+    private void showHiredNotificationFromReviewApplicants() {
+        //joid from the review applicants
+        preferences3 = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
+        data3 = new Notification_ReviewApplicant_To_Employee(preferences3);
+        jobID_reviewapplcaint = data3.getStoredUserID3();
+
+        //storing user id in the uID so that it is easy to get the current user and we can show them
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
+        uID = data.getStoredUserID();
+        isEmployer = data.getUserType();
+
+        ArrayList<String> name2 = new ArrayList<>();
+        ArrayList<String> location2 = new ArrayList<>();
+
+        if (!jobID_reviewapplcaint.equals("")) {
+            jobdetails.child(jobID_reviewapplcaint).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        name2.add((String) snapshot.child("jobTitle").getValue());
+                        location2.add(getTheFullAddressOfTheUser((double) snapshot.child("jobLocationCoordinates").child("latitude").getValue(), (double) snapshot.child("jobLocationCoordinates").child("longitude").getValue()));
+                        Notification_fromReviewApplicant notification_jobPostingClass2 = new Notification_fromReviewApplicant(getApplicationContext(), name2, location2);
+
+                        if (!isEmployer){
+                            System.out.println(name2 + "--------------------------------------------------------" + location2);
+                            System.out.println(snapshot.child("employeeID").getValue());
+                            if (snapshot.child("employeeID").getValue().equals(uID)){
+                                messageshow3();
+                                listView.setAdapter(notification_jobPostingClass2);
+                                data3.clearStoredData3();
+                            }
+                            else {
+                                messageshow2();
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else {
+            messageshow2();
+        }
+
+    }
+
     private void messageshow() {
         //alert square box that shows the answer
         AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
         // change the integer value into string value
-        alert_answer.setMessage("There is no new job posting by the employer");
+        alert_answer.setMessage("There is no new notification related to Job Posting");
+        alert_answer.setPositiveButton("ok", null);
+        alert_answer.create();
+        alert_answer.show();
+    }
+
+    private void messageshow2() {
+        //alert square box that shows the answer
+        AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
+        // change the integer value into string value
+        alert_answer.setMessage("There is no new notification related to Hired");
+        alert_answer.setPositiveButton("ok", null);
+        alert_answer.create();
+        alert_answer.show();
+    }
+
+    private void messageshow3() {
+        //alert square box that shows the answer
+        AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
+        // change the integer value into string value
+        alert_answer.setMessage("Yay you hired for this job go and check you will received the payment and this job is now closed automatically in jobHistory");
         alert_answer.setPositiveButton("ok", null);
         alert_answer.create();
         alert_answer.show();

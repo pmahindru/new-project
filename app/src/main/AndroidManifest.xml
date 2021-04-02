@@ -44,14 +44,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUp"/>
-        <activity android:name=".JobPosting" />
-        <activity android:name=".ReviewApplicants"/>
+        <activity android:name=".SignUp" android:label="Sign Up"/>
+        <activity android:name=".JobPosting" android:label="Job Posting"/>
+        <activity android:name=".ReviewApplicants" android:label="Review Applicants"/>
         <activity android:name=".JobDetail" android:label="Job Description"/>
         <activity android:name=".notification" android:label="@string/notification"/>
-        <activity android:name=".ViewJobs" />
-        <activity android:name=".DashboardEmployee" />
-        <activity android:name=".DashboardEmployer" />
+        <activity android:name=".ViewJobs" android:label="View Jobs"/>
+        <activity android:name=".DashboardEmployee" android:label="Dashboard Employee"/>
+        <activity android:name=".DashboardEmployer" android:label="Dashboard Employer"/>
+        <activity android:name=".paymentpage" android:label="Payment Page"/>
         <activity android:name=".jobHistory" android:label="Job History"/>
         <activity android:name=".Chat" android:label="Chat"/>
         <activity android:name=".ActiveJobs" android:label="@string/active_jobs"/>

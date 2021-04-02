@@ -1,7 +1,9 @@
 package com.example.csci3130_project_group17;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -32,6 +34,7 @@ public class ReviewApplicants extends AppCompatActivity {
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
     DatabaseReference jobapplication = null;
+    DatabaseReference jobdetails = null;
 
     TextView name;
     TextView email;
@@ -39,6 +42,10 @@ public class ReviewApplicants extends AppCompatActivity {
     TextView loca;
     TextView resume;
 
+    //
+    Notification_ReviewApplicant_To_Employee appData_notification_revviewapplicant;
+    SharedPreferences data_notification_revviewapplicant;
+    String jobID_notification_revviewapplicant = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,9 @@ public class ReviewApplicants extends AppCompatActivity {
         loca = findViewById(R.id.Location_employee);
         resume = findViewById(R.id.Resume_employee);
 
+        data_notification_revviewapplicant = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
+        appData_notification_revviewapplicant = new Notification_ReviewApplicant_To_Employee(data_notification_revviewapplicant);
+
 
         //button function take place
         OnClick();
@@ -59,7 +69,7 @@ public class ReviewApplicants extends AppCompatActivity {
 
     private void OnClick() {
         // take value of button
-        Button square_button2 = (Button)findViewById(R.id.switch2home);
+        Button square_button2 = (Button) findViewById(R.id.switch2home);
         square_button2.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -67,11 +77,55 @@ public class ReviewApplicants extends AppCompatActivity {
                 swtich2home();
             }
         });
-    }
 
+        Button hire = (Button) findViewById(R.id.Hire_review_application);
+        hire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closedJobPosting();
+            }
+        });
+    }
     private void swtich2home() {
         Intent dashboardEmployee = new Intent(this, DashboardEmployer.class);
         startActivity(dashboardEmployee);
+    }
+
+    private void closedJobPosting() {
+        Intent data = getIntent();
+        String userid = data.getStringExtra("userId");
+        Intent data2 = getIntent();
+        String jobid = data2.getStringExtra("jobId");
+        System.out.println(userid+"-------------------------------------------------"+jobid);
+
+        jobapplication.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    if (Objects.requireNonNull(snapshot.child("currentUserID").getValue()).equals(userid) && Objects.requireNonNull(snapshot.child("jobId").getValue()).equals(jobid)){
+                        String current_jobid = (String) snapshot.child("jobId").getValue();
+                        jobdetails.child(current_jobid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    jobdetails.child(current_jobid).child("state").setValue("closed");
+                                    jobID_notification_revviewapplicant = snapshot.getKey();
+                                    appData_notification_revviewapplicant.storedjobID3(jobID_notification_revviewapplicant);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void userifno() {
@@ -79,6 +133,7 @@ public class ReviewApplicants extends AppCompatActivity {
         String userid = data.getStringExtra("userId");
         Intent data2 = getIntent();
         String jobid = data2.getStringExtra("jobId");
+        System.out.println(userid+"-------------------------------------------------"+jobid);
 
 
         jobapplication.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -145,5 +200,6 @@ public class ReviewApplicants extends AppCompatActivity {
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
         jobapplication = database.getReference("application");
+        jobdetails = database.getReference("JobInformation");
     }
 }

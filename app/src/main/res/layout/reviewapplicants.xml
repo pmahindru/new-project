@@ -6,109 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-   <!-- this layout is taken from the job application and made changes Job Application was made
-   by Pranav mahindru/
-        -->
-    <LinearLayout
-        android:id="@+id/linearLayout_Reviewapplication"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteX="-72dp">
-
-        <FrameLayout
-            android:id="@+id/Reviewapplication"
-            android:layout_width="0dp"
-            android:layout_height="105dp"
-            android:layout_weight="1"
-            android:background="#B1AFAF" />
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_Reviewapplication"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="105dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginRight="120dp"
-        android:background="#FFFFFF"
-        app:cardCornerRadius="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout_Reviewapplication"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout_Reviewapplication"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
-
-        <!-- image is take from the
-        https://www.geeksforgeeks.org/how-to-create-circular-imageview-in-android-using-cardview/ -->
-        <!-- add a Image image.png in your Drawable folder -->
-        <ImageView
-            android:id="@+id/profilepic_employer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/image"
-            tools:layout_editor_absoluteX="276dp"
-            tools:layout_editor_absoluteY="16dp"
-            tools:srcCompat="@tools:sample/avatars" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/nameofthepage_Reviewapplication"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="240dp"
-        android:layout_marginLeft="240dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="14dp"
-        android:background="#B1AFAF"
-        android:text="@string/review_applicant"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout_Reviewapplication"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout_Reviewapplication"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_employeepicture"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginEnd="400dp"
-        android:layout_marginRight="120dp"
-        android:background="#FFFFFF"
-        app:cardCornerRadius="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout_Reviewapplication"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
-
-        <ImageView
-            android:id="@+id/profilepic_employee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/image"
-            tools:layout_editor_absoluteX="150dp"
-            tools:layout_editor_absoluteY="16dp"
-            tools:srcCompat="@tools:sample/avatars" />
-    </androidx.cardview.widget.CardView>
-
-
     <TextView
         android:id="@+id/Firstname_employee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="310dp"
+        android:layout_marginTop="290dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="45dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/FirstName"
@@ -116,7 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/Email_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView_employeepicture"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -127,7 +34,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="45dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/email"
@@ -146,7 +53,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="45dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/phone_number_employee"
@@ -165,7 +72,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="45dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/Location"
@@ -185,28 +92,28 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="45dp"
         android:autofillHints=""
         android:ems="10"
         android:clickable="true"
         android:focusable="true"
         android:hint="@string/resume"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/Hire"
+        app:layout_constraintBottom_toTopOf="@+id/Hire_review_application"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Location_employee"
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/Hire"
+        android:id="@+id/Hire_review_application"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginLeft="70dp"
         android:layout_marginEnd="240dp"
         android:layout_marginRight="240dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="40dp"
         android:ems="8"
         android:text="@string/Hire"
         app:layout_constraintBottom_toTopOf="@+id/horizontalline"
@@ -225,7 +132,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Hire"
+        app:layout_constraintTop_toBottomOf="@+id/Hire_review_application"
         tools:ignore="MissingConstraints" />
 
     <Button
