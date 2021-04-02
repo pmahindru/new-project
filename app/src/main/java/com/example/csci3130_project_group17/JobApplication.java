@@ -102,7 +102,6 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
 
         Intent intent = getIntent();
         jobPost = intent.getStringExtra("JobKey");
-        System.out.println(jobPost+ "-----------------------------------------------------------");
         user.put("jobId", jobPost);
         user.put("currentUserID", uID);
 

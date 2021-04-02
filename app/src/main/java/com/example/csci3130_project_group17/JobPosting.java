@@ -232,6 +232,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         job.setJobLocationCoordinates(location);
         jobID_notification = jobID;
         appData_notification.storedjobID(jobID_notification);
+        System.out.println(jobID+"------------------------------------i am done with this shit");
         jobInformation.child(jobID).setValue(job);
     }
 

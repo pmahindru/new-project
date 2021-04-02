@@ -33,6 +33,7 @@ public class JobDetail extends AppCompatActivity {
 
     //job post related information
     HashMap<String, String> jobPost;
+    String jobidfromnotification;
 
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
@@ -45,6 +46,7 @@ public class JobDetail extends AppCompatActivity {
     ImageView imageView;
     Button employer_profile;
     Button applybutton;
+    Button homepage;
 
 
     @Override
@@ -55,13 +57,23 @@ public class JobDetail extends AppCompatActivity {
 
         Intent intent = getIntent();
         jobPost = (HashMap<String, String>) intent.getSerializableExtra("jobPost");
-
+        jobidfromnotification = intent.getStringExtra("jobID2");
         initializeDatabase();
-        job_deatial(jobPost);
-        onclickbutton(jobPost);
+        System.out.println(jobPost+"---------------------------------------");
+        System.out.println(jobidfromnotification+"---------------------------------------");
+
+        if (jobPost != null) {
+            job_deatial_fromviewjob(jobPost);
+            jobidfromnotification = "";
+            onclickbutton(jobPost,jobidfromnotification);
+        } else {
+            job_deatial_fromnotification(jobidfromnotification);
+            jobPost = null;
+            onclickbutton(jobPost,jobidfromnotification);
+        }
     }
 
-    private void onclickbutton(HashMap<String, String> jobPost) {
+    private void onclickbutton(HashMap<String, String> jobPost,String jobid) {
         employer_profile = findViewById(R.id.employerprofilebutton_jobdescription);
         employer_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +87,59 @@ public class JobDetail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent swtichtoapplicationpage = new Intent(JobDetail.this, JobApplication.class);
-                swtichtoapplicationpage.putExtra("JobKey", jobPost.get("jobPostId"));
+                if (jobPost != null){
+                    swtichtoapplicationpage.putExtra("JobKey", jobPost.get("jobPostId"));
+                }
+                else {
+                    swtichtoapplicationpage.putExtra("JobKey", jobid);
+                }
                 startActivity(swtichtoapplicationpage);
+            }
+        });
+
+        homepage = findViewById(R.id.switch2home);
+        homepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnDashbaord = new Intent(JobDetail.this, DashboardEmployee.class);
+                startActivity(returnDashbaord);
             }
         });
     }
 
-    private void job_deatial(HashMap<String, String> jobPost) {
+    private void job_deatial_fromnotification(String jobidfromnotification) {
+        type = findViewById(R.id.type_jobdescription);
+        location = findViewById(R.id.Location_jobdescription);
+        payrate = findViewById(R.id.payrate_jobdescription);
+        description = findViewById(R.id.description_jobdescription);
+        imageView = findViewById(R.id.image_jobdescription);
+
+        jobdetails.child(jobidfromnotification).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    //this thing is taken from the gve link which is bold the specif text
+                    //https://stackoverflow.com/questions/14371092/how-to-make-a-specific-text-on-textview-bold
+                    String jobtitle = "<b> Job Title: </b>" + snapshot.child("jobTitle").getValue();
+                    String loca = "<b> Location: </b>" + getTheFullAddressOfTheUser((double) snapshot.child("jobLocationCoordinates").child("latitude").getValue(), (double) snapshot.child("jobLocationCoordinates").child("longitude").getValue());
+                    String Payrate = "<b> PayRate: </b>" + snapshot.child("jobPayRate").getValue();
+                    String jobdescription = "<b> Description: </b> <br>" + snapshot.child("jobDescription").getValue();
+                    String image = (String) snapshot.child("imageurl").getValue();
+
+                    type.setText(Html.fromHtml(jobtitle));
+                    location.setText(Html.fromHtml(loca));
+                    payrate.setText(Html.fromHtml(Payrate));
+                    description.setText(Html.fromHtml(jobdescription));
+                    Glide.with(JobDetail.this).load(image).into(imageView);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void job_deatial_fromviewjob(HashMap<String, String> jobPost) {
         type = findViewById(R.id.type_jobdescription);
         location = findViewById(R.id.Location_jobdescription);
         payrate = findViewById(R.id.payrate_jobdescription);
@@ -99,7 +157,6 @@ public class JobDetail extends AppCompatActivity {
                     String Payrate = "<b> PayRate: </b>" + snapshot.child("jobPayRate").getValue();
                     String jobdescription = "<b> Description: </b> <br>" + snapshot.child("jobDescription").getValue();
                     String image = (String) snapshot.child("imageurl").getValue();
-                    System.out.println(snapshot.child("imageurl").getValue()+"--------------------------------------------------------------------------------------");
 
                     type.setText(Html.fromHtml(jobtitle));
                     location.setText(Html.fromHtml(loca));

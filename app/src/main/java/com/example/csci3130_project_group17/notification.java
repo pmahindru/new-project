@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -51,6 +54,10 @@ public class notification extends AppCompatActivity {
     String uID;
     Boolean isEmployer;
 
+    Button homepage;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,20 @@ public class notification extends AppCompatActivity {
 
         initializeDatabase();
         getuserid();
+
+        onclick();
+
+    }
+
+    private void onclick() {
+        homepage = findViewById(R.id.switch2home);
+        homepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnDashbaord = new Intent(notification.this, DashboardEmployee.class);
+                startActivity(returnDashbaord);
+            }
+        });
     }
 
     private void getuserid(){
@@ -71,9 +92,7 @@ public class notification extends AppCompatActivity {
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 
-
         ArrayList<String> userIDs = new ArrayList<>();
-
 
         //geting all the users id from here
         userids.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -110,7 +129,7 @@ public class notification extends AppCompatActivity {
                     if (snapshot.exists()) {
                         name.add((String) snapshot.child("jobTitle").getValue());
                         location.add(getTheFullAddressOfTheUser((double) snapshot.child("jobLocationCoordinates").child("latitude").getValue(), (double) snapshot.child("jobLocationCoordinates").child("longitude").getValue()));
-                        Notification_JobPostingClass notification_jobPostingClass = new Notification_JobPostingClass(getApplicationContext(), name, location);
+                        Notification_JobPostingClass notification_jobPostingClass = new Notification_JobPostingClass(getApplicationContext(), name, location, currrent_jobID);
 
                             //show notification to all the users
                             userids.addListenerForSingleValueEvent(new ValueEventListener() {

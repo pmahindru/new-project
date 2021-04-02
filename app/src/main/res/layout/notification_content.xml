@@ -58,30 +58,17 @@ https://android-examples.blogspot.com/2016/10/android-cardview-inside-listview.h
                 android:text="@string/location_notification" />
 
             <Button
-                android:id="@+id/deletenotification"
+                android:id="@+id/reviewjobnotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="280dp"
+                android:layout_marginStart="240dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="23dp"
                 android:layout_marginBottom="-200dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="@string/delete_notification"
-                android:textColor="#000000"
-                android:textSize="13sp" />
-
-            <Button
-                android:id="@+id/reviewjobnotification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="145dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="150dp"
-                android:layout_marginBottom="-200dp"
-                android:background="?android:attr/selectableItemBackground"
                 android:text="@string/review_jobs_notification"
                 android:textColor="#000000"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

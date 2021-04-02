@@ -2,11 +2,13 @@ package com.example.csci3130_project_group17;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,12 +22,16 @@ public class Notification_JobPostingClass extends BaseAdapter {
     //initializing the text-view of the job details
     TextView jobtitle;
     TextView location;
+    Button reviewjob;
+    String jobid;
 
-    public Notification_JobPostingClass(Context applicationContext, ArrayList<String> name, ArrayList<String> location) {
+
+    public Notification_JobPostingClass(Context applicationContext, ArrayList<String> name, ArrayList<String> location, String currrent_jobID) {
         this.context = applicationContext;
         this.jobname = name;
         this.Location = location;
         inflater =  (LayoutInflater.from(applicationContext));
+        this.jobid = currrent_jobID;
     }
 
     /**
@@ -89,6 +95,19 @@ public class Notification_JobPostingClass extends BaseAdapter {
         location = convertView.findViewById(R.id.location_notification);
         String title = "<b> Job Title </b>" + jobname.get(position);
         String loca = "<b> Location </b> " + Location.get(position);
+
+        reviewjob = convertView.findViewById(R.id.reviewjobnotification);
+        reviewjob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,JobDetail.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("jobID2",jobid);
+                context.startActivity(intent);
+            }
+        });
+
+
         jobtitle.setText(Html.fromHtml(title));
         location.setText(Html.fromHtml(loca));
 
