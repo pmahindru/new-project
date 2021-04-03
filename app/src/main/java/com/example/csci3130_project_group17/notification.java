@@ -51,7 +51,11 @@ public class notification extends AppCompatActivity {
     Notification_ReviewApplicant_To_Employee data3;
     String jobID_reviewapplcaint;
 
-    Notification_ReviewApplicant_To_Employee notification_reviewApplicant_to_employee;
+
+    //current user hired information for the notification from the review applicant
+    SharedPreferences preferences4;
+    Notification_ReviewApplicant_To_Employee data4;
+    String currentuserID_reviewapplcaint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +176,12 @@ public class notification extends AppCompatActivity {
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 
+
+        //current user hired information for the notification from the review applicant
+        preferences4 = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);;
+        data4 = new Notification_ReviewApplicant_To_Employee(preferences4);
+        currentuserID_reviewapplcaint = data4.getStoredUserID2();
+
         ArrayList<String> name2 = new ArrayList<>();
         ArrayList<String> location2 = new ArrayList<>();
         System.out.println(jobID + "-------------------------------112121-------------------------" );
@@ -186,8 +196,8 @@ public class notification extends AppCompatActivity {
 
                         if (!isEmployer){
                             System.out.println(jobID + "--------------------------------------------------------" );
-                            System.out.println(snapshot.child("employeeID").getValue());
-                            if (snapshot.child("employeeID").getValue().equals(uID)){
+                            System.out.println(currentuserID_reviewapplcaint);
+                            if (currentuserID_reviewapplcaint.equals(uID)){
                                 messageshow3();
                                 listView.setAdapter(notification_jobPostingClass2);
                                 data3.clearStoredData3();
@@ -204,10 +214,6 @@ public class notification extends AppCompatActivity {
                 }
             });
         }
-        else {
-            messageshow2();
-        }
-
     }
 
     private void messageshow() {

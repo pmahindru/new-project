@@ -8,6 +8,7 @@ public class Notification_ReviewApplicant_To_Employee {
     private SharedPreferences data_notification2;
     private String storedDataName2 = "jobsPrefs_fromreviewapplicants";
     private String storedUserIdKey3 = "jobID";
+    private String storedUserIdKey = "employeeuID";
 
     public Notification_ReviewApplicant_To_Employee(SharedPreferences data_notification) {
         this.data_notification2 = data_notification;
@@ -30,6 +31,24 @@ public class Notification_ReviewApplicant_To_Employee {
     }
 
     public void storeByKeyValue3(String key, String value) {
+        SharedPreferences.Editor editor = data_notification2.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String getStoredUserID2() {
+        return getStoredDataByKey2(storedUserIdKey);
+    }
+
+    public String getStoredDataByKey2(String key) {
+        return data_notification2.getString(key,"");
+    }
+
+    public void storedjobID2(String jobID_notification) {
+        storeByKeyValue2(storedUserIdKey, jobID_notification);
+    }
+
+    public void storeByKeyValue2(String key, String value) {
         SharedPreferences.Editor editor = data_notification2.edit();
         editor.putString(key, value);
         editor.commit();

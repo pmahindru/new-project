@@ -46,6 +46,9 @@ public class ReviewApplicants extends AppCompatActivity {
     Notification_ReviewApplicant_To_Employee appData_notification_revviewapplicant;
     SharedPreferences data_notification_revviewapplicant;
     String jobID_notification_revviewapplicant = null;
+    String currentuserID_notification_revviewapplicant = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +150,8 @@ public class ReviewApplicants extends AppCompatActivity {
                         String resume_name = "<b> Resume: </b>" + snapshot.child("resume").child("name").getValue();
                         String resume_url = (String) snapshot.child("resume").child("url").getValue();
                         getTheFullAddressOfTheUser((double) snapshot.child("location").child("latitude").getValue(), (double) snapshot.child("location").child("longitude").getValue());
-
+                        currentuserID_notification_revviewapplicant = (String) snapshot.child("currentUserID").getValue();
+                        appData_notification_revviewapplicant.storedjobID2(currentuserID_notification_revviewapplicant);
                         name.setText(Html.fromHtml(fullanme));
                         email.setText(Html.fromHtml(email1));
                         number.setText(Html.fromHtml(phonenumber));
