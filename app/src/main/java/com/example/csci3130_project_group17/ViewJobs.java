@@ -127,12 +127,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 pullJobs();
                 showJobPosts();
             }});
-        Button mapViewButton = (Button) findViewById(R.id.mapview);
-        mapViewButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                switchToMapView();
-            }});
-
 
         Button homeButton = (Button) findViewById(R.id.viewJobsHome);
 
@@ -145,7 +139,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         filterButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                switchToPreference();
+                switchToMapView();
             }});
 
 
@@ -178,11 +172,6 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
         mapInfo.setVisibility(View.INVISIBLE);
         jobPostings.setVisibility(View.VISIBLE);
     }
-    private void switchToPreference() {
-        Intent preferencce = new Intent(this, Preference.class);
-        startActivity(preferencce);
-    }
-
     private void switchToMapView() {
         if(currentLocationCoordinates!= null) {
             View mapInfo =  findViewById(R.id.mapLayer);
