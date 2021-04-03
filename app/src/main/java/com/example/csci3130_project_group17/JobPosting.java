@@ -217,6 +217,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         else {
             if ((!isletter(getJobTitle())) || (!isletter(getJobType()))) {
                 errorMessage = "Only letters allowed";
+            } else if(!isNumber(getJobPayRate())) {
+                errorMessage = "Pay rate can only be a number";
             }
         }
 
@@ -226,6 +228,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     protected boolean isletter(String input) {
         return input.matches("^[A-Za-z\\s]+$");
     }
+
+    protected boolean isNumber(String input) { return input.matches("[0-9]+");}
 
     protected void saveJobToDatabase() {
         Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID,imageUploadInfo.getImageURL());

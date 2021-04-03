@@ -35,6 +35,7 @@
     <string name="Payrate">$ Pay Rate</string>
     <string name="viewchat">View Chats</string>
     <string name="locationfromdatabase">location</string>
+    <string name="filter">Filter</string>
     <string name="leave_a_review">Leave A Review</string>
     <string name="rate_out_of_5">Rate out of 5:</string>
     <string name="_5">5</string>

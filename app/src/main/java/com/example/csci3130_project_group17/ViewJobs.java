@@ -1,5 +1,6 @@
 package com.example.csci3130_project_group17;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +25,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
@@ -123,6 +127,12 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 pullJobs();
                 showJobPosts();
             }});
+        Button mapViewButton = (Button) findViewById(R.id.mapview);
+        mapViewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToMapView();
+            }});
+
 
         Button homeButton = (Button) findViewById(R.id.viewJobsHome);
 
@@ -135,7 +145,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         filterButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                switchToMapView();
+                switchToPreference();
             }});
 
 
@@ -167,6 +177,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
 
         mapInfo.setVisibility(View.INVISIBLE);
         jobPostings.setVisibility(View.VISIBLE);
+    }
+    private void switchToPreference() {
+        Intent preferencce = new Intent(this, Preference.class);
+        startActivity(preferencce);
     }
 
     private void switchToMapView() {
@@ -278,7 +292,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 .fillColor(shadeColor)
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
-//           mCircle = mMap.addCircle(circleOptions);
+           mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {
