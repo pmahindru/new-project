@@ -28,7 +28,7 @@ public class profileReviewAdapter extends RecyclerView.Adapter {
         profileReviewAdapter.ProfileViewHolder profileViewHolder = (profileReviewAdapter.ProfileViewHolder) holder;
         Review review = reviewList.get(position);
         profileViewHolder.review.setText("Comment: " + review.getComment());
-        profileViewHolder.rating.setNumStars(review.getRating());
+        profileViewHolder.rating.setRating(review.getRating());
         profileViewHolder.name.setText("From: " + review.getReviewerName());
     }
 

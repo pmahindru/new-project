@@ -25,7 +25,8 @@
                 android:layout_gravity="center"
                 android:max="5"
                 android:numStars="5"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:rating="3" />
 
             <TextView
                 android:id="@+id/profileReviewText"

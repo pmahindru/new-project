@@ -59,14 +59,13 @@ public class Profile extends AppCompatActivity {
 
 
     private void loadData(){
+
         reviewStore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            //get list of jobs
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (((dataSnapshot.child("revieweeID").getValue().toString()).equals(uID))) {
                         Review review = dataSnapshot.getValue(Review.class);
-                        Log.d("testsss", review.toString());
                         reviewList.add(review);
                     }
                 }
@@ -77,9 +76,9 @@ public class Profile extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
         usersStore.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            //get list of jobs
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (((dataSnapshot.getKey()).equals(uID))) {
@@ -94,6 +93,7 @@ public class Profile extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
 
     }
 
