@@ -232,7 +232,7 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
     protected boolean isNumber(String input) { return input.matches("[0-9]+");}
 
     protected void saveJobToDatabase() {
-        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open","",uID,imageUploadInfo.getImageURL());
+        Job job = new Job(getJobTitle(),getJobType(),getJobDescription(),getJobLocation(),getJobPayRate(),"open",uID,imageUploadInfo.getImageURL());
         job.setJobLocationCoordinates(location);
         jobID_notification = jobID;
         appData_notification.storedjobID(jobID_notification);

@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class notification extends AppCompatActivity {
-
-
     //job information for the notification
     SharedPreferences preferences2;
     JobPosting_notification data2;
@@ -101,6 +99,7 @@ public class notification extends AppCompatActivity {
                         }
                     }
                 }
+                System.out.println(jobID + "-----------------in getusid---------------------------------------" );
                 onclickbuttonjobnotification(jobID,userIDs,isEmployer);
             }
 
@@ -117,7 +116,7 @@ public class notification extends AppCompatActivity {
 
         ArrayList<String> name = new ArrayList<>();
         ArrayList<String> location = new ArrayList<>();
-
+        System.out.println(jobID + "---------------------asdasdasds-----------------------------------" );
         if (!currrent_jobID.equals("")) {
             jobdetails.child(currrent_jobID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -127,24 +126,24 @@ public class notification extends AppCompatActivity {
                         location.add(getTheFullAddressOfTheUser((double) snapshot.child("jobLocationCoordinates").child("latitude").getValue(), (double) snapshot.child("jobLocationCoordinates").child("longitude").getValue()));
                         Notification_JobPostingClass notification_jobPostingClass = new Notification_JobPostingClass(getApplicationContext(), name, location, currrent_jobID);
 
-                            //show notification to all the users
-                            userids.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                                    for (int i = 0; i < all_userIds.size(); i++) {
-                                        if (snapshot1.child(all_userIds.get(i)).exists()){
-                                            if (!isEmployer){
-                                                listView.setAdapter(notification_jobPostingClass);
-                                            }
+                        //show notification to all the users
+                        userids.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                                for (int i = 0; i < all_userIds.size(); i++) {
+                                    if (snapshot1.child(all_userIds.get(i)).exists()){
+                                        if (!isEmployer){
+                                            listView.setAdapter(notification_jobPostingClass);
                                         }
                                     }
-                                    showHiredNotificationFromReviewApplicants();
                                 }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                showHiredNotificationFromReviewApplicants();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                                }
-                            });
+                            }
+                        });
                     }
                 }
                 @Override
@@ -154,6 +153,7 @@ public class notification extends AppCompatActivity {
             });
         }
         else {
+            showHiredNotificationFromReviewApplicants();
             messageshow();
             System.out.println("done showing job positing notification to all the user and there no new job posting");
         }
@@ -174,7 +174,7 @@ public class notification extends AppCompatActivity {
 
         ArrayList<String> name2 = new ArrayList<>();
         ArrayList<String> location2 = new ArrayList<>();
-
+        System.out.println(jobID + "-------------------------------112121-------------------------" );
         if (!jobID_reviewapplcaint.equals("")) {
             jobdetails.child(jobID_reviewapplcaint).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -185,7 +185,7 @@ public class notification extends AppCompatActivity {
                         Notification_fromReviewApplicant notification_jobPostingClass2 = new Notification_fromReviewApplicant(getApplicationContext(), name2, location2);
 
                         if (!isEmployer){
-                            System.out.println(name2 + "--------------------------------------------------------" + location2);
+                            System.out.println(jobID + "--------------------------------------------------------" );
                             System.out.println(snapshot.child("employeeID").getValue());
                             if (snapshot.child("employeeID").getValue().equals(uID)){
                                 messageshow3();
