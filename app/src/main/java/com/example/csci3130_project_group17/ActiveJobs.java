@@ -107,8 +107,9 @@ public class ActiveJobs extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1: snapshot.getChildren()){
                     String employerID = snapshot1.child("employerID").getValue().toString();
+                    String employeeID = snapshot1.child("employeeID").getValue().toString();
                     String state = snapshot1.child("state").getValue().toString();
-                    if ((state.equals("open")) && (employerID.equals(uID))) {
+                    if ((state.equals("open")) && (employerID.equals(uID)) && employeeID.isEmpty()) {
                         String jobID = snapshot1.getKey();
                         jobids.add(jobID);
                         String jobTitle = snapshot1.child("jobTitle").getValue().toString();
