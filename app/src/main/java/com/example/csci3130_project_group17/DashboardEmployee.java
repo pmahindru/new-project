@@ -1,12 +1,11 @@
 package com.example.csci3130_project_group17;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DashboardEmployee extends AppCompatActivity {
 
@@ -69,7 +68,7 @@ public class DashboardEmployee extends AppCompatActivity {
     }
 
     private void swtichtopaymentpage() {
-        Intent viewJobsIntent = new Intent(this, paymentpage.class);
+        Intent viewJobsIntent = new Intent(this, paymentnotificaton.class);
         startActivity(viewJobsIntent);
     }
 

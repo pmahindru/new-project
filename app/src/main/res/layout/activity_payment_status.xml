@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <EditText
-        android:id="@+id/Fullname_pays"
+    <TextView
+        android:id="@+id/txtId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="295dp"
+        android:layout_marginTop="205dp"
         android:layout_marginEnd="181dp"
         android:layout_marginRight="181dp"
         android:layout_marginBottom="25dp"
         android:ems="10"
-        android:hint="Full Name"
+        android:hint="Text ID"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/Date"
+        app:layout_constraintBottom_toTopOf="@+id/txtAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
         android:autofillHints="" />
 
-    <EditText
+    <TextView
+        android:id="@+id/txtAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="181dp"
+        android:layout_marginRight="181dp"
+        android:layout_marginBottom="25dp"
+        android:ems="10"
+        android:hint="Text Amount"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtId"
+        tools:ignore="MissingConstraints,TextFields"
+        android:autofillHints="" />
+
+    <TextView
         android:id="@+id/Date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -39,15 +58,15 @@
         android:ems="10"
         android:hint="Date - YYY/MM/DD"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/Amount"
+        app:layout_constraintBottom_toTopOf="@+id/txtStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Fullname_pays"
+        app:layout_constraintTop_toBottomOf="@+id/txtAmount"
         tools:ignore="DuplicateIds,MissingConstraints,TextFields"
         android:autofillHints="" />
 
-    <EditText
-        android:id="@+id/Amount"
+    <TextView
+        android:id="@+id/txtStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -55,34 +74,16 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="181dp"
         android:layout_marginRight="181dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="35dp"
         android:ems="10"
-        android:hint="Amount"
+        android:hint="Status"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/pay_submit_payment"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Date"
         tools:ignore="MissingConstraints"
         android:autofillHints="" />
-
-    <Button
-        android:id="@+id/pay_submit_payment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginEnd="240dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="240dp"
-        android:layout_marginBottom="5dp"
-        android:ems="8"
-        android:text="Pay"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Amount"
-        tools:ignore="MissingConstraints" />
 
     <View
         android:id="@+id/horizontalline"
@@ -95,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pay_submit_payment"
+        app:layout_constraintTop_toBottomOf="@+id/txtStatus"
         tools:ignore="MissingConstraints" />
 
     <Button
