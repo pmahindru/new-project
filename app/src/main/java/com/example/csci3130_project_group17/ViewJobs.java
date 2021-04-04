@@ -122,9 +122,10 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
             defineRadius(currentLocationCoordinates);
             pullJobs();
+        }
 
         }
-    }
+
 
 
     private void intializeRecylcerView() {
@@ -332,13 +333,14 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 jobsList.clear();
                 // Store all the job posts in the jobslist arraylist as a hashmap
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
-                    if(lat!= null && longi!=null) {
-                        if(isInRange((double) lat, (double) longi)) {
+                    String employeeID = postSnapshot.child("employeeID").getValue().toString();
+                    if (lat != null && longi != null && employeeID.isEmpty()) {
+                        if (isInRange(lat, longi)) {
                             HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
-                            job.put("jobPostId",postSnapshot.getKey());
+                            job.put("jobPostId", postSnapshot.getKey());
                             jobsList.add(job);
                         }
                     }
@@ -347,7 +349,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                 //System.out.println(jobsList);
 
 
-                if(!data.getStoredPayRate().isEmpty()) {
+                if (!data.getStoredPayRate().isEmpty()) {
                     ArrayList<HashMap<String, String>> jobs = filter(pay, "pay", jobsList);
                     initializeJobPostings(jobs);
                 } else {
@@ -364,6 +366,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
             }
         });
     }
+
 
 
     private void initializeJobPostings(ArrayList<HashMap<String,String>> jobs) {

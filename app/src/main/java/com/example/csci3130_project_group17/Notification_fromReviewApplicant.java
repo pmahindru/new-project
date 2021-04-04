@@ -8,37 +8,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-//this class referenced from the https://abhiandroid.com/ui/listview
-public class Activejobs2 extends BaseAdapter {
+public class Notification_fromReviewApplicant extends BaseAdapter {
     Context context;
-    String[] arrjobtitle;
-    String[] arrjobpayrate;
-    String[] arrjolocation;
-    ArrayList<String> jobids;
+    ArrayList<String> jobname;
+    ArrayList<String> Location;
     LayoutInflater inflater;
-    Boolean isEmployer;
+
     //initializing the text-view of the job details
     TextView jobtitle;
     TextView location;
-    TextView payrate;
-    TextView viewchat;
+    Button reviewjob;
 
 
-    public Activejobs2(Context applicationContext, String[] arrjobtitle, String[] arrjobpayrate, String[] arrjolocation, ArrayList<String> jobids, Boolean isEmployer) {
+    public Notification_fromReviewApplicant(Context applicationContext, ArrayList<String> name, ArrayList<String> location) {
         this.context = applicationContext;
-        this.arrjobtitle = arrjobtitle;
-        this.arrjobpayrate = arrjobpayrate;
-        this.arrjolocation = arrjolocation;
-        this.jobids=jobids;
-        this.isEmployer = isEmployer;
+        this.jobname = name;
+        this.Location = location;
         inflater =  (LayoutInflater.from(applicationContext));
     }
 
-    //they automatically made when i create this class.
     /**
      * How many items are in the data set represented by this Adapter.
      *
@@ -46,7 +39,7 @@ public class Activejobs2 extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        return arrjobtitle.length;
+        return jobname.size();
     }
 
     /**
@@ -90,51 +83,33 @@ public class Activejobs2 extends BaseAdapter {
      * @param parent      The parent that this view will eventually be attached to
      * @return A View corresponding to the data at the specified position.
      */
+
+
     @SuppressLint({"ViewHolder", "InflateParams", "SetTextI18n"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        convertView = inflater.inflate(R.layout.notification_content, null);
+        jobtitle = convertView.findViewById(R.id.jobtitle_notification);
+        location = convertView.findViewById(R.id.location_notification);
+        String title = "<b> Job Title </b>" + jobname.get(position);
+        String loca = "<b> Location </b> " + Location.get(position);
 
-        convertView = inflater.inflate(R.layout.activejobs2,null);
-        jobtitle = convertView.findViewById(R.id.jobTitle);
-        location = convertView.findViewById(R.id.locationfromdatabase);
-        payrate = convertView.findViewById(R.id.payrate);
-        viewchat = convertView.findViewById(R.id.viewchat);
-        if (isEmployer){
-            viewchat.setText("View Applications");
-        }
-
-        //this thing is taken from the gve link which is bold the specif text
-        //https://stackoverflow.com/questions/14371092/how-to-make-a-specific-text-on-textview-bold
-        String titlePlain = arrjobtitle[position];
-        String title = "<b> Company Name </b> <br>" + arrjobtitle[position];
-        String loca = "<b> Location </b> <br>" + arrjolocation[position];
-        String Payrate = "<b> PayRate </b> <br>" + arrjobpayrate[position];
-        String id = jobids.get(position);
-
-        jobtitle.setText(Html.fromHtml(title));
-        location.setText(Html.fromHtml(loca));
-        payrate.setText(Html.fromHtml(Payrate));
-
-        viewchat.setOnClickListener(new View.OnClickListener() {
+        reviewjob = convertView.findViewById(R.id.reviewjobnotification);
+        reviewjob.setText("Job History Page");
+        reviewjob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (viewchat.getText().equals("View Applications")){
-                    Intent application = new Intent(context,ViewApplicants.class);
-                    application.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    application.putExtra("jobId", id);
-                    application.putExtra("jobTitle", titlePlain);
-                    context.startActivity(application);
-                }else{
-                    Intent chat = new Intent(context,Chat.class);
-                    chat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    chat.putExtra("jobId", id);
-                    context.startActivity(chat);
+                if (reviewjob.getText().equals("Job History Page")){
+                    Intent intent = new Intent(context,jobHistory.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
             }
         });
 
+        jobtitle.setText(Html.fromHtml(title));
+        location.setText(Html.fromHtml(loca));
+
         return convertView;
     }
-
 }
-

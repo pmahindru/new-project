@@ -40,7 +40,7 @@ public class jobHistory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_history);
-        recyclerView = findViewById(R.id.historyRecyclerView);
+        recyclerView = findViewById(R.id.notification_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         jobs = new ArrayList<>();
         Intent intent = getIntent();
