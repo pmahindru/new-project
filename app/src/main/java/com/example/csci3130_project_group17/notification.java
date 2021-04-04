@@ -240,7 +240,7 @@ public class notification extends AppCompatActivity {
         //alert square box that shows the answer
         AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
         // change the integer value into string value
-        alert_answer.setMessage("Yay you hired for this job go and check you will received the payment and this job is now closed automatically in jobHistory");
+        alert_answer.setMessage("Yay you hired for this job go and check you will received the payment and this job is now automatically in jobHistory");
         alert_answer.setPositiveButton("ok", null);
         alert_answer.create();
         alert_answer.show();

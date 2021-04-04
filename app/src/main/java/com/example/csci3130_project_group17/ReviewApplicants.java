@@ -47,7 +47,7 @@ public class ReviewApplicants extends AppCompatActivity {
     SharedPreferences data_notification_revviewapplicant;
     String jobID_notification_revviewapplicant = null;
     String currentuserID_notification_revviewapplicant = null;
-
+    String userid;
 
 
     @Override
@@ -63,7 +63,8 @@ public class ReviewApplicants extends AppCompatActivity {
         data_notification_revviewapplicant = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
         appData_notification_revviewapplicant = new Notification_ReviewApplicant_To_Employee(data_notification_revviewapplicant);
 
-
+        Intent data = getIntent();
+        userid = data.getStringExtra("userId");
         //button function take place
         OnClick();
         initializeDatabase();
@@ -95,8 +96,7 @@ public class ReviewApplicants extends AppCompatActivity {
     }
 
     private void closedJobPosting() {
-        Intent data = getIntent();
-        String userid = data.getStringExtra("userId");
+
         Intent data2 = getIntent();
         String jobid = data2.getStringExtra("jobId");
         System.out.println(userid+"-------------------------------------------------"+jobid);
@@ -111,7 +111,7 @@ public class ReviewApplicants extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
-                                    jobdetails.child(current_jobid).child("state").setValue("closed");
+                                    jobdetails.child(current_jobid).child("employeeID").setValue(userid);
                                     jobID_notification_revviewapplicant = snapshot.getKey();
                                     appData_notification_revviewapplicant.storedjobID3(jobID_notification_revviewapplicant);
                                 }
