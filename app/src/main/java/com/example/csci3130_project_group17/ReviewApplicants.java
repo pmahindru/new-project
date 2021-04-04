@@ -22,8 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -114,6 +112,7 @@ public class ReviewApplicants extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
                                     jobdetails.child(current_jobid).child("employeeID").setValue(userid);
+                                    jobdetails.child(current_jobid).child("state").setValue("closed");
                                     jobID_notification_revviewapplicant = snapshot.getKey();
                                     appData_notification_revviewapplicant.storedjobID3(jobID_notification_revviewapplicant);
                                 }
@@ -152,8 +151,10 @@ public class ReviewApplicants extends AppCompatActivity {
                         String resume_name = "<b> Resume: </b>" + snapshot.child("resume").child("name").getValue();
                         String resume_url = (String) snapshot.child("resume").child("url").getValue();
                         getTheFullAddressOfTheUser((double) snapshot.child("location").child("latitude").getValue(), (double) snapshot.child("location").child("longitude").getValue());
+
                         currentuserID_notification_revviewapplicant = (String) snapshot.child("currentUserID").getValue();
                         appData_notification_revviewapplicant.storedjobID2(currentuserID_notification_revviewapplicant);
+
                         name.setText(Html.fromHtml(fullanme));
                         email.setText(Html.fromHtml(email1));
                         number.setText(Html.fromHtml(phonenumber));

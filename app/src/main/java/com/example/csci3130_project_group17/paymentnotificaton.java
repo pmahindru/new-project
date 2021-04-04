@@ -26,12 +26,16 @@ public class paymentnotificaton extends AppCompatActivity {
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 
-//        if(isEmployer){
-//
-//        }
-//        else {
-//
-//        }
+        if(isEmployer){
+            paytoemployee();
+        }
+        else {
+
+        }
+    }
+
+    private void paytoemployee() {
+
     }
 
 }

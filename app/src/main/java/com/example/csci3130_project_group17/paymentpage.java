@@ -73,9 +73,6 @@ public class paymentpage extends AppCompatActivity {
                 }
             });
         }
-        else {
-            setContentView(R.layout.paymentemployee);
-        }
 
         Onclick();
 

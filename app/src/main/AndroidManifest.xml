@@ -51,6 +51,8 @@
         <activity android:name=".DashboardEmployee" android:label="Dashboard Employee"/>
         <activity android:name=".DashboardEmployer" android:label="Dashboard Employer"/>
         <activity android:name=".paymentpage" android:label="Payment Page"/>
+        <activity android:name=".PaymentStatus" android:label="Payment Status"/>
+        <activity android:name=".paymentnotificaton" android:label="Payment Notification"/>
         <activity android:name=".jobHistory" android:label="Job History"/>
         <activity android:name=".Chat" android:label="Chat"/>
         <activity android:name=".ActiveJobs" android:label="@string/active_jobs"/>

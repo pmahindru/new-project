@@ -22,7 +22,6 @@ public class PaymentStatus  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_status);
 
-
         txtId = findViewById(R.id.txtId);
         txtAmount = findViewById(R.id.txtAmount);
         txtStatus = findViewById(R.id.txtStatus);
