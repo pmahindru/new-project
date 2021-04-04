@@ -22,7 +22,7 @@
 
     <Button
         android:id="@+id/employeePaymentsButton"
-        android:layout_width="113dp"
+        android:layout_width="115dp"
         android:layout_height="109dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"

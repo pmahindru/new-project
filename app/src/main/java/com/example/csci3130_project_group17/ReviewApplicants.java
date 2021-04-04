@@ -42,7 +42,7 @@ public class ReviewApplicants extends AppCompatActivity {
     TextView loca;
     TextView resume;
 
-    //
+    //geting job id and user id of that job and closed the status and then notify that user and after employer need to pay
     Notification_ReviewApplicant_To_Employee appData_notification_revviewapplicant;
     SharedPreferences data_notification_revviewapplicant;
     String jobID_notification_revviewapplicant = null;
@@ -86,6 +86,8 @@ public class ReviewApplicants extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 closedJobPosting();
+                Intent intent = new Intent(ReviewApplicants.this,paymentpage.class);
+                startActivity(intent);
             }
         });
     }

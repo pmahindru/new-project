@@ -56,8 +56,20 @@ public class DashboardEmployer extends AppCompatActivity {
                 swtichtonotification();
             }
         });
+
+        Button payment = findViewById(R.id.employerPaymentsButton);
+        payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swtichtopaymentpage();
+            }
+        });
     }
 
+    private void swtichtopaymentpage() {
+        Intent viewJobsIntent = new Intent(this, paymentpage.class);
+        startActivity(viewJobsIntent);
+    }
     public void switchToCreateJob() {
         Intent createJobIntent = new Intent(this, JobPosting.class);
         startActivity(createJobIntent);

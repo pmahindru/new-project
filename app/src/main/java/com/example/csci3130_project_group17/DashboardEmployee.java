@@ -26,6 +26,7 @@ public class DashboardEmployee extends AppCompatActivity {
         Button activeJobs = (Button) findViewById(R.id.activeJobsButton);
         Button Logoutuser = findViewById(R.id.logoutButton2);
         Button notification = findViewById(R.id.aNotification);
+        Button payment = findViewById(R.id.employeePaymentsButton);
 
         viewJobs.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -58,6 +59,18 @@ public class DashboardEmployee extends AppCompatActivity {
                 swtichtonotification();
             }
         });
+
+        payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swtichtopaymentpage();
+            }
+        });
+    }
+
+    private void swtichtopaymentpage() {
+        Intent viewJobsIntent = new Intent(this, paymentpage.class);
+        startActivity(viewJobsIntent);
     }
 
     public void switchToViewJobs() {

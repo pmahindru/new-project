@@ -42,8 +42,8 @@ public class paymentpage extends AppCompatActivity {
 
         //initiating the Firebase
         initializeDatabase();
-        Onclick();
         setupforlayout();
+        Onclick();
 
     }
 
@@ -55,21 +55,21 @@ public class paymentpage extends AppCompatActivity {
 
     //on click for the homepage
     public void Onclick() {
-        // take value of button
-        Button square_button2 = (Button)findViewById(R.id.switch2home);
-        square_button2.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                swtich2home();
-            }
-        });
+//        // take value of button
+//        Button square_button2 = (Button)findViewById(R.id.switch2home);
+//        square_button2.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                swtich2home();
+//            }
+//        });
     }
-
-    public void swtich2home() {
-        Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
-        startActivity(dashboardEmployee);
-    }
+//
+//    public void swtich2home() {
+//        Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
+//        startActivity(dashboardEmployee);
+//    }
 
 
     private void setupforlayout() {

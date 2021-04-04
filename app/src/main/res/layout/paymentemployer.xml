@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/Firstname_pays"
+        android:id="@+id/Fullname_pays"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toTopOf="@+id/Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Firstname_pays"
+        app:layout_constraintTop_toBottomOf="@+id/Fullname_pays"
         tools:ignore="MissingConstraints,TextFields"
         android:autofillHints="" />
 
@@ -57,7 +57,7 @@
         android:layout_marginRight="181dp"
         android:layout_marginBottom="25dp"
         android:ems="10"
-        android:hint="Date"
+        android:hint="Date - YYY/MM/DD"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/Amount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,8 +78,8 @@
         android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="Amount"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/submit_payment"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/pay_submit_payment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Date"
@@ -87,7 +87,7 @@
         android:autofillHints="" />
 
     <Button
-        android:id="@+id/submit_payment"
+        android:id="@+id/pay_submit_payment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
@@ -97,7 +97,7 @@
         android:layout_marginRight="240dp"
         android:layout_marginBottom="5dp"
         android:ems="8"
-        android:text="@string/Hire"
+        android:text="Pay"
         app:layout_constraintBottom_toTopOf="@+id/horizontalline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submit_payment"
+        app:layout_constraintTop_toBottomOf="@+id/pay_submit_payment"
         tools:ignore="MissingConstraints" />
 
     <Button
