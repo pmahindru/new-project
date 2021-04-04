@@ -25,6 +25,7 @@ public class LogIn extends AppCompatActivity{
     FirebaseDatabase database =  null;
     DatabaseReference logintable = null;
     final Boolean[] errorFlag = {false};
+
     StoredData appData;
     SharedPreferences data;
     String uID = null;

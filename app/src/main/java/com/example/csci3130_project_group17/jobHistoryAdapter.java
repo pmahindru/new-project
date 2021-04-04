@@ -151,7 +151,7 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
     }
 
 
-    public class HistoryViewHolder extends RecyclerView.ViewHolder {
+    public static class HistoryViewHolder extends RecyclerView.ViewHolder {
         TextView title,name, state, rate;
         Button closeBttn, reviewBttn;
         public HistoryViewHolder(@NonNull View itemView) {

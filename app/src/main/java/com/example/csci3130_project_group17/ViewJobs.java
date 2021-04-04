@@ -208,8 +208,9 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Double lat = (Double) postSnapshot.child("jobLocationCoordinates").child("latitude").getValue();
                     Double longi = (Double) postSnapshot.child("jobLocationCoordinates").child("longitude").getValue();
-                    if(lat!= null && longi!=null) {
-                        if(isInRange((double) lat, (double) longi)) {
+                    String employeeID = postSnapshot.child("employeeID").getValue().toString();
+                    if(lat!= null && longi!=null && employeeID.isEmpty()) {
+                        if(isInRange(lat, longi)) {
                             HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
                             job.put("jobPostId",postSnapshot.getKey());
                             jobsList.add(job);
@@ -217,6 +218,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                     }
                 }
                 //all methods that require anything to do with the data retrieved will be called here
+                System.out.println(jobsList);
                 initializeJobPostings();
             }
 
@@ -280,7 +282,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback {
                 .fillColor(shadeColor)
                 .strokeColor(strokeColor)
                 .strokeWidth(8);
-//        mCircle = mMap.addCircle(circleOptions);
+           mCircle = mMap.addCircle(circleOptions);
     }
 
     public void locateUser() {
