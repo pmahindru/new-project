@@ -50,6 +50,13 @@ public class DashboardEmployee extends AppCompatActivity {
             }
         });
 
+        Button profileBttn = findViewById(R.id.employeeProfileButton);
+        profileBttn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                switchToProfile();
+            };
+        });
+
     }
 
     public void switchToViewJobs() {
@@ -73,5 +80,10 @@ public class DashboardEmployee extends AppCompatActivity {
         Intent switchToLogin = new Intent(this, LogIn.class);
         startActivity(switchToLogin);
         finish();
+    }
+
+    public void switchToProfile(){
+        Intent ProfileIntent = new Intent(this, Profile.class);
+        startActivity(ProfileIntent);
     }
 }

@@ -10,11 +10,13 @@
         android:id="@+id/employerProfileButton"
         android:layout_width="113dp"
         android:layout_height="109dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginLeft="62dp"
         android:layout_marginTop="36dp"
         android:text="Profile"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintTop_toBottomOf="@+id/activeEmployeesButton"
-        tools:layout_editor_absoluteX="62dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activeEmployeesButton" />
 
     <Button
         android:id="@+id/employerPaymentsButton"
