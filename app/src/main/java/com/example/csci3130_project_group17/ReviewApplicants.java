@@ -88,6 +88,14 @@ public class ReviewApplicants extends AppCompatActivity {
             }
         });
 
+        Button profile = (Button) findViewById(R.id.employeeProfileApplicants) ;
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToProfile(userid);
+            }
+        });
+
 
         Button hire = (Button) findViewById(R.id.Hire_review_application);
         hire.setOnClickListener(new View.OnClickListener() {
@@ -224,5 +232,11 @@ public class ReviewApplicants extends AppCompatActivity {
         database =  FirebaseDatabase.getInstance();
         jobapplication = database.getReference("application");
         jobdetails = database.getReference("JobInformation");
+    }
+
+    public void switchToProfile(String uID){
+        Intent ProfileIntent = new Intent(this, Profile.class);
+        ProfileIntent.putExtra("profileUserID", uID);
+        startActivity(ProfileIntent);
     }
 }

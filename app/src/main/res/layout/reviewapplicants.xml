@@ -152,4 +152,20 @@
         app:layout_constraintTop_toBottomOf="@+id/horizontalline"
         tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/employeeProfileApplicants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginLeft="53dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="93dp"
+        android:layout_marginRight="93dp"
+        android:layout_marginBottom="40dp"
+        android:text="Profile"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Hire_review_application"
+        app:layout_constraintTop_toBottomOf="@+id/Resume_employee" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
