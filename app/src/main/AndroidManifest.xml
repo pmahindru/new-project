@@ -59,6 +59,7 @@
         <activity android:name=".JobApplication" android:label="@string/job_application"/>
         <activity android:name=".ViewApplicants" android:label="@string/view_applicant"/>
         <activity android:name=".LeaveReview" android:label="@string/review_applicant"/>
+        <activity android:name=".Profile" />
 
     </application>
 

@@ -54,6 +54,7 @@ public class RecycleViewAdaptor extends RecyclerView.Adapter<RecycleViewAdaptor.
                     // redirect to job application page
                     Intent sendIntent = new Intent(v.getContext(), JobDetail.class);
                     sendIntent.putExtra("jobPost", jobs.get(position));
+                    sendIntent.putExtra("jobEmployerID", jobs.get(position).get("jobEmployerID"));
                     
                     v.getContext().startActivity(sendIntent);
 

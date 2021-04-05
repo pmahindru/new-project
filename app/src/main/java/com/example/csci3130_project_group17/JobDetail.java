@@ -48,6 +48,8 @@ public class JobDetail extends AppCompatActivity {
     Button applybutton;
     Button homepage;
 
+    String employerProfileId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class JobDetail extends AppCompatActivity {
         Intent intent = getIntent();
         jobPost = (HashMap<String, String>) intent.getSerializableExtra("jobPost");
         jobidfromnotification = intent.getStringExtra("jobID2");
+        employerProfileId = intent.getStringExtra("jobEmployerID");
         initializeDatabase();
         System.out.println(jobPost+"---------------------------------------");
         System.out.println(jobidfromnotification+"---------------------------------------");
@@ -78,7 +81,9 @@ public class JobDetail extends AppCompatActivity {
         employer_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Megh Gandhi is not complete with the profile screen so this button is not working then. Sorry
+                System.out.println("emp id: " +employerProfileId);
+                switchToProfile(employerProfileId);
+
             }
         });
 
@@ -202,6 +207,12 @@ public class JobDetail extends AppCompatActivity {
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
         jobdetails = database.getReference("JobInformation");
+    }
+
+    public void switchToProfile(String uID){
+        Intent ProfileIntent = new Intent(this, Profile.class);
+        ProfileIntent.putExtra("profileUserID", uID);
+        startActivity(ProfileIntent);
     }
 
 

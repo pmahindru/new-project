@@ -132,7 +132,11 @@ public class jobHistoryAdapter extends RecyclerView.Adapter{
     }
 
     private void closeBttnOnclick(HistoryViewHolder historyViewHolder, Job job) {
-        historyViewHolder.closeBttn.setOnClickListener(view -> jobInformation.child(job.getId()).child("state").setValue("closed"));
+        historyViewHolder.closeBttn.setOnClickListener(view -> {
+            jobInformation.child(job.getId()).child("state").setValue("closed");
+            jobsList.remove(job);
+            notifyDataSetChanged();
+        });
     }
 
     private void reviewBttnOnclick(HistoryViewHolder historyViewHolder, Job job) {
