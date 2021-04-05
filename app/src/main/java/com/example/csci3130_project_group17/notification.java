@@ -146,7 +146,7 @@ public class notification extends AppCompatActivity {
         ArrayList<String> name = new ArrayList<>();
         ArrayList<String> location = new ArrayList<>();
 
-        if (application_jobapplication != null){
+        if (!application_jobapplication.equals("")){
             jobapplication.child(application_jobapplication).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

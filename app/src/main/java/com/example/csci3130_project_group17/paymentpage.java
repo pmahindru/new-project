@@ -80,8 +80,6 @@ public class paymentpage extends AppCompatActivity {
     }
 
     private void gettingnameandamountfromdatabase(String jobid, String userid) {
-        System.out.println(jobid+ "-------------------------------------------------------------jobid---------------------------------------------------");
-        System.out.println(userid+ "-------------------------------------------------------------userid---------------------------------------------------");
         jobdeatials.child(jobid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
