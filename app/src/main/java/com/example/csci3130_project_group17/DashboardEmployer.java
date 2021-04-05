@@ -1,11 +1,11 @@
 package com.example.csci3130_project_group17;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DashboardEmployer extends AppCompatActivity {
 
@@ -49,14 +49,35 @@ public class DashboardEmployer extends AppCompatActivity {
             };
         });
 
+        Button notification = findViewById(R.id.employeraNotification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swtichtonotification();
+            }
+        });
+
         Button profileBttn = findViewById(R.id.employerProfileButton);
         profileBttn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 switchToProfile();
             };
         });
+
+        Button payment = findViewById(R.id.employerPaymentsButton);
+        payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swtichtopaymentpage();
+            }
+        });
     }
 
+
+    private void swtichtopaymentpage() {
+        Intent viewJobsIntent = new Intent(this, paymentnotificaton.class);
+        startActivity(viewJobsIntent);
+    }
     public void switchToCreateJob() {
         Intent createJobIntent = new Intent(this, JobPosting.class);
         startActivity(createJobIntent);
@@ -64,7 +85,6 @@ public class DashboardEmployer extends AppCompatActivity {
 
     public void switchToHistory(){
         Intent HistoryIntent = new Intent(this, jobHistory.class);
-        HistoryIntent.putExtra("userType", "EMPLOYER");
         startActivity(HistoryIntent);
     }
 
@@ -77,6 +97,11 @@ public class DashboardEmployer extends AppCompatActivity {
     public void switchToJobApplications(){
         Intent HistoryIntent = new Intent(this, ActiveJobs.class);
         startActivity(HistoryIntent);
+    }
+
+    public void swtichtonotification(){
+        Intent switchTonotification = new Intent(this, notification.class);
+        startActivity(switchTonotification);
     }
 
     public void switchToProfile(){

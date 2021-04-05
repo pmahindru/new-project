@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class jobHistory extends AppCompatActivity {
     DatabaseReference jobInformation;
@@ -34,11 +35,12 @@ public class jobHistory extends AppCompatActivity {
     String userIDSearchTerm = "employeeID";
     SharedPreferences preferences;
     StoredData data;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_history);
-        recyclerView = findViewById(R.id.historyRecyclerView);
+        recyclerView = findViewById(R.id.notification_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         jobs = new ArrayList<>();
         Intent intent = getIntent();
@@ -48,6 +50,7 @@ public class jobHistory extends AppCompatActivity {
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
         uID = data.getStoredUserID();
+        context = getApplicationContext();
         checkIfEmployer();
         System.out.println(userIDSearchTerm);
 
@@ -103,10 +106,10 @@ public class jobHistory extends AppCompatActivity {
             //get list of jobs
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String id = dataSnapshot.getKey().toString();
-                        if (((dataSnapshot.child(userIDSearchTerm).getValue()).equals(uID)) && ((dataSnapshot.child("state").getValue()).equals(state))) {
+                    String id = dataSnapshot.getKey();
+                        if (((Objects.requireNonNull(dataSnapshot.child(userIDSearchTerm).getValue())).equals(uID)) && ((Objects.requireNonNull(dataSnapshot.child("state").getValue())).equals(state))) {
                             Job job = dataSnapshot.getValue(Job.class);
-                            job.setJobLocationCoordinates(dataSnapshot.child("jobLocationCoordinates").getValue(location.class));
+                            Objects.requireNonNull(job).setJobLocationCoordinates(dataSnapshot.child("jobLocationCoordinates").getValue(location.class));
                             job.setId(id);
                             jobs.add(job);
                         }
@@ -136,7 +139,7 @@ public class jobHistory extends AppCompatActivity {
             noJobsMessage.setVisibility(View.VISIBLE);
         } else {
             noJobsMessage.setVisibility(View.INVISIBLE);
-            adapter = new jobHistoryAdapter(jobs);
+            adapter = new jobHistoryAdapter(jobs, context, uID);
             recyclerView.setAdapter(adapter);
         }
     }

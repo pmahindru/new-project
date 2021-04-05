@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.csci3130_project_group17">
 
-    <!--upload a resume in pdf in the database i took a look from here-->
-    <!--https://www.youtube.com/watch?v=lY9zSr6cxko-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <!-- upload a resume in pdf in the database i took a look from here -->
+    <!-- https://www.youtube.com/watch?v=lY9zSr6cxko -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
         android:allowBackup="true"
@@ -22,7 +21,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CSCI3130ProjectGroup17">
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,9 +31,9 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key" /> <!-- All page are here -->
 
-        <activity android:name=".LogIn">
+        <activity android:name=".LogIn" android:label="Login Up">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,26 +41,24 @@
             </intent-filter>
         </activity>
 
-
-
-        <activity android:name=".Chat">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ViewJobs" />
-        <activity android:name=".DashboardEmployee" />
-        <activity android:name=".DashboardEmployer" />
-        <activity android:name=".jobHistory" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".JobPosting" />
-        <activity android:name=".AddImage" />
-        <activity android:name=".ActiveJobs" />
-        <activity android:name=".JobApplication" />
-        <activity android:name=".ViewApplicants" />
+        <activity android:name=".Preference"/>
+        <activity android:name=".SignUp" android:label="Sign Up"/>
+        <activity android:name=".JobPosting" android:label="Job Posting"/>
+        <activity android:name=".ReviewApplicants" android:label="Review Applicants"/>
+        <activity android:name=".JobDetail" android:label="Job Description"/>
+        <activity android:name=".notification" android:label="@string/notification"/>
+        <activity android:name=".ViewJobs" android:label="View Jobs"/>
+        <activity android:name=".DashboardEmployee" android:label="Dashboard Employee"/>
+        <activity android:name=".DashboardEmployer" android:label="Dashboard Employer"/>
+        <activity android:name=".paymentpage" android:label="Payment Page"/>
+        <activity android:name=".PaymentStatus" android:label="Payment Status"/>
+        <activity android:name=".paymentnotificaton" android:label="Payment Notification"/>
+        <activity android:name=".jobHistory" android:label="Job History"/>
+        <activity android:name=".Chat" android:label="Chat"/>
+        <activity android:name=".ActiveJobs" android:label="@string/active_jobs"/>
+        <activity android:name=".JobApplication" android:label="@string/job_application"/>
+        <activity android:name=".ViewApplicants" android:label="@string/view_applicant"/>
+        <activity android:name=".LeaveReview" android:label="@string/review_applicant"/>
         <activity android:name=".Profile" />
 
     </application>

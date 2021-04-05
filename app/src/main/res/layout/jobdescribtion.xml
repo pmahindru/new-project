@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/jobDetail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_jobdescription"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/type_jobdescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="15dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/jobtype"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/Location_jobdescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_jobdescription"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/Location_jobdescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="15dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/location"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/payrate_jobdescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/type_jobdescription"
+        tools:ignore="MissingConstraints,TextFields" />
+
+    <TextView
+        android:id="@+id/payrate_jobdescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="15dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/payrate"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/description_jobdescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Location_jobdescription"
+        tools:ignore="DuplicateIds,MissingConstraints,TextFields" />
+
+    <TextView
+        android:id="@+id/description_jobdescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="21dp"
+        android:layout_marginBottom="15dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/description"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/employerprofilebutton_jobdescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payrate_jobdescription"
+        tools:ignore="DuplicateIds,MissingConstraints" />
+
+    <Button
+        android:id="@+id/employerprofilebutton_jobdescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginEnd="240dp"
+        android:layout_marginRight="240dp"
+        android:layout_marginBottom="20dp"
+        android:ems="8"
+        android:text="@string/employer_profile"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_jobdescription"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/apply_jobdescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="240dp"
+        android:ems="8"
+        android:text="@string/apply"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_jobdescription"
+        tools:ignore="MissingConstraints" />
+
+        <!--this is taken reference from the given link
+    https://www.geeksforgeeks.org/how-to-draw-horizontal-and-vertical-lines-in-an-android-app-using-xml/    -->
+    <View
+        android:id="@+id/horizontalline"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toTopOf="@+id/switch2home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apply_jobdescription"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/switch2home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginLeft="140dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginRight="150dp"
+        android:layout_marginBottom="2dp"
+        android:ems="8"
+        android:text="@string/home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalline"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

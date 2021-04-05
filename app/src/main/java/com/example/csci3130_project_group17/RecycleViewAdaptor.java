@@ -52,8 +52,8 @@ public class RecycleViewAdaptor extends RecyclerView.Adapter<RecycleViewAdaptor.
                 @Override
                 public void onClick(View v) {
                     // redirect to job application page
-                    Intent sendIntent = new Intent(v.getContext(), JobApplication.class);
-                    sendIntent.putExtra("jobPost", (Serializable) jobs.get(position));
+                    Intent sendIntent = new Intent(v.getContext(), JobDetail.class);
+                    sendIntent.putExtra("jobPost", jobs.get(position));
                     
                     v.getContext().startActivity(sendIntent);
 
@@ -81,7 +81,7 @@ public class RecycleViewAdaptor extends RecyclerView.Adapter<RecycleViewAdaptor.
         return count;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView jobTitle;
         TextView location;

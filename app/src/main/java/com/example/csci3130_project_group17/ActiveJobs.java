@@ -8,16 +8,18 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,13 +77,6 @@ public class ActiveJobs extends AppCompatActivity{
         } else {
             elementsfromdatabase();
         }
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
     }
 
     //on click for the homepage
@@ -114,8 +109,9 @@ public class ActiveJobs extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1: snapshot.getChildren()){
                     String employerID = snapshot1.child("employerID").getValue().toString();
+                    String employeeID = snapshot1.child("employeeID").getValue().toString();
                     String state = snapshot1.child("state").getValue().toString();
-                    if ((state.equals("open")) && (employerID.equals(uID))) {
+                    if ((state.equals("open")) && (employerID.equals(uID)) && employeeID.isEmpty()) {
                         String jobID = snapshot1.getKey();
                         jobids.add(jobID);
                         String jobTitle = snapshot1.child("jobTitle").getValue().toString();
@@ -139,7 +135,7 @@ public class ActiveJobs extends AppCompatActivity{
                 //adapter is taken from the give link
                 //just had a reference
                 //https://abhiandroid.com/ui/listview
-                Activejobs2 activejobs2 = new Activejobs2(appContext,arrjobtitle,arrjobpayrate,arrjolocation, jobids ,isEmployer);
+                Activejobs2 activejobs2 = new Activejobs2(appContext,arrjobtitle,arrjobpayrate,arrjolocation, jobids ,isEmployer, uID,jobapplication);
                 listView.setAdapter(activejobs2);
             }
 
@@ -187,7 +183,7 @@ public class ActiveJobs extends AppCompatActivity{
                 //adapter is taken from the give link
                 //just had a reference
                 //https://abhiandroid.com/ui/listview
-                Activejobs2 activejobs2 = new Activejobs2(ActiveJobs.this, arrjobtitle,arrjobpayrate,arrjolocation, jobids,isEmployer);
+                Activejobs2 activejobs2 = new Activejobs2(ActiveJobs.this, arrjobtitle,arrjobpayrate,arrjolocation, jobids,isEmployer,uID, jobapplication);
                 listView.setAdapter(activejobs2);
 
             }

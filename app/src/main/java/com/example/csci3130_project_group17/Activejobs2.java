@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 
 //this class referenced from the https://abhiandroid.com/ui/listview
@@ -21,6 +23,7 @@ public class Activejobs2 extends BaseAdapter {
     ArrayList<String> jobids;
     LayoutInflater inflater;
     Boolean isEmployer;
+    String currentuserid;
     //initializing the text-view of the job details
     TextView jobtitle;
     TextView location;
@@ -28,13 +31,14 @@ public class Activejobs2 extends BaseAdapter {
     TextView viewchat;
 
 
-    public Activejobs2(Context applicationContext, String[] arrjobtitle, String[] arrjobpayrate, String[] arrjolocation, ArrayList<String> jobids, Boolean isEmployer) {
+    public Activejobs2(Context applicationContext, String[] arrjobtitle, String[] arrjobpayrate, String[] arrjolocation, ArrayList<String> jobids, Boolean isEmployer, String uId, DatabaseReference jobapplication) {
         this.context = applicationContext;
         this.arrjobtitle = arrjobtitle;
         this.arrjobpayrate = arrjobpayrate;
         this.arrjolocation = arrjolocation;
         this.jobids=jobids;
         this.isEmployer = isEmployer;
+        this.currentuserid = uId;
         inflater =  (LayoutInflater.from(applicationContext));
     }
 
@@ -93,7 +97,6 @@ public class Activejobs2 extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams", "SetTextI18n"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         convertView = inflater.inflate(R.layout.activejobs2,null);
         jobtitle = convertView.findViewById(R.id.jobTitle);
         location = convertView.findViewById(R.id.locationfromdatabase);
@@ -104,14 +107,15 @@ public class Activejobs2 extends BaseAdapter {
         }
 
 
-
         //this thing is taken from the gve link which is bold the specif text
         //https://stackoverflow.com/questions/14371092/how-to-make-a-specific-text-on-textview-bold
+
         String titlePlain = arrjobtitle[position];
-        String title = "<b> Company Name </b> <br>" + arrjobtitle[position];
+        String id = jobids.get(position);
+        String title = "<b> Company Name </b> <br>" + titlePlain;
         String loca = "<b> Location </b> <br>" + arrjolocation[position];
         String Payrate = "<b> PayRate </b> <br>" + arrjobpayrate[position];
-        String id = jobids.get(position);
+
 
         jobtitle.setText(Html.fromHtml(title));
         location.setText(Html.fromHtml(loca));
@@ -129,6 +133,7 @@ public class Activejobs2 extends BaseAdapter {
                 }else{
                     Intent chat = new Intent(context,Chat.class);
                     chat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    chat.putExtra("jobId", id);
                     context.startActivity(chat);
                 }
             }

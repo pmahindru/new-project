@@ -1,49 +1,28 @@
 package com.example.csci3130_project_group17;
 
 public class Review {
-    public String comment;
-    public String jobID;
-    public String revieweeID;
-    public String reviewerID;
-    public String reviewerName;
-    public int rating;
 
-    public Review() {
-    }
+    private String reviewerID;
+    private String revieweeID;
+    private String reviewerName;
+    private String jobID;
+    private int rating;
+    private String comment;
 
-    public Review(String comment, String jobID, String revieweeID, String reviewerID, String reviewerName, int rating) {
-        this.comment = comment;
-        this.jobID = jobID;
-        this.revieweeID = revieweeID;
+    //constructors
+    public Review(){}
+
+
+    public Review(String reviewerID, String reviewerName, String jobID, String revieweeID, int rating, String comment) {
         this.reviewerID = reviewerID;
         this.reviewerName = reviewerName;
+        this.revieweeID = revieweeID;
+        this.jobID = jobID;
         this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public String getJobID() {
-        return jobID;
-    }
-
-    public void setJobID(String jobID) {
-        this.jobID = jobID;
-    }
-
-    public String getRevieweeID() {
-        return revieweeID;
-    }
-
-    public void setRevieweeID(String revieweeID) {
-        this.revieweeID = revieweeID;
-    }
-
+    //getters and setters
     public String getReviewerID() {
         return reviewerID;
     }
@@ -60,6 +39,22 @@ public class Review {
         this.reviewerName = reviewerName;
     }
 
+    public String getRevieweeID() {
+        return revieweeID;
+    }
+
+    public void setRevieweeID(String revieweeID) {
+        this.revieweeID = revieweeID;
+    }
+
+    public String getJobID() {
+        return jobID;
+    }
+
+    public void setJobID(String jobID) {
+        this.jobID = jobID;
+    }
+
     public int getRating() {
         return rating;
     }
@@ -67,4 +62,31 @@ public class Review {
     public void setRating(int rating) {
         this.rating = rating;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public boolean CheckRatingValueIsValid(){
+        if(this.rating >0 && this.rating <= 5 ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean CommentLeft(){
+        if (this.comment==null){
+            return false;
+        } else{
+            return true;
+        }
+    }
+
+
+
 }

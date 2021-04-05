@@ -8,25 +8,22 @@
 
     <Button
         android:id="@+id/viewJobsButton"
-        android:layout_width="113dp"
+        android:layout_width="127sp"
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginTop="35dp"
         android:text="View Jobs"
-        app:layout_constraintEnd_toStartOf="@+id/employeePaymentsButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <Button
         android:id="@+id/employeePaymentsButton"
-        android:layout_width="113dp"
+        android:layout_width="127sp"
         android:layout_height="109dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginLeft="37dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:text="Payments"
@@ -37,21 +34,18 @@
 
     <Button
         android:id="@+id/activeJobsButton"
-        android:layout_width="113dp"
+        android:layout_width="127sp"
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginTop="21dp"
         android:text="Active Jobs"
-        app:layout_constraintEnd_toStartOf="@+id/employeehistoryButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewJobsButton" />
 
     <Button
         android:id="@+id/employeeProfileButton"
-        android:layout_width="113dp"
+        android:layout_width="127sp"
         android:layout_height="109dp"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
@@ -65,12 +59,25 @@
         app:layout_constraintTop_toBottomOf="@+id/viewJobsButton" />
 
     <Button
-        android:id="@+id/employeehistoryButton"
-        android:layout_width="113dp"
+        android:id="@+id/aNotification"
+        android:layout_width="127sp"
         android:layout_height="109dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:text="Notification"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employeehistoryButton"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/employeehistoryButton"
+        android:layout_width="127sp"
+        android:layout_height="109dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginLeft="37dp"
+        android:layout_marginTop="21dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:text="History"
@@ -108,7 +115,7 @@
         android:id="@+id/view3"
         android:layout_width="600dp"
         android:layout_height="1dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
