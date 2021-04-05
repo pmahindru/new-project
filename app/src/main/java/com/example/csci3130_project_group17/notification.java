@@ -121,12 +121,7 @@ public class notification extends AppCompatActivity {
                 else{
                     onclickbuttonjobnotification(jobID,userIDs,isEmployer);
                 }
-
-
             }
-
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

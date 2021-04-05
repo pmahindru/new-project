@@ -66,6 +66,7 @@ public class Chat extends AppCompatActivity {
     String userId;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,11 +174,8 @@ public class Chat extends AppCompatActivity {
 
     //save the chat in the database
     public void SaveMessageInTheDatabase(ArrayList<String>chatwith_) {
-
         sendButton = findViewById(R.id.sendButton);
         messageArea = findViewById(R.id.messageArea);
-
-
         String Chatwith_Full_Name_User = chatwith_.get(0) + "-" + chatwith_.get(1);
 
         //checking for the current full name
@@ -205,21 +203,19 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    //employee Chat With Employer
-    private void employeeChatWithEmployer(String curr_username, String chatwith_Full_Name_User) {
+    //employer Chat With Employee
+    private void employerChatWithEmployee(String curr_username, String chatwith_Full_Name_User) {
         currentmessage2 = currentmessage.child(curr_username + "_" + chatwith_Full_Name_User);
         currentmessage = currentmessage.child(chatwith_Full_Name_User + "_" + curr_username);
-        System.out.println(currentmessage + " --------------------------------------- " + currentmessage2);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageText = messageArea.getText().toString();
+                String messageText =  messageArea.getText().toString();
 
                 if (!messageText.equals("")) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", messageText);
                     map.put("user", curr_username);
-                    System.out.println(map);
                     currentmessage.push().setValue(map);
                     currentmessage2.push().setValue(map);
                     messageArea.setText("");
@@ -283,14 +279,14 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    //employer Chat With Employee
-    private void employerChatWithEmployee(String curr_username, String chatwith_Full_Name_User) {
+    //employee Chat With Employer
+    private void employeeChatWithEmployer(String curr_username, String chatwith_Full_Name_User) {
         currentmessage2 = currentmessage.child(curr_username + "_" + chatwith_Full_Name_User);
         currentmessage = currentmessage.child(chatwith_Full_Name_User + "_" + curr_username);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageText =  messageArea.getText().toString();
+                String messageText = messageArea.getText().toString();
 
                 if (!messageText.equals("")) {
                     Map<String, String> map = new HashMap<String, String>();

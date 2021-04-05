@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:paddingTop="30dp"
         android:paddingBottom="10dp"
         android:text="Job History"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
@@ -43,12 +44,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toggleButtonState"
-        android:layout_marginTop="-1dp"
+        android:layout_marginTop="0dp"
         android:isScrollContainer="true"
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="vertical">
-
     </androidx.recyclerview.widget.RecyclerView>
-
-
 </RelativeLayout>
