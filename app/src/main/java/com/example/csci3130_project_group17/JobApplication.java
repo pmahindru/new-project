@@ -1,17 +1,12 @@
 package com.example.csci3130_project_group17;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -29,7 +24,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -91,10 +91,18 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
     String uID;
 
 
+    //storing current user id when they press apply button and show the notification to the employer
+    Notification_ReviewApplicant_To_Employee appData_notification_revviewapplicant;
+    SharedPreferences data_notification_revviewapplicant;
+    String appliccationkey_notification_jobapplicaton = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.jobapplication);
+
+        data_notification_revviewapplicant = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
+        appData_notification_revviewapplicant = new Notification_ReviewApplicant_To_Employee(data_notification_revviewapplicant);
 
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         data = new StoredData(preferences);
@@ -201,6 +209,9 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
         user.put("email", email);
         user.put("phone_number", phonenumber);
         user.put("location",currentLocation);
+
+        appliccationkey_notification_jobapplicaton = count;
+        appData_notification_revviewapplicant.storedjobID4(appliccationkey_notification_jobapplicaton);
 
         userstable.child(count).setValue(user);
     }

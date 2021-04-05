@@ -1,9 +1,5 @@
 package com.example.csci3130_project_group17;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +10,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +36,7 @@ public class notification extends AppCompatActivity {
     FirebaseDatabase database =  null;
     DatabaseReference userids = null;
     DatabaseReference jobdetails = null;
+    DatabaseReference jobapplication = null;
 
     ListView listView;
 
@@ -56,6 +57,12 @@ public class notification extends AppCompatActivity {
     SharedPreferences preferences4;
     Notification_ReviewApplicant_To_Employee data4;
     String currentuserID_reviewapplcaint;
+
+
+    //current application key information for the notification from the jobapplcation
+    SharedPreferences preferences5;
+    Notification_ReviewApplicant_To_Employee data5;
+    String application_jobapplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +97,7 @@ public class notification extends AppCompatActivity {
         isEmployer = data.getUserType();
 
         ArrayList<String> userIDs = new ArrayList<>();
+        ArrayList<String> employeruserIDs = new ArrayList<>();
 
         //geting all the users id from here
         userids.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,11 +109,23 @@ public class notification extends AppCompatActivity {
                         if (snapshot1.child(key).child("employee").getValue().equals(true) && snapshot1.child(key).child("employer").getValue().equals(false)){
                             userIDs.add(snapshot.getKey());
                         }
+                        else{
+                            employeruserIDs.add(snapshot.getKey());
+                        }
+
                     }
                 }
-                System.out.println(jobID + "-----------------in getusid---------------------------------------" );
-                onclickbuttonjobnotification(jobID,userIDs,isEmployer);
+                if (isEmployer){
+                    employernotification();
+                }
+                else{
+                    onclickbuttonjobnotification(jobID,userIDs,isEmployer);
+                }
+
+
             }
+
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -114,6 +134,77 @@ public class notification extends AppCompatActivity {
         });
     }
 
+    //notification for the employer
+    private void employernotification() {
+        listView = findViewById(R.id.list_notification);
+        preferences5 = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
+        data5 = new Notification_ReviewApplicant_To_Employee(preferences5);
+        application_jobapplication = data5.getStoredUserID4();
+
+        //storing user id in the uID so that it is easy to get the current user and we can show them
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
+        uID = data.getStoredUserID();
+
+        System.out.println(application_jobapplication+"----------------------------------------------------------------------------");
+
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> location = new ArrayList<>();
+
+        if (application_jobapplication != null){
+            jobapplication.child(application_jobapplication).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        name.add((String) snapshot.child("firstName").getValue() + snapshot.child("lastName").getValue());
+                        location.add(getTheFullAddressOfTheUser((double) snapshot.child("location").child("latitude").getValue(), (double) snapshot.child("location").child("longitude").getValue()));
+                        String currentuserid = (String) snapshot.child("currentUserID").getValue();
+                        String jobidforthatspecificapplication =(String)  snapshot.child("jobId").getValue();
+                        Notification_from_jobapplication notification_from_jobapplication = new  Notification_from_jobapplication(getApplicationContext(), name,location,currentuserid,jobidforthatspecificapplication);
+
+                        jobdetails.child(jobidforthatspecificapplication).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    String employerid = (String) snapshot.child("employerID").getValue();
+                                    userids.child(employerid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()){
+                                                if (employerid.equals(uID)){
+                                                    listView.setAdapter(notification_from_jobapplication);
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else {
+            messageshow4();
+        }
+    }
+
+    //notification for the employee
     //this is for the notification when there is new job posting
     private void onclickbuttonjobnotification(String currrent_jobID, ArrayList<String> all_userIds, Boolean isEmployer) {
         listView = findViewById(R.id.list_notification);
@@ -246,6 +337,16 @@ public class notification extends AppCompatActivity {
         alert_answer.show();
     }
 
+    private void messageshow4() {
+        //alert square box that shows the answer
+        AlertDialog.Builder alert_answer = new AlertDialog.Builder(this);
+        // change the integer value into string value
+        alert_answer.setMessage("There is no application is submitted for this job");
+        alert_answer.setPositiveButton("ok", null);
+        alert_answer.create();
+        alert_answer.show();
+    }
+
     @SuppressLint("SetTextI18n")
     private String getTheFullAddressOfTheUser(double getLatitude, double getLongitude){
         String full_address = null;
@@ -273,6 +374,7 @@ public class notification extends AppCompatActivity {
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
         jobdetails = database.getReference("JobInformation");
+        jobapplication = database.getReference("application");
         userids = database.getReference("users");
     }
 }

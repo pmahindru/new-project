@@ -33,7 +33,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" /> <!-- All page are here -->
 
-        <activity android:name=".LogIn">
+        <activity android:name=".LogIn" android:label="Login Up">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
