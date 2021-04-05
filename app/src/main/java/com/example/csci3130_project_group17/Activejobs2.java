@@ -103,13 +103,16 @@ public class Activejobs2 extends BaseAdapter {
             viewchat.setText("View Applications");
         }
 
+
         //this thing is taken from the gve link which is bold the specif text
         //https://stackoverflow.com/questions/14371092/how-to-make-a-specific-text-on-textview-bold
+
         String titlePlain = arrjobtitle[position];
-        String title = "<b> Company Name </b> <br>" + arrjobtitle[position];
+        String id = jobids.get(position);
+        String title = "<b> Company Name </b> <br>" + titlePlain;
         String loca = "<b> Location </b> <br>" + arrjolocation[position];
         String Payrate = "<b> PayRate </b> <br>" + arrjobpayrate[position];
-        String id = jobids.get(position);
+
 
         jobtitle.setText(Html.fromHtml(title));
         location.setText(Html.fromHtml(loca));

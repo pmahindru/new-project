@@ -36,12 +36,6 @@ public class paymentpage extends AppCompatActivity {
     DatabaseReference usertable = null;
     DatabaseReference jobdeatials = null;
 
-//    //user information
-//    String uID;
-//    SharedPreferences preferences;
-//    StoredData data;
-//    Boolean isEmployer;
-
     //paypal information from lab
     private static final int PAYPAL_REQUEST_CODE = 555;
 
@@ -83,14 +77,6 @@ public class paymentpage extends AppCompatActivity {
         String userid = data2.getStringExtra("currentuserId_topay");
 
         gettingnameandamountfromdatabase(jobid,userid);
-
-//        //getting the current date from the date format copied from the given link
-//        //https://beginnersbook.com/2013/05/current-date-time-in-java/
-//        @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yy/MM/dd");
-//        Date dateobj = new Date();
-//        String date2 = df.format(dateobj);
-//        date.setText(date2);
-//        System.out.println(df.format(dateobj) + " date =---------------------------------------------------------------------------------");
     }
 
     private void gettingnameandamountfromdatabase(String jobid, String userid) {
