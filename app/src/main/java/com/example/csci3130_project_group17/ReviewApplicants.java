@@ -80,12 +80,23 @@ public class ReviewApplicants extends AppCompatActivity {
             }
         });
 
+
         Button hire = (Button) findViewById(R.id.Hire_review_application);
         hire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent data2 = getIntent();
+                String jobid = data2.getStringExtra("jobId");
+                Intent data = getIntent();
+                String currentjobhired_userid = data.getStringExtra("userId");
+
+                System.out.println("pay jobid from here to there     " + jobid +  " ------------------------ ---------------------------------------------");
+                System.out.println("pay userid from here to there    " + currentjobhired_userid +  " ------------------------ ---------------------------------------------");
+
                 closedJobPosting();
                 Intent intent = new Intent(ReviewApplicants.this,paymentpage.class);
+                intent.putExtra("currentjobId_topay",jobid);
+                intent.putExtra("currentuserId_topay",currentjobhired_userid);
                 startActivity(intent);
             }
         });
@@ -96,11 +107,8 @@ public class ReviewApplicants extends AppCompatActivity {
     }
 
     private void closedJobPosting() {
-
         Intent data2 = getIntent();
         String jobid = data2.getStringExtra("jobId");
-        System.out.println(userid+"-------------------------------------------------"+jobid);
-
         jobapplication.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -137,7 +145,6 @@ public class ReviewApplicants extends AppCompatActivity {
         String userid = data.getStringExtra("userId");
         Intent data2 = getIntent();
         String jobid = data2.getStringExtra("jobId");
-        System.out.println(userid+"-------------------------------------------------"+jobid);
 
 
         jobapplication.addListenerForSingleValueEvent(new ValueEventListener() {

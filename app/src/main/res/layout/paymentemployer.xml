@@ -37,14 +37,12 @@
         android:layout_marginRight="181dp"
         android:layout_marginBottom="25dp"
         android:ems="10"
-        android:hint="Date - YYY/MM/DD"
-        android:inputType="textPersonName"
+        android:hint="Date"
         app:layout_constraintBottom_toTopOf="@+id/Amount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Fullname_pays"
-        tools:ignore="DuplicateIds,MissingConstraints,TextFields"
-        android:autofillHints="" />
+        tools:ignore="DuplicateIds,MissingConstraints,TextFields"/>
 
     <EditText
         android:id="@+id/Amount"

@@ -1,20 +1,24 @@
 package com.example.csci3130_project_group17;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -22,18 +26,21 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 
 public class paymentpage extends AppCompatActivity {
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
     DatabaseReference usertable = null;
+    DatabaseReference jobdeatials = null;
 
-    //user information
-    String uID;
-    SharedPreferences preferences;
-    StoredData data;
-    Boolean isEmployer;
+//    //user information
+//    String uID;
+//    SharedPreferences preferences;
+//    StoredData data;
+//    Boolean isEmployer;
 
     //paypal information from lab
     private static final int PAYPAL_REQUEST_CODE = 555;
@@ -42,48 +49,95 @@ public class paymentpage extends AppCompatActivity {
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(Config.PAYPAL_CLIENT_ID);
 
+    //current thing on page
     Button btnPayNow;
     EditText edtAmount;
+    EditText fullname;
+    EditText date;
 
+    //amount in string
     String amount = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //storing user id in the uID so that it is easy to get the current user and we can show them
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
-        uID = data.getStoredUserID();
-        isEmployer = data.getUserType();
-
-        if(isEmployer){
-            setContentView(R.layout.paymentemployer);
-            Intent intent = new Intent(this, PayPalService.class);
-            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
-            startService(intent);
-
-            edtAmount= findViewById(R.id.Amount);
-            btnPayNow = findViewById(R.id.pay_submit_payment);
-
-            btnPayNow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    processPayment();
-                }
-            });
-        }
-
-        Onclick();
+        setContentView(R.layout.paymentemployer);
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
+        startService(intent);
+        edtAmount = findViewById(R.id.Amount);
+        fullname = findViewById(R.id.Fullname_pays);
+        date = findViewById(R.id.Date);
 
         //initiating the Firebase
+        Onclick();
         initializeDatabase();
+        datafromfirebase();
+    }
+
+    private void datafromfirebase() {
+        Intent data1 = getIntent();
+        String jobid = data1.getStringExtra("currentjobId_topay");
+
+        Intent data2 = getIntent();
+        String userid = data2.getStringExtra("currentuserId_topay");
+
+        gettingnameandamountfromdatabase(jobid,userid);
+
+//        //getting the current date from the date format copied from the given link
+//        //https://beginnersbook.com/2013/05/current-date-time-in-java/
+//        @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yy/MM/dd");
+//        Date dateobj = new Date();
+//        String date2 = df.format(dateobj);
+//        date.setText(date2);
+//        System.out.println(df.format(dateobj) + " date =---------------------------------------------------------------------------------");
+    }
+
+    private void gettingnameandamountfromdatabase(String jobid, String userid) {
+        System.out.println(jobid+ "-------------------------------------------------------------jobid---------------------------------------------------");
+        System.out.println(userid+ "-------------------------------------------------------------userid---------------------------------------------------");
+        jobdeatials.child(jobid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    edtAmount.setText((String) snapshot.child("jobPayRate").getValue());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        usertable.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String employee_name = (String) snapshot.child("firstName").getValue() + (String) snapshot.child("lastName").getValue();
+                    fullname.setText(employee_name);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Calendar calendar = Calendar.getInstance();
+        String currentdate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        System.out.println(currentdate);
+
+        date.setText(currentdate);
+
     }
 
     public void initializeDatabase(){
         //initialize your database and related fields here
         database =  FirebaseDatabase.getInstance();
         usertable = database.getReference("users");
+        jobdeatials = database.getReference("JobInformation");
     }
 
     //on click for the homepage
@@ -97,6 +151,14 @@ public class paymentpage extends AppCompatActivity {
                 swtich2home();
             }
         });
+
+        btnPayNow = findViewById(R.id.pay_submit_payment);
+        btnPayNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processPayment();
+            }
+        });
     }
     public void swtich2home() {
         Intent dashboardEmployee = new Intent(this, DashboardEmployee.class);
@@ -104,7 +166,6 @@ public class paymentpage extends AppCompatActivity {
     }
 
     private void processPayment() {
-
         amount = edtAmount.getText().toString();
         PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)),"CAD",
                 "Purchase Goods",PayPalPayment.PAYMENT_INTENT_SALE);
@@ -114,6 +175,7 @@ public class paymentpage extends AppCompatActivity {
         startActivityForResult(intent,PAYPAL_REQUEST_CODE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -128,6 +190,7 @@ public class paymentpage extends AppCompatActivity {
                         startActivity(new Intent(this,PaymentStatus.class)
                                 .putExtra("PaymentDetails",paymentDetails)
                                 .putExtra("Amount",amount));
+                        getDisplay();
                     } catch (Exception e){
                         e.printStackTrace();
                     }

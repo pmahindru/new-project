@@ -11,9 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 public class PaymentStatus  extends AppCompatActivity {
 
-    TextView txtId, txtAmount, txtStatus;
+    TextView txtId, txtAmount, txtStatus, date;
     Button homepage;
     PaymentModel responseData;
 
@@ -25,6 +28,7 @@ public class PaymentStatus  extends AppCompatActivity {
         txtId = findViewById(R.id.txtId);
         txtAmount = findViewById(R.id.txtAmount);
         txtStatus = findViewById(R.id.txtStatus);
+        date = findViewById(R.id.Date);
         homepage = findViewById(R.id.switch2home);
 
         Intent intent = getIntent();
@@ -37,9 +41,15 @@ public class PaymentStatus  extends AppCompatActivity {
     }
 
     private void showDetails(String paymentAmount) {
+        Calendar calendar = Calendar.getInstance();
+        String currentdate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        System.out.println(currentdate);
+
         txtId.setText("Transaction ID -- "+responseData.getResponse().getId());
         txtStatus.setText("Status -- "+responseData.getResponse().getState());
+        date.setText("Date -- " + currentdate);
         txtAmount.setText("Amount -- $" + paymentAmount);
+
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
