@@ -341,6 +341,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
                         if (isInRange(lat, longi)) {
                             HashMap<String, String> job = (HashMap<String, String>) postSnapshot.getValue();
                             job.put("jobPostId", postSnapshot.getKey());
+                            job.put("jobEmployerID",postSnapshot.child("employerID").getValue().toString());
                             jobsList.add(job);
                         }
                     }

@@ -30,8 +30,6 @@ public class Profile extends AppCompatActivity {
     private RecyclerView recyclerView;
     profileReviewAdapter adapter;
     String uID;
-    SharedPreferences preferences;
-    StoredData data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +39,9 @@ public class Profile extends AppCompatActivity {
         recyclerView = findViewById(R.id.profileReviews);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Intent intent = getIntent();
+        uID = intent.getStringExtra("profileUserID");
         initializeDatabase();
 
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
-        uID = data.getStoredUserID();
 
         reviewList = new ArrayList<Review>();
 

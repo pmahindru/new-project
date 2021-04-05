@@ -1,6 +1,8 @@
 package com.example.csci3130_project_group17;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,11 +10,18 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DashboardEmployee extends AppCompatActivity {
+    SharedPreferences preferences;
+    StoredData data;
+    String uID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employee);
+        //get userID of logged in user
+        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
+        data = new StoredData(preferences);
+        uID = data.getStoredUserID();
 
         Intent intent = getIntent();
 
@@ -117,6 +126,7 @@ public class DashboardEmployee extends AppCompatActivity {
 
     public void switchToProfile(){
         Intent ProfileIntent = new Intent(this, Profile.class);
+        ProfileIntent.putExtra("profileUserID", uID);
         startActivity(ProfileIntent);
     }
 }
