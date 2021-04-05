@@ -1,6 +1,8 @@
 package com.example.csci3130_project_group17;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,13 @@ public class PaymentStatus  extends AppCompatActivity {
     Button homepage;
     PaymentModel responseData;
 
+
+    //geting job id and user id of that job and closed the status and then notify that user and after employer need to pay
+    JobIdAndUserIdFromReviewApplicantToPaymentNotificaiton appData_forpaymentpage;
+    SharedPreferences data__forpaymentpage;
+    String status__forpaymentpage = null;
+    String date_forpaymentpage = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +39,9 @@ public class PaymentStatus  extends AppCompatActivity {
         txtStatus = findViewById(R.id.txtStatus);
         date = findViewById(R.id.Date);
         homepage = findViewById(R.id.switch2home);
+
+        data__forpaymentpage = getSharedPreferences("bothidsPrefs", Context.MODE_PRIVATE);
+        appData_forpaymentpage = new JobIdAndUserIdFromReviewApplicantToPaymentNotificaiton(data__forpaymentpage);
 
         Intent intent = getIntent();
 
@@ -44,6 +56,15 @@ public class PaymentStatus  extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         String currentdate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         System.out.println(currentdate);
+
+        status__forpaymentpage = responseData.getResponse().getState();
+        appData_forpaymentpage.storedjobID3(status__forpaymentpage);
+
+        date_forpaymentpage = currentdate;
+        appData_forpaymentpage.storedjobID4(date_forpaymentpage);
+
+
+
 
         txtId.setText("Transaction ID -- "+responseData.getResponse().getId());
         txtStatus.setText("Status -- "+responseData.getResponse().getState());

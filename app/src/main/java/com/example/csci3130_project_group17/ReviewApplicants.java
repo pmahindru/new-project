@@ -47,6 +47,11 @@ public class ReviewApplicants extends AppCompatActivity {
     String currentuserID_notification_revviewapplicant = null;
     String userid;
 
+    //geting job id and user id of that job and closed the status and then notify that user and after employer need to pay
+    JobIdAndUserIdFromReviewApplicantToPaymentNotificaiton appData_forpaymentpage;
+    SharedPreferences data__forpaymentpage;
+    String jobID__forpaymentpage = null;
+    String currentuserID_forpaymentpage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,9 @@ public class ReviewApplicants extends AppCompatActivity {
 
         data_notification_revviewapplicant = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
         appData_notification_revviewapplicant = new Notification_ReviewApplicant_To_Employee(data_notification_revviewapplicant);
+
+        data__forpaymentpage = getSharedPreferences("bothidsPrefs",Context.MODE_PRIVATE);
+        appData_forpaymentpage = new JobIdAndUserIdFromReviewApplicantToPaymentNotificaiton(data__forpaymentpage);
 
         Intent data = getIntent();
         userid = data.getStringExtra("userId");
@@ -89,9 +97,10 @@ public class ReviewApplicants extends AppCompatActivity {
                 String jobid = data2.getStringExtra("jobId");
                 Intent data = getIntent();
                 String currentjobhired_userid = data.getStringExtra("userId");
-
-                System.out.println("pay jobid from here to there     " + jobid +  " ------------------------ ---------------------------------------------");
-                System.out.println("pay userid from here to there    " + currentjobhired_userid +  " ------------------------ ---------------------------------------------");
+                jobID__forpaymentpage = jobid;
+                appData_forpaymentpage.storedjobID(jobid);
+                currentuserID_forpaymentpage = userid;
+                appData_forpaymentpage.storedjobID2(currentjobhired_userid);
 
                 closedJobPosting();
                 Intent intent = new Intent(ReviewApplicants.this,paymentpage.class);
