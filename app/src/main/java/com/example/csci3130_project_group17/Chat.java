@@ -44,7 +44,7 @@ public class Chat extends AppCompatActivity {
     //user information
     String uID;
     StoredData data;
-    SharedPreferences preferences;
+
 
     //this is for the read and write in the database
     FirebaseDatabase database =  null;
@@ -73,8 +73,8 @@ public class Chat extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         //get userID of logged in user
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
         check = data.getUserType();
 

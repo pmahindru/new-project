@@ -49,7 +49,8 @@ public class paymentnotificaton extends AppCompatActivity {
         setContentView(R.layout.paymentemployee);
         //storing user id in the uID so that it is easy to get the current user and we can show them
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         isEmployer = data.getUserType();
 
         initializeDatabase();
@@ -98,7 +99,8 @@ public class paymentnotificaton extends AppCompatActivity {
         date_pays = data2.getStoredUserId4();
 
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
 
         System.out.println(uID + "-------------------------------------------------------------------------------");
@@ -155,7 +157,8 @@ public class paymentnotificaton extends AppCompatActivity {
 
 
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
 
         System.out.println(uID + "-------------------------------------------------------------------------------");

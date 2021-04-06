@@ -99,7 +99,8 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
         initializeDatabase();
 
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         savedLocation = data.getUserLocation();
 
         if(savedLocation.isEmpty()) {

@@ -33,7 +33,6 @@ public class jobHistory extends AppCompatActivity {
     String state = "open";
     Boolean isEmployer = false;
     String userIDSearchTerm = "employeeID";
-    SharedPreferences preferences;
     StoredData data;
     Context context;
     @Override
@@ -47,8 +46,8 @@ public class jobHistory extends AppCompatActivity {
         initializeDatabase();
 
         //get userID of logged in user
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
         context = getApplicationContext();
         checkIfEmployer();

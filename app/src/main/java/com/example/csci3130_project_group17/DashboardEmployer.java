@@ -10,7 +10,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DashboardEmployer extends AppCompatActivity {
-    SharedPreferences preferences;
     StoredData data;
     String uID;
 
@@ -19,8 +18,8 @@ public class DashboardEmployer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_employer);
         //get userID of logged in user
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
 
         setClickListeners();
