@@ -34,7 +34,6 @@ public class ActiveJobs extends AppCompatActivity{
     DatabaseReference jobdetails = null;
 
     //user information
-    SharedPreferences preferences;
     StoredData data;
     String uID;
     Boolean isEmployer;
@@ -63,8 +62,8 @@ public class ActiveJobs extends AppCompatActivity{
         Intent intent = getIntent();
 
         //storing user id in the uID so that it is easy to get the current user and we can show them
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
         appContext = getApplicationContext();

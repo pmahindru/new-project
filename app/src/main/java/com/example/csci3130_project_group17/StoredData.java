@@ -14,15 +14,15 @@ public class StoredData {
     private String storedLocationRange = "userLocationRange";
     private String storedPayRate = "userPayRate";
 
-    public StoredData(SharedPreferences storedAppData) {
-        this.storedAppData = storedAppData;
+    private static  StoredData instance = new StoredData();
+    private StoredData() { }
 
+
+    public static  StoredData getInstance(){
+        return instance;
     }
-
-    public StoredData(Context appContext) {
+    public void setAppContext(Context appContext){
         this.storedAppData = appContext.getSharedPreferences(storedDataName, Context.MODE_PRIVATE);
-
-
     }
 
     public String getStoredUserID() {

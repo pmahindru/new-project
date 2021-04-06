@@ -41,7 +41,6 @@ public class notification extends AppCompatActivity {
     ListView listView;
 
     //current user information
-    SharedPreferences preferences;
     StoredData data;
     String uID;
     Boolean isEmployer;
@@ -91,8 +90,8 @@ public class notification extends AppCompatActivity {
         jobID = data2.getStoredUserID2();
 
         //storing user id in the uID so that it is easy to get the current user and we can show them
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 
@@ -137,8 +136,8 @@ public class notification extends AppCompatActivity {
         application_jobapplication = data5.getStoredUserID4();
 
         //storing user id in the uID so that it is easy to get the current user and we can show them
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
 
         System.out.println(application_jobapplication+"----------------------------------------------------------------------------");
@@ -257,8 +256,8 @@ public class notification extends AppCompatActivity {
         jobID_reviewapplcaint = data3.getStoredUserID3();
 
         //storing user id in the uID so that it is easy to get the current user and we can show them
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 

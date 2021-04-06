@@ -27,7 +27,6 @@ public class LogIn extends AppCompatActivity{
     final Boolean[] errorFlag = {false};
 
     StoredData appData;
-    SharedPreferences data;
     String uID = null;
     Boolean isEmployer = null;
 
@@ -37,8 +36,8 @@ public class LogIn extends AppCompatActivity{
         setContentView(R.layout.login);
 
         Intent intent = getIntent();
-        data = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        appData = new StoredData(data);
+        appData = StoredData.getInstance();
+        appData.setAppContext(getApplicationContext());
 
         //initiating the Firebase
         initializeDatabase();

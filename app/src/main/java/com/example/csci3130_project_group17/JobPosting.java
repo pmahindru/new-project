@@ -75,7 +75,8 @@ public class JobPosting extends AppCompatActivity implements View.OnClickListene
         data_notification = getSharedPreferences("jobsPrefs", Context.MODE_PRIVATE);
         appData_notification = new JobPosting_notification(data_notification);
 
-        StoredData data = new StoredData(getApplicationContext());
+        StoredData data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
 
         storageReference = FirebaseStorage.getInstance().getReference("jobimages");

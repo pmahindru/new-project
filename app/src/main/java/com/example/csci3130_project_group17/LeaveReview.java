@@ -32,7 +32,6 @@ public class LeaveReview extends AppCompatActivity {
     String jobEmployerID;
     String jobEmployeeID;
     String reviewerName;
-    SharedPreferences preferences;
     StoredData data;
     String uID;
     Boolean isEmployer;
@@ -54,8 +53,8 @@ public class LeaveReview extends AppCompatActivity {
         jobEmployeeID = i.getStringExtra("employeeId");
 
         //get stored data about user
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data = StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
         isEmployer = data.getUserType();
 

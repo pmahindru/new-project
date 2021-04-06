@@ -86,7 +86,6 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
     LatLng currentLocation;
 
     //user information
-    SharedPreferences preferences;
     StoredData data;
     String uID;
 
@@ -104,8 +103,8 @@ public class JobApplication extends AppCompatActivity implements OnMapReadyCallb
         data_notification_revviewapplicant = getSharedPreferences("jobsPrefs_fromreviewapplicants", Context.MODE_PRIVATE);
         appData_notification_revviewapplicant = new Notification_ReviewApplicant_To_Employee(data_notification_revviewapplicant);
 
-        preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = new StoredData(preferences);
+        data =  StoredData.getInstance();
+        data.setAppContext(getApplicationContext());
         uID = data.getStoredUserID();
 
         Intent intent = getIntent();
