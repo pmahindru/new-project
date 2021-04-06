@@ -41,7 +41,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Preference"/>
         <activity android:name=".SignUp" android:label="Sign Up"/>
         <activity android:name=".JobPosting" android:label="Job Posting"/>
         <activity android:name=".ReviewApplicants" android:label="Review Applicants"/>
