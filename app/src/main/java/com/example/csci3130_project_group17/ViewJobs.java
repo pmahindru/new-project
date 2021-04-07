@@ -61,8 +61,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
     int radius = 8;
     int undecidedRadius = 0;
 
-    private Circle mCircle;
-    private Marker mMarker;
+    Circle mCircle;
 
     CircleOptions circleOptions;
     LatLng currentLocationCoordinates = null;
@@ -99,7 +98,7 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
         initializeDatabase();
 
         preferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
-        data = data = StoredData.getInstance();
+        data = StoredData.getInstance();
         data.setAppContext(getApplicationContext());
         savedLocation = data.getUserLocation();
 
@@ -203,10 +202,12 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                // Only here to comply with the code
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                // Only here to comply with the code
             }
 
             @Override
@@ -543,17 +544,17 @@ public class ViewJobs extends FragmentActivity implements OnMapReadyCallback, Vi
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-
+            // Only here to comply with the code
         }
 
         @Override
         public void onProviderEnabled(String s) {
-
+            // Only here to comply with the code
         }
 
         @Override
         public void onProviderDisabled(String s) {
-
+            // Only here to comply with the code
         }
     };
 

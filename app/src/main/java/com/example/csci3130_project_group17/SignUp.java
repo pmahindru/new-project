@@ -80,7 +80,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         UUID idOne = UUID.randomUUID();
         userid = userid + 1;
         String count = String.valueOf(idOne);
-        System.out.println("I was here!");
         user.put("firstName", fname);
         user.put("lastName", lname);
         user.put("email", email);

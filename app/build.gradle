@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'org.sonarqube'
 }
 
 android {
@@ -75,4 +76,16 @@ dependencies {
 
     api 'com.google.firebase:firebase-core:9.4.0'
     api 'com.firebaseui:firebase-ui:0.6.0'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "QuickCash"
+        property "sonar.projectKey", "SEProject"
+        property "sonar.sources", "src/main/java"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.binaries", "build/intermediates/classes/debug"
+        property "sonar.tests", "src/test/java, src/androidTest/java"
+    }
+
 }
